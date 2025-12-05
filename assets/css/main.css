@@ -27,6 +27,26 @@
   unicode-range: U+0590-05FF, U+0030-0039;
 }
 
+@font-face {
+	font-family: "Diode Global New";
+	src: url("/fonts/DiodeGlobalNewVF.ttf") format("truetype");
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Seoul Grotesk";
+	src: url("/fonts/SeoulGrotesqueVF.ttf") format("truetype");
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
 :is(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table, dl) + :is(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table, dl) {
   @apply mt-2;
+}
+
+.prose p:has(img) {
+  @apply my-20;
 }

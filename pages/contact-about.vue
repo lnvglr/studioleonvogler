@@ -18,7 +18,7 @@
           <template #fallback> multilingual communication.</template>
           <VTooltip class="inline">
             <button
-              class="text-blue-500 underline underline-offset-4 hover:text-blue-600"
+              class="text-green-500 underline underline-offset-4 hover:text-green-600"
               role="button"
             >
               multilingual communication

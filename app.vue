@@ -3,20 +3,21 @@
     <div
       class="inset-0 fixed -z-10 bg-[radial-gradient(circle_at_left,_var(--tw-gradient-stops))] via-20% to-50% to-white bg-cover duration-1000"
       :class="{
-        'from-purple-200 via-blue-50': route.name === 'contact-about',
+        'from-purple-200 via-green-50': route.name === 'contact-about',
         'from-red-200 via-orange-50':
           route.name === 'privacy-policy' || route.name === 'legal-notice',
-        'from-teal-200 via-green-50': route.name === 'index',
+        'from-teal-200 via-green-50': route.name === 'index' || route.name?.toString().startsWith('projects-'),
       }"
       :style="`filter: hue-rotate(${hue}deg);`"
     />
     <div
-      class="flex flex-col min-h-screen p-5 sm:p-10 md:px-20 gap-5 sm:gap-10"
+      class="flex flex-col min-h-screen p-5 sm:p-10 md:px-20 pb-10 sm:pb-20 md:pb-32 gap-5 sm:gap-10"
+      :class="{ 'sm:pr-0': route.name === 'index' }"
     >
       <Header />
       <NuxtPage class="flex flex-col" />
     </div>
-    <Footer class="mt-auto p-5 sm:p-10" />
+    <Footer v-if="route.name !== 'index'" class="mt-auto p-5 sm:p-10 md:px-20" />
   </div>
 </template>
 <script setup>

@@ -15,6 +15,10 @@
 <script setup lang="ts">
 const menu = [
   {
+    name: 'Projects',
+    link: '/projects',
+  },
+  {
     name: 'Contact / About',
     link: '/contact-about',
   },

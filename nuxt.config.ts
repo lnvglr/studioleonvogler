@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
   modules: [
+    '@nuxt/content',
     // '@nuxt/image',
     // 'floating-vue/nuxt'
   ],
@@ -10,6 +11,12 @@ export default defineNuxtConfig({
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
+    },
+  },
+  router: {
+    options: {
+      // Suppress warnings for unmatched routes (like static file requests from extensions)
+      strict: false,
     },
   },
 })
