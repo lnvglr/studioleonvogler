@@ -3,7 +3,7 @@ id: data-literacy
 title: Data Literacy Booklet
 category: editorial
 categoryName: Editorial Design
-description: A booklet about data literacy using the visual concept of a metro map to navigate through different elements.
+description: A comprehensive booklet designed to make data literacy accessible and engaging for readers of all backgrounds. Through thoughtful visual design, clear typography, and intuitive information architecture, the publication breaks down complex data concepts into digestible sections, helping readers develop the skills needed to understand and interpret data in their daily lives.
 image: img/projects/data-literacy/Magazine_Mockup_3.jpg
 alt: Open booklet on data literacy
 date: 2021-04-01

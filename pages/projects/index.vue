@@ -7,7 +7,7 @@
       >
         ← Back to home
       </NuxtLink>
-      <h1 class="text-3xl sm:text-4xl font-bold">All Projects</h1>
+      <h1 class="text-3xl sm:text-4xl font-bold">Projects</h1>
     </div>
 
     <!-- Filter Tags -->
@@ -18,7 +18,7 @@
           'px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300',
           selectedCategory === null
             ? 'bg-green-500 text-white'
-            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200',
+            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 mix-blend-multiply',
         ]"
         :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
       >
@@ -32,7 +32,7 @@
           'px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300',
           selectedCategory === category.value
             ? 'bg-green-500 text-white'
-            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200',
+            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 mix-blend-multiply',
         ]"
         :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
       >
@@ -59,7 +59,7 @@
         </div>
         <div class="flex items-center gap-2 flex-wrap">
           <span
-            class="text-xs px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-600 uppercase transition-colors duration-300"
+            class="text-xs px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-600 uppercase transition-colors duration-300 mix-blend-multiply"
             :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
           >
             {{ getCategoryTag(project.category) }}
@@ -75,9 +75,6 @@
             :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }">
           {{ project.title }}
         </h3>
-        <p class="text-sm text-neutral-600 line-clamp-2 font-normal">
-          {{ project.description }}
-        </p>
       </NuxtLink>
     </div>
   </main>
@@ -135,8 +132,8 @@ useHead({
 })
 
 useSeoMeta({
-  title: 'All Projects – Studio Leon Vogler',
-  ogTitle: 'All Projects – Studio Leon Vogler',
+  title: 'Projects – Studio Leon Vogler',
+  ogTitle: 'Projects – Studio Leon Vogler',
   description: 'Browse all design projects by Leon Vogler.',
   ogDescription: 'Browse all design projects by Leon Vogler.',
 })

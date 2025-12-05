@@ -3,7 +3,7 @@ id: safari-concert-poster
 title: Safari in Park HaLeumi Ramat Gan
 category: graphic
 categoryName: Graphic Design
-description: Poster design for a concert that was eventually canceled in the early days of the COVID pandemic, exploring Hebrew calligraphy.
+description: A poster design for a concert that was eventually canceled in the early days of the COVID pandemic, featuring an exploration of Hebrew calligraphy and contemporary graphic design. The project combines traditional calligraphic techniques with modern visual language, creating a dynamic composition that captures the energy of the planned event while showcasing the expressive potential of Hebrew typography in contemporary contexts.
 image: img/projects/safari-concert-poster/safari.jpg
 alt: Safari – Polo & Pan / Artbat concert poster
 date: 2020-03-01

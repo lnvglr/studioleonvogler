@@ -3,7 +3,7 @@ id: food-waste
 title: Wasted – Food Worth Saving
 category: editorial
 categoryName: Editorial Design
-description: A zine about why food waste and why we need to talk about it.
+description: A zine that addresses the critical issue of food waste and why it demands our immediate attention. Through compelling editorial design and thoughtful content curation, the publication explores the environmental, economic, and social implications of food waste, encouraging readers to reconsider their relationship with food and take action toward more sustainable practices.
 image: img/projects/food-waste/wasted.jpg
 alt: Open magazine on food waste
 date: 2018-11-01

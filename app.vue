@@ -6,7 +6,7 @@
         'from-purple-200 via-green-50': route.name === 'contact-about',
         'from-red-200 via-orange-50':
           route.name === 'privacy-policy' || route.name === 'legal-notice',
-        'from-teal-200 via-green-50': route.name === 'index' || route.name?.toString().startsWith('projects-'),
+        'from-teal-200 via-green-50': route.name === 'index' || route.name?.toString().startsWith('projects'),
       }"
       :style="`filter: hue-rotate(${hue}deg);`"
     />

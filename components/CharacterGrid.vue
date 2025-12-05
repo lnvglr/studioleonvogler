@@ -27,7 +27,7 @@
               }}</span>
             </div>
             <!-- Details Toggle -->
-            <div class="flex items-center gap-2 hidden">
+            <div class="hidden items-center gap-2">
               <span class="text-sm text-white/70">Details</span>
               <button
                 @click="showDetails = !showDetails"
@@ -184,7 +184,7 @@
           v-for="(char, charIdx) in currentCharacters"
           :key="charIdx"
           :ref="(el) => setGridItemRef(el, charIdx)"
-          class="aspect-square flex items-center justify-center ring-1 ring-green-300 transition-colors cursor-pointer group relative text-3xl text-white"
+          class="aspect-square flex items-center justify-center ring-1 ring-green-300 transition-colors cursor-pointer group relative text-3xl text-white hover:ring-green-200 hover:bg-green-600"
           :class="
             previewChar === char
               ? 'bg-green-500 ring-green-300'
@@ -513,12 +513,7 @@ const characterGroups = computed(() => {
     name: "Mathematical",
     characters: "+−×÷=><~^∞%‰".split(""),
   });
-  
-  // Special symbols
-  groups.push({
-    name: "Special Symbols",
-    characters: "﴾﴿־".split(""),
-  });
+
 
   return groups;
 });

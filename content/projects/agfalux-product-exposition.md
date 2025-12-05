@@ -3,7 +3,7 @@ id: agfalux-product-exposition
 title: Agfalux Product Exposition
 category: graphic
 categoryName: Graphic Design
-description: Visual design for Agfalux product exposition showcasing retro camera equipment.
+description: Visual design for an Agfalux product exposition showcasing retro camera equipment. The design system celebrates the aesthetic and technical qualities of vintage photography equipment through careful attention to detail, typography, and layout. The visual language bridges the gap between historical craftsmanship and contemporary presentation, creating an engaging experience that honors both the products and their heritage.
 image: img/projects/agfalux-product-exposition/agfa-3.jpg
 alt: A disassembled retro camera flash
 date: 2018-07-01

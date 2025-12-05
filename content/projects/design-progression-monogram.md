@@ -3,7 +3,7 @@ id: design-progression-monogram
 title: Monogram
 category: graphic
 categoryName: Graphic Design
-description: A design exploration for a monogram consisting of the Hebrew letters alef, zadi, lamed.
+description: A detailed design exploration for a monogram consisting of the Hebrew letters alef, zadi, and lamed. The project documents the iterative process of creating a cohesive visual identity from these three distinct letterforms, exploring various approaches to integration, balance, and harmony. The final monogram serves as a testament to the careful consideration of form, space, and cultural context in typographic design.
 image: img/projects/design-progression-monogram/zal.jpg
 alt: Design progression of a monogram
 date: 2019-12-01

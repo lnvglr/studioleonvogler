@@ -19,7 +19,7 @@
         v-for="font in fonts"
         :key="font.id"
         :to="`/fonts/${font.id}`"
-        class="p-6 rounded-xl bg-stone-50 hover:bg-stone-100 dark:bg-stone-900 dark:hover:bg-stone-800 transition-colors border border-stone-200 dark:border-stone-700"
+        class="p-6 rounded-xl bg-stone-50 hover:bg-stone-100 transition-colors border border-stone-200"
       >
         <h2
           class="text-2xl font-medium mb-2"
@@ -27,14 +27,14 @@
         >
           {{ font.name }}
         </h2>
-        <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+        <p class="text-sm text-neutral-600 mb-4">
           {{ font.description }}
         </p>
         <div class="flex gap-2 flex-wrap">
           <span
             v-for="variant in font.variants"
             :key="variant.id"
-            class="text-xs px-2 py-1 rounded bg-stone-200 dark:bg-stone-700"
+            class="text-xs px-2 py-1 rounded bg-stone-200"
           >
             {{ variant.name }}
           </span>

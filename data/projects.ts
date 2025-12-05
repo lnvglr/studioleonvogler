@@ -106,7 +106,7 @@ export const projects: Project[] = [
   },
   {
     id: 'rights-plus',
-    title: 'Rights Plus',
+    title: 'RightsPlus',
     category: 'web',
     categoryName: 'Interface Design',
     description: 'A web application designed to help passengers understand and exercise their rights when traveling. The platform translates complex legal information into clear, actionable guidance, making passenger rights accessible to everyone. Through thoughtful information architecture and user-centered design, the application empowers users to navigate situations with confidence, whether dealing with flight delays, lost luggage, or other travel-related issues.',
@@ -126,24 +126,26 @@ export function getProjectById(id: string): Project | undefined {
   return projects.find((p) => p.id === id)
 }
 
-// Load projects with dates from content and sort by newest first
+// Load projects with dates and descriptions from content and sort by newest first
 export async function getProjectsWithDates(): Promise<Project[]> {
   try {
     // Load all project content files
     const contentFiles = await queryContent('projects').find()
     
-    // Create a map of dates by project id
+    // Create maps of dates and descriptions by project id
     const dateMap = new Map<string, string>()
     contentFiles.forEach((file: any) => {
-      if (file.id && file.date) {
-        dateMap.set(file.id, file.date)
+      if (file.id) {
+        if (file.date) {
+          dateMap.set(file.id, file.date)
+        }
       }
     })
     
-    // Merge dates into projects and sort by date (newest first)
+    // Merge dates and descriptions into projects and sort by date (newest first)
     const projectsWithDates = projects.map(project => ({
       ...project,
-      date: dateMap.get(project.id)
+      date: dateMap.get(project.id) || project.date,
     }))
     
     // Sort by date (newest first), projects without dates go to the end

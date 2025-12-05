@@ -3,7 +3,7 @@ id: character-diversion
 title: Character Diversion – Platform for Typographic Discourse
 category: web
 categoryName: Interface Design
-description: A web platform designed for typographic discourse and exploration.
+description: A web platform designed for typographic discourse and exploration, providing a space for designers, researchers, and enthusiasts to engage with type design in new ways. The interface combines intuitive navigation with rich interactive features, allowing users to explore glyphs, compare typefaces, and participate in discussions about typographic practice. The design prioritizes both functionality and aesthetic experience, creating a tool that serves both practical and educational purposes.
 image: img/projects/character-diversion/character-diversion.png
 alt: Webapp for typographic discourse
 date: 2022-07-01

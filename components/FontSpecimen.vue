@@ -4,7 +4,7 @@
     <div v-if="standalone" class="flex justify-end mb-8">
       <button
         @click="toggleDarkMode"
-        class="p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+        class="p-2 rounded-lg hover:bg-stone-100 transition-colors"
         aria-label="Toggle dark mode"
       >
         <svg
@@ -59,7 +59,7 @@
         <h1 class="text-4xl sm:text-5xl font-medium mb-4" :style="mastheadStyle">
           {{ font.name }}
         </h1>
-        <p class="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl">
+        <p class="text-lg text-neutral-600 max-w-2xl">
           {{ font.description }}
         </p>
       </div>
@@ -71,7 +71,7 @@
       <h2 class="text-2xl font-medium mb-8">Alphabet</h2>
       <div
         contenteditable="true"
-        class="p-8 rounded-xl bg-stone-50 dark:bg-stone-900 focus:outline-none focus:ring-2 focus:ring-green-500 min-h-[300px] whitespace-pre-wrap"
+        class="p-8 rounded-xl bg-stone-50 focus:outline-none focus:ring-2 focus:ring-green-500 min-h-[300px] whitespace-pre-wrap mix-blend-multiply"
         :style="{
           fontFamily: currentFontFamily,
           fontSize: 'clamp(2.5rem, 6vw, 6rem)',
@@ -91,7 +91,7 @@
         <div
           v-for="(weight, weightIdx) in weightExamples"
           :key="weight"
-          class="p-6 rounded-xl bg-stone-50 dark:bg-stone-900"
+          class="p-6 rounded-xl bg-stone-50 mix-blend-multiply"
         >
           <div class="text-sm text-neutral-500 mb-4">{{ getWeightName(weight) }} {{ weight }}</div>
           <div
@@ -127,7 +127,7 @@
         <span
           v-for="lang in font.supportedLanguages"
           :key="lang"
-          class="px-4 py-2 rounded-lg bg-stone-100 dark:bg-stone-800"
+          class="px-4 py-2 rounded-lg bg-stone-100"
         >
           {{ lang }}
         </span>

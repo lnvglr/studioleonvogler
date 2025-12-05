@@ -7,7 +7,7 @@
       :font="font"
       :tuple="tuple"
       :tupleAlt="tupleAlt"
-      class="border-b border-r border-beige-200 dark:border-mint-900"
+      class="border-b border-r border-beige-200"
     />
   </div>
 </template>
