@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="text-neutral-800 w-full transition-opacity duration-300"
+    class="text-neutral-800 w-full transition-opacity duration-300 [font-kerning:none]"
     :class="{ 'opacity-0': !fontReady }"
     :style="{ visibility: fontReady ? 'visible' : 'hidden' }"
   >
@@ -12,7 +12,7 @@
         </h1>
       </div>
       <div v-if="fontName">
-        <h1 class="text-6xl sm:text-6xl font-medium" :style="mastheadStyle">
+        <h1 class="text-6xl sm:text-6xl leading-tight font-medium" :style="mastheadStyle">
           {{ fontName.toUpperCase() }}
         </h1>
       </div>
@@ -99,13 +99,16 @@
       <div v-for="(languages, script) in languagesByScript" :key="script" class="mb-6">
         <h3 class="text-lg font-medium mb-3 text-neutral-700">{{ script }}</h3>
         <div class="flex flex-wrap gap-2">
-          <span
+          <a
             v-for="lang in languages"
             :key="lang"
-            class="px-4 py-2 rounded-lg bg-stone-100 mix-blend-multiply"
+            class="px-2 py-0.5 rounded-sm bg-stone-100 mix-blend-multiply hover:bg-stone-200 transition-colors duration-300"
+            :href="`https://en.wikipedia.org/wiki/${lang.replace(' ', '_')}_language`"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             {{ lang }}
-          </span>
+          </a>
         </div>
       </div>
       <p class="text-sm text-neutral-600 mt-6">

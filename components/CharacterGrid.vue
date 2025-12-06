@@ -14,12 +14,12 @@
     >
       <!-- Header -->
       <div class="p-6 border-b border-green-300">
-        <div class="grid grid-cols-2 items-center gap-6">
+        <div class="grid sm:grid-cols-2 items-center gap-x-6 gap-y-2">
           <div class="flex flex-col gap-2">
             <!-- Weight Slider (for variable fonts) -->
-            <div v-if="isVariableFont" class="flex items-center gap-4">
+            <div v-if="isVariableFont" class="grid grid-cols-2 grid-rows-2 items-center gap-x-4 gap-y-0">
               <span class="text-sm text-white/70">Weight</span>
-              <div class="relative w-32 h-1 bg-green-500 rounded-full">
+              <div class="relative w-full max-w-32 h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2">
                 <div
                   class="absolute top-1/2 -translate-y-1/2 h-full bg-white rounded-full"
                   :style="{ width: `${weightPercentage}%` }"
@@ -30,7 +30,7 @@
                   @mousedown="startWeightSliderDrag"
                 ></div>
               </div>
-              <span class="text-sm text-white font-medium tabular-nums">{{
+              <span class="text-sm text-white font-medium tabular-nums row-start-1 col-start-2 text-right">{{
                 currentWeight
               }}</span>
             </div>
@@ -73,11 +73,11 @@
             </div>
           </div>
           <!-- Character Info -->
-          <div class="flex ml-auto text-sm text-white/70 gap-1">
+          <div class="flex sm:flex-col self-start sm:items-end ml-auto text-sm text-white/70 gap-x-4 w-full">
             <span class="font-medium text-white">{{
               getGlyphName(previewChar)
             }}</span
-            ><span class="text-white/50">·</span>
+            >
             <span>U+{{ getCharCode(previewChar) }}</span>
           </div>
         </div>
@@ -138,22 +138,16 @@
         <div
           class="text-center select-none relative"
           :style="{
-            fontFamily: fontFamily,
-            fontWeight: getCurrentWeight(),
-            fontVariationSettings: fontVariationSettings,
-            fontSize: '20rem',
-            lineHeight: 1,
             cursor: isVariableFont ? 'ew-resize' : 'default',
           }"
         >
           <!-- Character container for proper baseline alignment -->
           <div
-            class="relative inline-block"
+            class="relative inline-block text-[10rem] sm:text-[20rem]"
             :style="{
               fontFamily: fontFamily,
               fontWeight: getCurrentWeight(),
               fontVariationSettings: fontVariationSettings,
-              fontSize: '20rem',
               lineHeight: 1,
             }"
           >
@@ -539,6 +533,14 @@ const characterGroups = computed(() => {
         lang.toLowerCase().includes("russian")
     );
 
+  const supportsBelarusian =
+    supportsScript("belarusian", props.supportedLanguages) ||
+    normalizedLanguages.some((lang) => lang.toLowerCase().includes("belarusian"));
+
+  const supportsBulgarian =
+    supportsScript("bulgarian", props.supportedLanguages) ||
+    normalizedLanguages.some((lang) => lang.toLowerCase().includes("bulgarian"));
+
   // Check if font supports Georgian
   const supportsGeorgian =
     supportsScript("georgian", props.supportedLanguages) ||
@@ -564,28 +566,16 @@ const characterGroups = computed(() => {
   if (supportsLatin) {
     groups.push({
       name: "Uppercase",
-      characters: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),
+      characters: "AÀÁÂĂÃÄÅÆBCÇDÐEÈÉÊËFGĞHIÏİĲJKLMNÑOÒÓÔÕÖØŒŐPÞQRSŞẞTUÙÚÛÜVWXYŸZ".split(""),
+      // characters: "AÀÁÂĂÃÄÅÆBCÇDÐEÈÉÊËFGĞHIÌÍÎÏİĲJKLMNÑOÒÓÔÕÖØŒŐPÞQRSŞẞTUÙÚÛÜVWXYŸZ".split(""),
     });
     groups.push({
       name: "Lowercase",
-      characters: "abcdefghijklmnopqrstuvwxyz".split(""),
-    });
-
-    // Extended Latin with diacritics from font
-    groups.push({
-      name: "Latin Extended",
-      characters:
-        "AÁĂÂÄÀÅÃÆBCÇDÐEÉÊËÈFGĞHIĲÏİJKLMNÑOÓÔÖÒŐØÕŒPÞQRSŞẞTUÚÛÜÙVWXYŸZaăäåæbcçdðeëfgğhiıíîïìĳjȷklmnñoöőøõœpþqrsşßtuüvwxyz".split(
-          ""
-        ),
+      characters: "aăäåæbcçdðeèéëfgğhiìíîïıĳjȷklmnñoõöøœőpþqrsşßtuüvwxyz".split(""),
+      // characters: "aàáâăãäåæbcçdðeèéêëfgğhiìíîïıĳjȷklmnñoòóôõöøœőpþqrsşßtuùúûüvwxyÿz".split(""),
     });
   }
 
-  // Numbers (universal)
-  groups.push({
-    name: "Numbers",
-    characters: "0123456789".split(""),
-  });
 
   // Hebrew characters
   if (supportsHebrew) {
@@ -627,16 +617,35 @@ const characterGroups = computed(() => {
   // Cyrillic characters
   if (supportsCyrillic) {
     // Extended Cyrillic from font
-    const cyrillicUpper = "АБВГҐДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЄЭІЇЮЯ".split("");
+    const cyrillicUpper = "АБВГҐДЕЁЀЖЗИЙЍКЛМНОПРСТУЎФХЦЧШЩЬЫЪЄЭІЇЮЯ".split("");
     groups.push({
       name: "Cyrillic Uppercase",
       characters: cyrillicUpper,
     });
-    const cyrillicLower = "абвгґдеёжзийклмнопрстуфхцчшщьыъєэіїюя".split("");
+    const cyrillicLower = "абвгґдеёѐжзийѝклмнопрстуўфхцчшщьыъєэіїюя".split("");
     groups.push({
       name: "Cyrillic Lowercase",
       characters: cyrillicLower,
     });
+    console.log("supportsBelarusian", supportsBelarusian);
+    // Belarusian characters
+    if (supportsBelarusian) {
+      // Extended Belarusian from font
+      const belarusianUpper = "Ўў".split("");
+      groups.push({
+        name: "Belarusian Uppercase",
+        characters: belarusianUpper,
+      });
+    }
+    // Bulgarian characters
+    if (supportsBulgarian) {
+      // Extended Bulgarian from font
+      const bulgarianUpper = "ЀЍѐѝ".split("");
+      groups.push({
+        name: "Bulgarian Uppercase",
+        characters: bulgarianUpper,
+      });
+    }
   }
 
   // Georgian characters
@@ -706,6 +715,11 @@ const characterGroups = computed(() => {
     });
   }
 
+  // Numbers (universal)
+  groups.push({
+    name: "Numbers",
+    characters: "0123456789".split(""),
+  });
   // Punctuation (universal)
   groups.push({
     name: "Punctuation",
@@ -1139,25 +1153,31 @@ const handleKeyDown = (e: KeyboardEvent) => {
 
     switch (e.key) {
       case "ArrowLeft":
-        // Move left, wrap to end of previous row if at start
+        // Move left
         if (currentCol > 0) {
+          // Not at start of row, move left
           newIdx = currentIdx - 1;
+        } else if (currentRow > 0) {
+          // At start of row, move to end of previous row
+          const prevRowStart = (currentRow - 1) * cols;
+          const prevRowEnd = Math.min(prevRowStart + cols - 1, chars.length - 1);
+          newIdx = prevRowEnd;
         } else {
-          // Wrap to end of current row, or last item if on first row
-          newIdx = currentRow > 0 
-            ? Math.min(currentIdx + cols - 1, chars.length - 1)
-            : chars.length - 1;
+          // At start of first row, wrap to last item
+          newIdx = chars.length - 1;
         }
         break;
       case "ArrowRight":
-        // Move right, wrap to start of next row if at end
+        // Move right
         if (currentCol < cols - 1 && currentIdx < chars.length - 1) {
+          // Not at end of row, move right
           newIdx = currentIdx + 1;
+        } else if (currentRow < rows - 1) {
+          // At end of row, move to start of next row
+          newIdx = (currentRow + 1) * cols;
         } else {
-          // Wrap to start of current row, or first item if on last row
-          newIdx = currentRow < rows - 1 
-            ? currentRow * cols
-            : 0;
+          // At end of last row, wrap to first item
+          newIdx = 0;
         }
         break;
       case "ArrowUp":

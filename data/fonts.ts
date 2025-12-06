@@ -54,8 +54,11 @@ export const fonts: Font[] = [
       ],
       Cyrillic: [
         "Abaza",
+        "Belarusian",
+        "Bulgarian",
         "Crimean Tatar",
         "Erzya",
+        "Karachay-Balkar",
         "Kumyk",
         "Moksha",
         "Nogai",
