@@ -1,7 +1,7 @@
 <template>
   <div 
-    class="text-neutral-800 w-full transition-opacity duration-300 [font-kerning:none]"
-    :class="{ 'opacity-0': !fontReady }"
+    class="text-neutral-800 w-full transition-opacity duration-300"
+    :class="{ 'opacity-0': !fontReady, '[font-kerning:none]': font.id === 'seoul-grotesk' }"
     :style="{ visibility: fontReady ? 'visible' : 'hidden' }"
   >
     <section v-if="title || fontName || content" class="mb-16">
@@ -79,7 +79,7 @@
     </section>
 
     <!-- Font Features -->
-    <!-- <FontFeatures :font="font" /> -->
+    <FontFeatures :font="font" :feature-metadata="font.featureMetadata" />
 
     <!-- Character Grid -->
     <section class="mb-16 w-screen relative -mx-5 sm:-mx-10 md:-mx-20">

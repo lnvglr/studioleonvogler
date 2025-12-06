@@ -23,32 +23,59 @@ export function useSamsa() {
       return samsaInstance.value
     }
 
-
     if (typeof window === 'undefined') {
       return null
     }
 
     let Samsa = (window as any).Samsa
 
-
     if (!Samsa) {
       try {
-        await import('~/assets/samsa-core.js')
-        Samsa = (window as any).Samsa
-        console.log("Samsa loaded from import", Samsa);
+        // Import as ES module - samsa-core.js exports SamsaFont
+        const samsaModule = await import('~/assets/samsa-core.js') as any
+        
+        // Check if it exports SamsaFont
+        if (samsaModule.SamsaFont) {
+          Samsa = samsaModule.SamsaFont
+          // Also set it on window for compatibility with other code
+          ;(window as any).Samsa = Samsa
+        } else {
+          // Fallback: check window after import (in case it sets it globally)
+          Samsa = (window as any).Samsa
+        }
       } catch (e) {
-        console.error("Error loading Samsa from import", e);
-        // If import fails, try loading as script
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script')
-          script.src = '/assets/samsa-core.js'
-          script.onload = () => {
-            Samsa = (window as any).Samsa
-            resolve(Samsa)
-          }
-          script.onerror = reject
-          document.head.appendChild(script)
-        })
+        console.error('[useSamsa] Error loading Samsa:', e);
+        // If import fails, try loading as script tag
+        try {
+          await new Promise<void>((resolve, reject) => {
+            const script = document.createElement('script')
+            script.src = '/assets/samsa-core.js'
+            script.type = 'module'
+            
+            script.onload = () => {
+              setTimeout(() => {
+                Samsa = (window as any).Samsa
+                
+                if (!Samsa) {
+                  // Try dynamic import as fallback
+                  import('~/assets/samsa-core.js').then((module: any) => {
+                    if (module.SamsaFont) {
+                      Samsa = module.SamsaFont
+                      ;(window as any).Samsa = Samsa
+                    }
+                    resolve()
+                  }).catch(reject)
+                } else {
+                  resolve()
+                }
+              }, 100)
+            }
+            script.onerror = reject
+            document.head.appendChild(script)
+          })
+        } catch (scriptError) {
+          console.error('[useSamsa] Error loading Samsa as script tag:', scriptError)
+        }
       }
     }
 
@@ -62,43 +89,68 @@ export function useSamsa() {
   }
 
   const loadFont = async (fontUrl: string): Promise<any> => {
-    console.log('[useSamsa] loadFont called with URL:', fontUrl)
-    const Samsa = await loadSamsa()
-    console.log('[useSamsa] Samsa loaded:', !!Samsa)
-    if (!Samsa) {
-      console.error('[useSamsa] Samsa library not available')
+    try {
+      console.log('[useSamsa] loadFont called:', fontUrl)
+      const Samsa = await loadSamsa()
+      if (!Samsa) {
+        console.error('[useSamsa] Samsa library not available')
+        return null
+      }
+
+      console.log('[useSamsa] Fetching font...')
+      const response = await fetch(fontUrl)
+      if (!response.ok) {
+        console.error('[useSamsa] Failed to fetch font:', response.status, response.statusText)
+        return null
+      }
+      
+      console.log('[useSamsa] Font fetched, parsing...')
+      const arrayBuffer = await response.arrayBuffer()
+      
+      // SamsaFont requires a callback - wrap it in a promise
+      const samsaFont = await new Promise<any>((resolve, reject) => {
+        try {
+          console.log('[useSamsa] Creating SamsaFont instance...')
+          const font = new Samsa({ 
+            arrayBuffer,
+            callback: (parsedFont: any) => {
+              console.log('[useSamsa] SamsaFont callback invoked, font parsed')
+              resolve(parsedFont)
+            }
+          })
+          console.log('[useSamsa] SamsaFont instance created')
+          // Note: parse() is called synchronously in constructor when arrayBuffer is provided
+          // The callback will be invoked synchronously, so resolve will be called immediately
+        } catch (error) {
+          console.error('[useSamsa] Error creating SamsaFont:', error)
+          reject(error)
+        }
+      })
+      
+      console.log('[useSamsa] SamsaFont promise resolved')
+      
+      // Log feature-related info for debugging
+      console.log('[useSamsa] Font loaded, feature structure:', {
+        hasTables: !!samsaFont.tables,
+        tableKeys: samsaFont.tables ? Object.keys(samsaFont.tables) : [],
+        hasGSUB: !!samsaFont.tables?.GSUB,
+        hasFeaturesDirect: !!samsaFont.features,
+        featuresDirectLength: samsaFont.features?.length,
+        hasFeaturesInGSUB: !!samsaFont.tables?.GSUB?.features,
+        featuresInGSUBLength: samsaFont.tables?.GSUB?.features?.length,
+        gsubKeys: samsaFont.tables?.GSUB ? Object.keys(samsaFont.tables.GSUB) : null,
+        fontKeys: Object.keys(samsaFont).filter(k => !k.startsWith('_'))
+      })
+
+      return samsaFont
+    } catch (error) {
+      console.error('[useSamsa] Error in loadFont:', error)
+      console.error('[useSamsa] Error details:', {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      })
       return null
     }
-
-    console.log('[useSamsa] Fetching font from:', fontUrl)
-    const response = await fetch(fontUrl)
-    console.log('[useSamsa] Fetch response:', {
-      ok: response.ok,
-      status: response.status,
-      statusText: response.statusText,
-      contentType: response.headers.get('content-type')
-    })
-    
-    if (!response.ok) {
-      console.error('[useSamsa] Failed to fetch font:', response.status, response.statusText)
-      return null
-    }
-    
-    const arrayBuffer = await response.arrayBuffer()
-    console.log('[useSamsa] Font arrayBuffer size:', arrayBuffer.byteLength, 'bytes')
-
-    console.log('[useSamsa] Creating Samsa font instance')
-    const samsaFont = new Samsa({ arrayBuffer })
-    console.log('[useSamsa] Waiting for font ready...')
-    await samsaFont.ready
-    console.log('[useSamsa] Font ready, checking structure:', {
-      hasTables: !!samsaFont.tables,
-      tableKeys: samsaFont.tables ? Object.keys(samsaFont.tables) : [],
-      hasGSUB: !!samsaFont.tables?.GSUB,
-      gsubKeys: samsaFont.tables?.GSUB ? Object.keys(samsaFont.tables.GSUB) : []
-    })
-
-    return samsaFont
   }
 
   const getFontMetrics = (samsaFont: any): SamsaFontMetrics | null => {

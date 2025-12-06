@@ -13,7 +13,8 @@ export default {
   theme: {
     fontFamily: {
       sans: ['Gramatika', 'Heebo', 'system-ui', 'sans-serif'],
-      body: ['Gramatika', 'Heebo', 'system-ui', 'sans-serif']
+      mono: ['monospace'],
+      body: ['Gramatika', 'Heebo', 'system-ui', 'sans-serif'],
     },
     extend: {
       colors: {

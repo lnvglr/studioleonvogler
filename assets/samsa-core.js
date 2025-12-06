@@ -3297,3 +3297,8 @@ function quit(obj) {
 
 // exports for node.js
 export { SamsaFont, SamsaGlyph }
+
+// Also expose on window for browser usage
+if (typeof window !== 'undefined') {
+	window.Samsa = SamsaFont;
+}

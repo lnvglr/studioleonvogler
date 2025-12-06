@@ -6,6 +6,16 @@ export interface FontVariant {
   file: string
 }
 
+export interface FontFeatureMetadata {
+  name: string
+  description?: string
+  exampleText: string
+  enabledText?: string
+  enabledByDefault?: boolean
+  highlighted?: string | string[] // Characters to display at 50% opacity (illustrative only)
+  languageTag?: string // For locl feature, specify language tag (e.g., 'BGR' for Bulgarian)
+}
+
 export interface Font {
   id: string
   name: string
@@ -18,6 +28,8 @@ export interface Font {
     long: string
     words: string[]
   }
+  featureMetadata?: Record<string, FontFeatureMetadata>
+  defaultWeight?: number
 }
 
 export const fonts: Font[] = [
@@ -233,6 +245,56 @@ export const fonts: Font[] = [
       long: 'Typography is the art and technique of arranging type to make written language legible, readable and appealing when displayed. The arrangement of type involves selecting typefaces, point sizes, line lengths, line-spacing, and letter-spacing. The term typography is also applied to the style, arrangement, and appearance of the letters, numbers, and symbols created by the process.',
       words: ['Typography', 'Multi-script', 'Variable', 'Hierarchy', 'Public Space', 'Design'],
     },
+    defaultWeight: 600,
+    featureMetadata: {
+      calt: {
+        name: 'Contextual alternates',
+        description: 'Depending on the surrounding context, different glyphs are used. Enabled by default',
+        exampleText: ["See: 13.", "12:34", "<br>", "1+2", "1−2", "1×2", "1÷2", "1=2", "~1", "<br>", "[CALT]", "(BRACKET)", "{BRACE}"].join(' '),
+        highlighted: [":", "+", "−", "×", "÷", "=", "~", "[", "(", "{", "]", ")", "}"].join(''),
+        enabledByDefault: true,
+      },
+      jalt: {
+        name: 'Justification alternates',
+        exampleText: `אדהכלםרת`.split('').join(' '),
+        enabledText: `ﬡﬢﬣﬤﬥﬦﬧﬨ`.split('').join(' '),
+        enabledByDefault: false,
+      },
+      tnum: {
+        name: 'Tabular numbers',
+        description: 'Fixed-width numbers are useful for tabular data, where comparing columns across rows is desired.',
+        exampleText: `$11.99; 0:08<br>
+$10.71; 1:41<br>
+١١٫٩٩$; ٠:٠٨<br>
+١٠٫٧١$; ١:٤١`,
+        highlighted: "0123456789٠١٢٣٤٥٦٧٨٩",
+        enabledByDefault: false,
+      },
+      locl: {
+        name: 'Localized forms',
+        description: 'Bulgarian localized glyph forms',
+        exampleText: `АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЪЮЯабвгдежзийклмнопрстуфхцчшщьъюя`.split('').join(' '),
+        highlighted: "ДЛФбвгджзийклптцшщьъю",
+        languageTag: 'BGR',
+        enabledByDefault: false,
+      },
+      ss01: {
+        name: 'Stylistic Set 1',
+        description: 'Alternate glyphs for Arabic letters.',
+        exampleText: [
+          "جاي",
+          "چپ",
+          "حبي",
+          "خوي",
+          "مي",
+          "يار",
+          "مي"
+        ].join(' '),
+        highlighted: ["ج", "چ", "ح", "خ", "م", "ي"].join(''),
+        enabledByDefault: false,
+      },
+      
+    },
   },
   {
     id: 'seoul-grotesk',
@@ -258,6 +320,60 @@ export const fonts: Font[] = [
       short: 'השועל החום המהיר קופץ מעל הכלב העצלן',
       long: 'טיפוגרפיה היא האמנות והטכניקה של סידור אותיות כדי להפוך שפה כתובה לקריאה, קריאה ומושכת כאשר היא מוצגת. סידור האותיות כולל בחירת גופנים, גדלי נקודות, אורכי שורות, ריווח שורות וריווח אותיות.',
       words: ['טיפוגרפיה', 'עיצוב', 'צורות אותיות', 'ריווח', 'קריאות', 'גרוטסק'],
+    },
+    featureMetadata: {
+      jalt: {
+        name: 'Justification alternates',
+        exampleText: `אדהכלםרת`.split('').join(' '),
+        enabledText: `ﬡﬢﬣﬤﬥﬦﬧﬨ`.split('').join(' '),
+        enabledByDefault: false,
+      },
+      liga: {
+        name: 'Standard Ligatures',
+        description: 'Common ligatures like fi, fl, ff. Enabled by default',
+        exampleText: [
+          "צצ", "אא", "אאא", "אל", "אש", "<br>", "ה.ת", "ו.ה",
+          "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת", "עי",
+          "ת.ד", "י.ו"
+        ].join(' '),
+        enabledByDefault: true,
+      },
+      tnum: {
+        name: 'Tabular numbers',
+        description: 'Fixed-width numbers are useful for tabular data, where comparing columns across rows is desired.',
+        exampleText: `₪11.99; 0:08<br>
+₪10.71; 1:41<br>
+₪29.99; 7:12`,
+        highlighted: "0123456789",
+        enabledByDefault: false,
+      },
+      zero: {
+        name: 'Slashed zero',
+        exampleText: `0123`,
+        highlighted: "123",
+        enabledByDefault: false,
+      },
+      ss01: {
+        name: 'Stylistic Set 1',
+        description: 'Sharper glyph set for otherwise rounder characters.',
+        exampleText: `אבגדהוזחטיךכלםמןנסעףפץצקרשת`.split('').join(' '),
+        highlighted: "בדהוחיךןסףר",
+        enabledByDefault: false,
+      },
+      ss02: {
+        name: 'Stylistic Set 2',
+        description: 'Alternate glyph for letters ק and ל.',
+        exampleText: `אבגקל`.split('').join(' '),
+        highlighted: "אבג",
+        enabledByDefault: false,
+      },
+      ss03: {
+        name: 'Stylistic Set 3',
+        description: 'Alternate glyph for letter ק.',
+        exampleText: `אבגק`.split('').join(' '),
+        highlighted: "אבג",
+        enabledByDefault: false,
+      },
     },
   },
 ]

@@ -35,12 +35,9 @@
               }}</span>
             </div>
             <!-- SHPE Axis Slider (for diode-global-next) -->
-            <div
-              v-if="isVariableFont && hasShapeAxis"
-              class="flex items-center gap-4"
-            >
-              <span class="text-sm text-white/70">SHPE</span>
-              <div class="relative w-32 h-1 bg-green-500 rounded-full">
+            <div v-if="isVariableFont && hasShapeAxis" class="grid grid-cols-2 grid-rows-2 items-center gap-x-4 gap-y-0">
+              <span class="text-sm text-white/70">Shape</span>
+              <div class="relative w-full max-w-32 h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2">
                 <div
                   class="absolute top-1/2 -translate-y-1/2 h-full bg-white rounded-full"
                   :style="{ width: `${shapePercentage}%` }"
@@ -51,8 +48,8 @@
                   @mousedown="startShapeSliderDrag"
                 ></div>
               </div>
-              <span class="text-sm text-white font-medium tabular-nums">{{
-                currentShape.toFixed(1)
+              <span class="text-sm text-white font-medium tabular-nums row-start-1 col-start-2 text-right">{{
+                currentShape.toFixed()
               }}</span>
             </div>
             <!-- Details Toggle -->
@@ -402,7 +399,7 @@ watch(
   samsaFontInstance,
   (font) => {
     if (font && hasShapeAxis.value && shapeAxis.value) {
-      currentShape.value = shapeAxis.value.default || shapeRange.value.default;
+      currentShape.value = 0;
     }
   },
   { immediate: true }
@@ -760,6 +757,12 @@ const characterGroups = computed(() => {
     characters: "+−×÷=><~^∞%‰".split(""),
   });
 
+  // Emojis
+  groups.push({
+    name: "Emojis",
+    characters: "🚆".split(""),
+  })
+
   return groups;
 });
 
@@ -859,7 +862,7 @@ const getCharCode = (char: string): string => {
 watch(
   samsaFontInstance,
   () => {
-    console.log("charCode", samsaFontInstance.value?.cmap);
+    // Font instance loaded
   },
   { immediate: true }
 );
