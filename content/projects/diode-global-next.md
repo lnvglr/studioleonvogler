@@ -6,13 +6,16 @@ categoryName: Type Design
 description: A comprehensive multi-script typeface family created through extensive research into typographic hierarchies in Israeli public space. The design explores how different scripts coexist and interact in urban environments, supporting Latin, Cyrillic, Greek, Georgian, and N'Ko scripts. The typeface addresses the complex challenges of multilingual typography while maintaining visual coherence and readability across all supported languages.
 image: img/projects/diode-global-next/diode-global.png
 alt: Typeface specimen for Diode Global Next
+fontName: ديود جلوبال نيكست
 date: 2024-09-01
 ---
 
-Why is Arabic text thinner on Tel Aviv bus displays than Hebrew and English? This research project designed a pixel typeface to test whether the hierarchy was technical necessity or design choice—revealing it was the latter.
+On Tel Aviv buses, the next stop appears on low-resolution LED displays in Hebrew, Arabic, and English. But something was off: Hebrew text used thick double-pixel strokes while Arabic used thin single-pixel strokes. Hebrew also appeared twice as often in the rotation.
 
-The investigation explored whether thinner Arabic text was due to technical constraints (Hebrew being compact, Arabic more intricate on low-resolution displays) or arbitrary/political reasons. A pixel typeface was designed for English, Hebrew, and Arabic to fit Tel Aviv bus LED displays.
+![Diode Global Next typeface specimen](/img/projects/diode-global-next/tel-aviv-bus.png)
 
-As it turned out, Arabic could be displayed with the same thickness as Hebrew and English. This revealed the visual hierarchy wasn't a technical necessity but a design choice with significant implications for how languages and communities are represented in public space.
+Was this hierarchy a technical necessity—Arabic being too complex for thick strokes on pixel displays—or a design choice? To find out, I designed a bitmap font matching the exact pixel dimensions of these bus displays, testing both single and double-pixel strokes for all three scripts.
 
-The typeface demonstrates that when designed with equal consideration, all three scripts can coexist with equal visual weight. Multiple languages were later added, making it a truly global multi-script typeface system.
+![Diode Global Next typeface specimen](/img/projects/diode-global-next/diode-global.png)
+
+The result? Arabic works perfectly with double-pixel strokes. The visual hierarchy wasn't technical—it was a design decision. This project became a multi-script typeface proving that when given equal consideration, Hebrew, Arabic, Latin, and many other scripts can coexist with equal visual weight in public space.

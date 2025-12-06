@@ -163,15 +163,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-.selection-container .card {
-  .input-container.hide {
-    opacity: 0;
-  }
-
-  &:hover .input-container.hide {
-    opacity: 1;
-  }
-}
-</style>

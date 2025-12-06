@@ -311,3 +311,4 @@ const carouselRef = ref<HTMLElement | null>(null)
 <style scoped>
 /* Smooth transitions */
 </style>
+

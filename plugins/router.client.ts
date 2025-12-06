@@ -40,3 +40,4 @@ export default defineNuxtPlugin((nuxtApp) => {
     originalWarn.apply(console, args)
   }
 })
+

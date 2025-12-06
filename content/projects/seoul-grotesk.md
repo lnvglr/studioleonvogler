@@ -1,6 +1,7 @@
 ---
 id: seoul-grotesk
 title: Seoul Grotesk
+fontName: סיאול גרוטסק
 category: type
 categoryName: Type Design
 description: A typeface design deeply inspired by the vibrant urban landscape and typographic culture of Seoul. The font captures the energy and character of the city through its letterforms, balancing modern functionality with distinctive personality. Designed to support both Latin and Hebrew scripts, Seoul Grotesk reflects the multicultural nature of contemporary design while maintaining strong visual identity.

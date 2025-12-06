@@ -1,49 +1,21 @@
 <template>
-  <div class="font-specimen w-full">
-    <!-- Dark Mode Toggle (if standalone) -->
-    <div v-if="standalone" class="flex justify-end mb-8">
-      <button
-        @click="toggleDarkMode"
-        class="p-2 rounded-lg hover:bg-stone-100 transition-colors"
-        aria-label="Toggle dark mode"
-      >
-        <svg
-          v-if="!isDark"
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-          />
-        </svg>
-        <svg
-          v-else
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-          />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Custom Title and Content (if provided) -->
-    <section v-if="title || content" class="mb-16">
-      <div v-if="title" class="mb-8">
-        <h1 class="text-4xl sm:text-5xl font-medium mb-4" :style="mastheadStyle">
+  <div 
+    class="text-neutral-800 w-full transition-opacity duration-300"
+    :class="{ 'opacity-0': !fontReady }"
+    :style="{ visibility: fontReady ? 'visible' : 'hidden' }"
+  >
+    <section v-if="title || fontName || content" class="mb-16">
+      <div v-if="title || fontName" class="mb-8 flex flex-col gap-0">
+      <div v-if="title">
+        <h1 class=" font-medium" :class="fontName ? 'text-xl sm:text-2xl text-neutral-400' : 'uppercase text-5xl sm:text-6xl'" :style="fontName ? {} : mastheadStyle">
           {{ title }}
         </h1>
+      </div>
+      <div v-if="fontName">
+        <h1 class="text-6xl sm:text-6xl font-medium" :style="mastheadStyle">
+          {{ fontName.toUpperCase() }}
+        </h1>
+      </div>
       </div>
       <div
         v-if="content"
@@ -69,9 +41,9 @@
     <!-- Large Alphabet Display (like Inter) -->
     <section class="mb-16">
       <h2 class="text-2xl font-medium mb-8">Alphabet</h2>
-      <div
-        contenteditable="true"
-        class="p-8 rounded-xl bg-stone-50 focus:outline-none focus:ring-2 focus:ring-green-500 min-h-[300px] whitespace-pre-wrap mix-blend-multiply"
+      <textarea
+        :value="alphabetDisplay"
+        class="w-full p-8 rounded-xl bg-stone-50 focus:outline-none focus:ring-2 focus:ring-green-500 min-h-[300px] whitespace-pre-wrap mix-blend-multiply resize-none border-none"
         :style="{
           fontFamily: currentFontFamily,
           fontSize: 'clamp(2.5rem, 6vw, 6rem)',
@@ -79,9 +51,7 @@
           lineHeight: 1.1,
           letterSpacing: '0.02em',
         }"
-      >
-        {{ alphabetDisplay }}
-      </div>
+      ></textarea>
     </section>
 
     <!-- Weight Examples (for variable fonts) -->
@@ -108,47 +78,67 @@
       </div>
     </section>
 
+    <!-- Font Features -->
+    <!-- <FontFeatures :font="font" /> -->
+
     <!-- Character Grid -->
     <section class="mb-16 w-screen relative -mx-5 sm:-mx-10 md:-mx-20">
       <CharacterGrid
         :font-family="currentFontFamily"
         :font-weight="currentVariant.weight"
         :font-id="font.id"
-        :supported-languages="font.supportedLanguages || []"
+        :supported-languages="normalizeSupportedLanguages(font.supportedLanguages)"
         :is-variable-font="isVariableFont"
         :weight-range="variableWeightRange"
       />
     </section>
 
     <!-- Supported Languages -->
-    <section v-if="font.supportedLanguages" class="mb-16">
+    <section v-if="languagesByScript" class="mb-16">
       <h2 class="text-2xl font-medium mb-8">Supported Languages</h2>
-      <div class="flex flex-wrap gap-2">
-        <span
-          v-for="lang in font.supportedLanguages"
-          :key="lang"
-          class="px-4 py-2 rounded-lg bg-stone-100"
-        >
-          {{ lang }}
-        </span>
+      <div v-for="(languages, script) in languagesByScript" :key="script" class="mb-6">
+        <h3 class="text-lg font-medium mb-3 text-neutral-700">{{ script }}</h3>
+        <div class="flex flex-wrap gap-2">
+          <span
+            v-for="lang in languages"
+            :key="lang"
+            class="px-4 py-2 rounded-lg bg-stone-100 mix-blend-multiply"
+          >
+            {{ lang }}
+          </span>
+        </div>
       </div>
+      <p class="text-sm text-neutral-600 mt-6">
+        Language support data referenced from
+        <a
+          href="https://hyperglot.rosettatype.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline hover:text-neutral-900"
+        >Hyperglot</a>, a database for detecting language support in fonts.
+      </p>
     </section>
+
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref, computed } from 'vue'
 import type { Font } from '~/data/fonts'
+import { useFontLoading } from '~/composables/useFontLoading'
 
 interface Props {
   font: Font
   standalone?: boolean
   title?: string
+  fontName?: string
   content?: any // ContentRenderer value
 }
 
 const props = withDefaults(defineProps<Props>(), {
   standalone: false,
   title: undefined,
+  fontName: undefined,
   content: undefined,
 })
 
@@ -190,7 +180,21 @@ const currentVariant = computed(() => {
 })
 
 const currentFontFamily = computed(() => {
-  return `"${props.font.name}", system-ui, sans-serif`
+  return `"${props.font.name}", "Gramatika", system-ui, sans-serif`
+})
+
+// Font loading detection
+const { waitForFont } = useFontLoading()
+const fontReady = ref(false)
+
+// Wait for the current font to load
+onMounted(async () => {
+  if (typeof window !== 'undefined') {
+    await waitForFont(props.font.name)
+    fontReady.value = true
+  } else {
+    fontReady.value = true
+  }
 })
 
 
@@ -199,7 +203,7 @@ const getAlphabetForLanguage = (language: string): string => {
   const lang = language.toLowerCase()
   
   if (lang.includes('hebrew')) {
-    return 'אבגדהוזחטיכךסעפצקרשת'
+    return "אבגדהוזחטיכךלמםנןסעפףצץקרשת"
   }
   if (lang.includes('arabic')) {
     return 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي'
@@ -220,18 +224,50 @@ const getAlphabetForLanguage = (language: string): string => {
   return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 }
 
+// Helper function to normalize supportedLanguages (handles both array and object formats)
+const normalizeSupportedLanguages = (supportedLanguages?: string[] | Record<string, string[]>): string[] => {
+  if (!supportedLanguages) return []
+  if (Array.isArray(supportedLanguages)) return supportedLanguages
+  // If it's an object, flatten all languages from all scripts
+  return Object.keys(supportedLanguages)
+}
+
+// Get all languages grouped by script (for display)
+const languagesByScript = computed(() => {
+  const supportedLanguages = props.font.supportedLanguages
+  if (!supportedLanguages) return null
+  if (Array.isArray(supportedLanguages)) {
+    // Old format: group by script name if present in language name
+    const grouped: Record<string, string[]> = {}
+    for (const lang of supportedLanguages) {
+      const script = lang.includes('Arabic') ? 'Arabic' :
+                    lang.includes('Cyrillic') || lang.includes('Russian') ? 'Cyrillic' :
+                    lang.includes('Georgian') ? 'Georgian' :
+                    lang.includes('Greek') ? 'Greek' :
+                    lang.includes('Hebrew') || lang.includes('Yiddish') ? 'Hebrew' :
+                    'Latin'
+      if (!grouped[script]) grouped[script] = []
+      grouped[script].push(lang)
+    }
+    return Object.keys(grouped).length > 0 ? grouped : null
+  }
+  // New format: already grouped by script
+  return supportedLanguages
+})
+
 const alphabetDisplay = computed(() => {
   // Get first supported language
-  const supportedLanguages = props.font.supportedLanguages || []
+  const supportedLanguages = normalizeSupportedLanguages(props.font.supportedLanguages)
   
   if (supportedLanguages.length > 0) {
     const firstLanguage = supportedLanguages[0]
+    console.log('firstLanguage', firstLanguage)
     return getAlphabetForLanguage(firstLanguage)
   }
   
   // Fallback: check font ID for backward compatibility
   if (props.font.id === 'heebo' || props.font.id === 'seoul-grotesk') {
-    return 'אבגדהוזחטיכךסעפצקרשת'
+    return 'אבגדהוזחטיכךלמםנןסעפףצץקרשת'
   }
   
   // Default: Latin uppercase
@@ -242,20 +278,11 @@ const weightExamples = computed(() => {
   if (!isVariableFont.value) return []
   const { min, max } = variableWeightRange.value
   // Generate weight steps: Thin, ExtraLight, Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black
-  const steps = [100, 200, 300, 400, 500, 600, 700, 800, 900]
+  const steps = [100, 300, 500, 700, 900]
   return steps.filter(w => w >= min && w <= max)
 })
 
 const weightSampleTexts = computed(() => {
-  if (props.font.id === 'heebo') {
-    return [
-      'טיפוגרפיה עברית היא אמנות',
-      'אותיות וצורות מעוצבות בקפידה',
-      'קריאות ונוחות קריאה מעולות',
-      'עיצוב גופנים דיגיטליים מודרניים',
-      'טיפוגרפיה עברית דיגיטלית מעולה'
-    ]
-  }
   if (props.font.id === 'diode-global-next') {
     return [
       'Typography & Design in Public Space',
@@ -301,7 +328,7 @@ const getWeightName = (weight: number): string => {
 
 const mastheadStyle = computed(() => ({
   fontFamily: currentFontFamily.value,
-  fontWeight: currentVariant.value.weight,
+  fontWeight: 700,
 }))
 
 const toggleDarkMode = () => {
@@ -321,13 +348,3 @@ onMounted(() => {
   }
 })
 </script>
-
-<style scoped>
-.font-specimen {
-  color: #1c1917;
-}
-
-.dark .font-specimen {
-  color: #fafaf9;
-}
-</style>

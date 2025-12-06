@@ -1,6 +1,7 @@
 export interface Project {
   id: string
   title: string
+  fontName?: string
   category: 'editorial' | 'type' | 'graphic' | 'web'
   categoryName: string
   description: string
@@ -14,6 +15,7 @@ export const projects: Project[] = [
   {
     id: 'military-occupations',
     title: 'Military Occupations – An Index',
+    fontName: "סיאול גרוטסק",
     category: 'editorial',
     categoryName: 'Editorial Design',
     description: 'An extensive index that explores the complex history and impact of military occupations through a carefully crafted typographic and editorial approach. The publication examines various case studies, historical contexts, and contemporary perspectives, using typography and layout as tools to navigate difficult subject matter with clarity and sensitivity.',

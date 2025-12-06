@@ -239,35 +239,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-.selection-container > div {
-  position: relative;
-  &:last-child::before,
-  &:last-child::after {
-    --i: 20;
-    // content: '';
-    position: relative;
-    height: 100%;
-    // width: calc(var(--i) * 100%);
-    width: calc(100% / 64);
-    top: 0;
-    transform: translate(calc(100% / var(--i)), -100%);
-    display: block;
-  }
-  &:last-child::before {
-    background: var(--color-beige-50);
-    position: absolute;
-    transform: translate(calc(100% / var(--i)), 0%);
-    margin: 1px;
-    width: calc(var(--i) * 100% - 2px);
-    height: calc(100% - 2px);
-    border-radius: var(--rounded-lg);
-    z-index: 20;
-  }
-  &:last-child::after {
-    z-index: 10;
-    background: var(--color-beige-500);
-  }
-}
-</style>

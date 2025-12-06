@@ -11,6 +11,7 @@
       <FontSpecimen 
         :font="font" 
         :title="project.title"
+        :fontName="project.fontName"
         :content="content"
       />
     </article>
