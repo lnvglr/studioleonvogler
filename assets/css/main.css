@@ -6,26 +6,26 @@
 	font-family: "Gramatika";
 	src: url("/fonts/Gramatika-Regular.woff2") format("woff2");
 	font-weight: normal;
-  font-display: block;
+  font-display: swap;
 }
 @font-face {
 	font-family: "Gramatika";
 	src: url("/fonts/Gramatika-Medium.woff2") format("woff2");
 	font-weight: medium;
-  font-display: block;
+  font-display: swap;
 }
 @font-face {
   font-family: "Gramatika";
 	src: url("/fonts/Gramatika-Bold.woff2") format("woff2");
 	font-weight: bold;
-  font-display: block;
+  font-display: swap;
 }
 @font-face {
 	font-family: "Heebo";
   src: url("/fonts/Heebo-Medium.woff2") format("woff2");
   font-weight: normal;
   unicode-range: U+0590-05FF, U+0030-0039;
-  font-display: block;
+  font-display: swap;
 }
 
 @font-face {

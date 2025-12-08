@@ -30,6 +30,7 @@
               :alt="project.alt"
               class="w-full h-full object-cover"
               :loading="index === 0 ? 'eager' : 'lazy'"
+              :fetchpriority="index === 0 ? 'high' : undefined"
               format="webp"
               quality="70"
               sizes="(max-width: 320px) 640px, (max-width: 640px) 1280px, 1920px"

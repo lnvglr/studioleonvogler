@@ -43,4 +43,12 @@ export default defineNuxtConfig({
       strict: false,
     },
   },
+  routeRules: {
+    // Cache static assets for 1 year
+    '/fonts/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
+    '/img/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
+    '/_ipx/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
+    // Cache HTML pages for 1 hour, revalidate
+    '/**': { headers: { 'Cache-Control': 'public, max-age=3600, must-revalidate' } },
+  },
 })
