@@ -30,7 +30,10 @@ const interval = ref()
 
 onMounted(async () => {
   await router.isReady()
-  interval.value = setInterval(() => hue.value++, 1000)
+  // Defer hue rotation animation to reduce initial load work
+  requestAnimationFrame(() => {
+    interval.value = setInterval(() => hue.value++, 1000)
+  })
 })
 onBeforeUnmount(() => {
   clearInterval(interval.value)

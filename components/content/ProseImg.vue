@@ -3,7 +3,7 @@
     :src="normalizedSrc"
     :alt="alt"
     format="webp"
-    quality="85"
+    quality="80"
     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 768px, 672px"
     fit="inside"
     placeholder

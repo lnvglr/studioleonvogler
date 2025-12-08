@@ -33,7 +33,7 @@
 	src: url("/fonts/DiodeGlobalNewVF.ttf") format("truetype");
 	font-weight: 100 900;
 	font-style: normal;
-	font-display: block;
+	font-display: swap;
 }
 
 @font-face {
@@ -41,7 +41,7 @@
 	src: url("/fonts/SeoulGrotesqueVF.ttf") format("truetype");
 	font-weight: 100 900;
 	font-style: normal;
-	font-display: block;
+	font-display: swap;
 }
 body {
 	font-feature-settings: "ss02", "ss03", "ss04", "ss06";

@@ -35,7 +35,7 @@
             :alt="imageAlt"
             class="object-contain rounded-lg w-auto h-auto"
             format="webp"
-            quality="90"
+            quality="85"
             sizes="(max-width: 640px) 640px, (max-width: 1280px) 1280px, 1920px"
             fit="inside"
             width="1920"

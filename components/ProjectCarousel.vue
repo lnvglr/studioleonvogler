@@ -25,18 +25,25 @@
             class="block w-full h-full cursor-pointer"
           >
             <NuxtImg
+              v-if="shouldLoadImage(index)"
               :ref="(el) => setImageRef(el, index)"
               :src="project.image.startsWith('/') ? project.image : `/${project.image}`"
               :alt="project.alt"
               class="w-full h-full object-cover"
-              :loading="index === 0 ? 'eager' : 'lazy'"
-              :fetchpriority="index === 0 ? 'high' : undefined"
+              :loading="index === currentIndex ? 'eager' : 'lazy'"
+              :fetchpriority="index === currentIndex ? 'high' : undefined"
+              :placeholder="index === 0 ? true : false"
               format="webp"
-              quality="70"
-              sizes="(max-width: 320px) 640px, (max-width: 640px) 1280px, 1920px"
+              quality="85"
+              sizes="(max-width: 320px) 320px, (max-width: 640px) 640px, (max-width: 768px) 768px, (max-width: 1024px) 512px, (max-width: 1280px) 640px, (max-width: 1536px) 768px, (max-width: 1920px) 960px, 1200px"
               fit="cover"
-              placeholder
+              width="1920"
+              height="1920"
               @load="onImageLoad(index, $event)"
+            />
+            <div
+              v-else
+              class="w-full h-full bg-stone-100"
             />
           </NuxtLink>
           
@@ -160,6 +167,32 @@ const isPaused = ref(false)
 const progressStartTime = ref(0)
 const imageRefs = ref<(HTMLImageElement | null)[]>([])
 const imageBrightness = ref<number[]>([])
+
+// Computed property to get indices that should be loaded (current, previous, next only)
+const indicesToLoad = computed(() => {
+  const total = props.projects.length
+  const current = currentIndex.value
+  const indices = new Set<number>()
+  
+  // Always load current image
+  indices.add(current)
+  
+  // Load previous image (handle wrap-around)
+  const prevIndex = current === 0 ? total - 1 : current - 1
+  indices.add(prevIndex)
+  
+  // Load next image (handle wrap-around)
+  const nextIndex = current === total - 1 ? 0 : current + 1
+  indices.add(nextIndex)
+  
+  return indices
+})
+
+// Determine which images should be loaded (current, previous, next)
+const shouldLoadImage = (index: number): boolean => {
+  return indicesToLoad.value.has(index)
+}
+
 const textColorClass = computed(() => {
   if (imageBrightness.value[currentIndex.value] === undefined) {
     return 'text-white' // Default to white
@@ -307,6 +340,9 @@ onMounted(() => {
   startProgress()
   // Initialize brightness array
   imageBrightness.value = new Array(props.projects.length).fill(undefined)
+  
+  // Initial images will be loaded via shouldLoadImage computed property
+  // which automatically includes current (0), next (1), and previous (last)
 })
 
 onBeforeUnmount(() => {

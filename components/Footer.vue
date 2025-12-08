@@ -3,7 +3,7 @@
     <nav role="navigation">
       <ul aria-expanded="false" class="flex flex-col sm:flex-row sm:items-center gap-3">
         <li v-for="(item, i) in menu" :key="i">
-          <NuxtLink :to="item.link" class="hover:underline">{{ item.name }}</NuxtLink>
+          <NuxtLink :to="item.link" class="hover:underline leading-none">{{ item.name }}</NuxtLink>
         </li>
       </ul>
     </nav>

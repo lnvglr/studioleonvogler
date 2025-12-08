@@ -51,4 +51,13 @@ export default defineNuxtConfig({
     // Cache HTML pages for 1 hour, revalidate
     '/**': { headers: { 'Cache-Control': 'public, max-age=3600, must-revalidate' } },
   },
+  app: {
+    head: {
+      link: [
+        // DNS prefetch for external resources (if any)
+        // Preconnect to same origin for faster resource loading
+        { rel: 'preconnect', href: '/', crossorigin: 'anonymous' },
+      ],
+    },
+  },
 })

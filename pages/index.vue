@@ -77,6 +77,23 @@ useHead({
   htmlAttrs: {
     lang: 'en-US',
   },
+  link: [
+    // Preload critical fonts
+    {
+      rel: 'preload',
+      as: 'font',
+      type: 'font/woff2',
+      href: '/fonts/Gramatika-Regular.woff2',
+      crossorigin: 'anonymous',
+    },
+    {
+      rel: 'preload',
+      as: 'font',
+      type: 'font/woff2',
+      href: '/fonts/Heebo-Medium.woff2',
+      crossorigin: 'anonymous',
+    },
+  ],
 })
 useSeoMeta({
   title: 'Studio Leon Vogler',
