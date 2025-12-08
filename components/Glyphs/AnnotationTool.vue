@@ -176,9 +176,6 @@ export default defineComponent({
     },
   },
   watch: {
-    hoverRemove(s) {
-      // console.log(s)
-    },
     pointer({ x, y }) {
       if (!this.glyph || !this.scaling || !this.offset || !this.height) return
       this.$state.opinion.annotationTool = {

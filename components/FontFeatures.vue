@@ -151,7 +151,6 @@ const extractFeaturesFromFont = async () => {
     }
 
     const fontUrl = fontFile.startsWith('/') ? fontFile : `/${fontFile}`
-    console.log('[FontFeatures] Loading font:', fontUrl)
     
     let samsaFont
     try {
@@ -170,19 +169,6 @@ const extractFeaturesFromFont = async () => {
       return
     }
     
-    // Debug: Check all possible feature locations
-    console.log('[FontFeatures] Font structure:', {
-      hasTables: !!samsaFont.tables,
-      tableKeys: samsaFont.tables ? Object.keys(samsaFont.tables) : [],
-      hasGSUB: !!samsaFont.tables?.GSUB,
-      gsubKeys: samsaFont.tables?.GSUB ? Object.keys(samsaFont.tables.GSUB) : null,
-      hasFeaturesDirect: !!samsaFont.features,
-      featuresDirectLength: samsaFont.features?.length,
-      hasFeaturesInGSUB: !!samsaFont.tables?.GSUB?.features,
-      featuresInGSUBLength: samsaFont.tables?.GSUB?.features?.length,
-      gsubData: samsaFont.tables?.GSUB?.data ? Object.keys(samsaFont.tables.GSUB.data) : null
-    })
-    
     // Try both locations: font.features (direct) and font.tables.GSUB.features
     let gsubFeatures = samsaFont.features || samsaFont.tables?.GSUB?.features
     
@@ -198,21 +184,11 @@ const extractFeaturesFromFont = async () => {
       return
     }
 
-    console.log('[FontFeatures] Features found:', {
-      count: gsubFeatures.length,
-      source: samsaFont.features ? 'font.features' : 'font.tables.GSUB.features',
-      firstFeature: gsubFeatures[0],
-      allTags: gsubFeatures.map(f => f?.tag).filter(Boolean),
-      hasJalt: gsubFeatures.some(f => f?.tag?.toLowerCase() === 'jalt'),
-      jaltFeature: gsubFeatures.find(f => f?.tag?.toLowerCase() === 'jalt')
-    })
-
     const fontFeatures: FontFeature[] = []
 
     // Also add features that are in metadata but not found in font (for testing/preview)
     Object.keys(featureMetadata.value).forEach(tag => {
         const metadata = featureMetadata.value[tag]
-        console.log('[FontFeatures] Adding feature from metadata (not in font):', tag)
         const fontFeature: FontFeature = {
           tag,
           name: metadata.name,
@@ -227,11 +203,6 @@ const extractFeaturesFromFont = async () => {
         }
         
         fontFeatures.push(fontFeature)
-    })
-
-    console.log('[FontFeatures] Processed features:', {
-      total: fontFeatures.length,
-      tags: fontFeatures.map(f => f.tag)
     })
 
     // Sort features: common ones first, then stylistic sets, then character variants
@@ -268,7 +239,6 @@ const extractFeaturesFromFont = async () => {
     features.value = []
   } finally {
     isLoading.value = false
-    console.log('[FontFeatures] extractFeaturesFromFont completed, isLoading:', isLoading.value)
   }
 }
 

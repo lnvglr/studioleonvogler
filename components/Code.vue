@@ -71,7 +71,7 @@
 }
 
 .custom-link span {
-  background: url('https://media2.giphy.com/media/3og0IGjLXRttYbbtcc/200w.webp?cid=ecf05e47yhra8n67yahrknntz48jrojzob4u2qwsmk1dwqgj&rid=200w.webp&ct=g');
+  background: url('/img/code-flow.webp');
   background-size: cover;
   background-position: center;
   background-clip: text;

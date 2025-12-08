@@ -52,6 +52,9 @@
           v-if="content"
           :value="content"
           class="prose prose-neutral max-w-none prose-headings:font-medium prose-p:font-normal prose-p:text-neutral-700 prose-p:leading-relaxed prose-img:rounded-xl prose-img:my-16 prose-img:mb-20 prose-p:mb-8 prose-img:cursor-pointer prose-img:hover:opacity-90 prose-img:transition-opacity"
+          :components="{
+            img: ProseImg
+          }"
         />
       </div>
     </article>
@@ -73,6 +76,7 @@
 
 <script setup lang="ts">
 import { getFontById } from '~/data/fonts'
+import ProseImg from '~/components/content/ProseImg.vue'
 
 const route = useRoute()
 const projectId = route.params.id as string
@@ -106,7 +110,6 @@ const { data: content } = await useAsyncData(`project-${projectId}`, async () =>
     }
   } catch (e) {
     // Content file doesn't exist, will fallback to data
-    console.log('Content file not found, using data fallback')
   }
   return null
 })
@@ -136,37 +139,7 @@ const getImagePath = (imagePath: string) => {
   return imagePath.startsWith('/') ? imagePath : `/${imagePath}`
 }
 
-// Attach click handlers to images in markdown content
-const attachImageHandlers = () => {
-  nextTick(() => {
-    if (contentRef.value) {
-      const images = contentRef.value.querySelectorAll('img')
-      images.forEach((img) => {
-        // Skip if already has handler
-        if (img.dataset.lightboxHandler === 'true') return
-        
-        img.style.cursor = 'pointer'
-        img.dataset.lightboxHandler = 'true'
-        img.addEventListener('click', () => {
-          const src = img.getAttribute('src') || ''
-          const alt = img.getAttribute('alt') || ''
-          // Handle relative paths
-          const fullSrc = src.startsWith('/') ? src : `/${src}`
-          openLightbox(fullSrc, alt)
-        })
-      })
-    }
-  })
-}
-
-// Watch for content changes and attach handlers
-watch(() => content.value, () => {
-  attachImageHandlers()
-}, { immediate: true })
-
-onMounted(() => {
-  attachImageHandlers()
-})
+// Image handlers are now handled by ProseImg component
 
 useHead({
   htmlAttrs: {

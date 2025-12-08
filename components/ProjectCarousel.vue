@@ -24,12 +24,17 @@
             :to="`/projects/${project.id}`"
             class="block w-full h-full cursor-pointer"
           >
-            <img
+            <NuxtImg
               :ref="(el) => setImageRef(el, index)"
-              :src="project.image"
+              :src="project.image.startsWith('/') ? project.image : `/${project.image}`"
               :alt="project.alt"
               class="w-full h-full object-cover"
               :loading="index === 0 ? 'eager' : 'lazy'"
+              format="webp"
+              quality="70"
+              sizes="(max-width: 320px) 640px, (max-width: 640px) 1280px, 1920px"
+              fit="cover"
+              placeholder
               @load="onImageLoad(index, $event)"
             />
           </NuxtLink>
@@ -163,7 +168,9 @@ const textColorClass = computed(() => {
 
 const setImageRef = (el: any, index: number) => {
   if (el) {
-    imageRefs.value[index] = el
+    // NuxtImg wraps the img element, so we need to get the actual img
+    const imgElement = el.$el?.tagName === 'IMG' ? el.$el : el.$el?.querySelector('img')
+    imageRefs.value[index] = imgElement || el
   }
 }
 
@@ -223,9 +230,12 @@ const calculateBrightness = (img: HTMLImageElement): Promise<number> => {
 }
 
 const onImageLoad = async (index: number, event: Event) => {
-  const img = event.target as HTMLImageElement
-  const brightness = await calculateBrightness(img)
-  imageBrightness.value[index] = brightness
+  // NuxtImg emits load event from the underlying img element
+  const target = event.target as HTMLImageElement
+  if (target && target.tagName === 'IMG') {
+    const brightness = await calculateBrightness(target)
+    imageBrightness.value[index] = brightness
+  }
 }
 
 const goToIndex = (index: number) => {

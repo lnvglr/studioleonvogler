@@ -32,7 +32,10 @@
         v-if="content"
         class="prose prose-neutral max-w-none prose-headings:font-medium prose-p:font-normal prose-p:text-neutral-700 prose-p:leading-relaxed prose-img:rounded-xl prose-img:my-16 prose-img:mb-20 prose-p:mb-8"
       >
-        <ContentRenderer :value="content" />
+        <ContentRenderer 
+          :value="content"
+          :components="{ img: ProseImg }"
+        />
       </div>
     </section>
 
@@ -153,6 +156,7 @@
 import { onMounted, ref, computed } from "vue";
 import type { Font } from "~/data/fonts";
 import { useFontLoading } from "~/composables/useFontLoading";
+import ProseImg from "~/components/content/ProseImg.vue";
 
 interface Props {
   font: Font;
@@ -304,7 +308,6 @@ const alphabetDisplay = computed(() => {
 
   if (supportedLanguages.length > 0) {
     const firstLanguage = supportedLanguages[0];
-    console.log("firstLanguage", firstLanguage);
     return getAlphabetForLanguage(firstLanguage);
   }
 

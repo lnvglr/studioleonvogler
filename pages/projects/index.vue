@@ -49,11 +49,18 @@
         class="flex flex-col gap-3 group"
       >
         <div class="overflow-hidden bg-stone-50">
-          <img
-            :src="project.image"
+          <NuxtImg
+            :src="project.image.startsWith('/') ? project.image : `/${project.image}`"
             :alt="project.alt"
             class="w-full h-64 object-cover group-hover:scale-[1.02] transition-transform duration-500"
             :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
+            format="webp"
+            quality="85"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            fit="cover"
+            width="600"
+            height="400"
+            placeholder
             loading="lazy"
           />
         </div>

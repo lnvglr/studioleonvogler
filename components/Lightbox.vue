@@ -28,11 +28,19 @@
         </button>
 
         <!-- Image Container -->
-        <div class="relative max-w-[95vw] max-h-[95vh] p-4">
-          <img
+        <div class="relative max-w-[95vw] max-h-[95vh] p-4 w-auto h-auto">
+          <NuxtImg
+            v-if="imageSrc"
             :src="imageSrc"
             :alt="imageAlt"
-            class="max-w-full max-h-[95vh] object-contain rounded-lg"
+            class="object-contain rounded-lg w-auto h-auto"
+            format="webp"
+            quality="90"
+            sizes="(max-width: 640px) 640px, (max-width: 1280px) 1280px, 1920px"
+            fit="inside"
+            width="1920"
+            height="1080"
+            placeholder
             @click.stop
           />
         </div>

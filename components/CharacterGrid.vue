@@ -442,7 +442,6 @@ const loadFontMetrics = async () => {
 
     const fontFile = font.variants[0].file;
     const fontUrl = fontFile.startsWith("/") ? fontFile : `/${fontFile}`;
-    console.log("fontUrl", fontUrl);
 
     // Load font using Samsa composable
     const samsaFont = await loadFont(fontUrl);
@@ -624,7 +623,6 @@ const characterGroups = computed(() => {
       name: "Cyrillic Lowercase",
       characters: cyrillicLower,
     });
-    console.log("supportsBelarusian", supportsBelarusian);
     // Belarusian characters
     if (supportsBelarusian) {
       // Extended Belarusian from font
@@ -951,14 +949,6 @@ const loadGlyphOutline = async (char: string) => {
       console.warn("No outline returned for character:", char);
       return;
     }
-
-    console.log("Loaded glyph outline:", {
-      char,
-      hasPath: !!outline.path,
-      pathLength: outline.path?.length,
-      bbox: outline.bbox,
-      controlPoints: outline.controlPoints?.length || 0,
-    });
 
     const bbox = outline.bbox;
 

@@ -90,35 +90,29 @@ export function useSamsa() {
 
   const loadFont = async (fontUrl: string): Promise<any> => {
     try {
-      console.log('[useSamsa] loadFont called:', fontUrl)
       const Samsa = await loadSamsa()
       if (!Samsa) {
         console.error('[useSamsa] Samsa library not available')
         return null
       }
 
-      console.log('[useSamsa] Fetching font...')
       const response = await fetch(fontUrl)
       if (!response.ok) {
         console.error('[useSamsa] Failed to fetch font:', response.status, response.statusText)
         return null
       }
       
-      console.log('[useSamsa] Font fetched, parsing...')
       const arrayBuffer = await response.arrayBuffer()
       
       // SamsaFont requires a callback - wrap it in a promise
       const samsaFont = await new Promise<any>((resolve, reject) => {
         try {
-          console.log('[useSamsa] Creating SamsaFont instance...')
           const font = new Samsa({ 
             arrayBuffer,
             callback: (parsedFont: any) => {
-              console.log('[useSamsa] SamsaFont callback invoked, font parsed')
               resolve(parsedFont)
             }
           })
-          console.log('[useSamsa] SamsaFont instance created')
           // Note: parse() is called synchronously in constructor when arrayBuffer is provided
           // The callback will be invoked synchronously, so resolve will be called immediately
         } catch (error) {
@@ -127,21 +121,6 @@ export function useSamsa() {
         }
       })
       
-      console.log('[useSamsa] SamsaFont promise resolved')
-      
-      // Log feature-related info for debugging
-      console.log('[useSamsa] Font loaded, feature structure:', {
-        hasTables: !!samsaFont.tables,
-        tableKeys: samsaFont.tables ? Object.keys(samsaFont.tables) : [],
-        hasGSUB: !!samsaFont.tables?.GSUB,
-        hasFeaturesDirect: !!samsaFont.features,
-        featuresDirectLength: samsaFont.features?.length,
-        hasFeaturesInGSUB: !!samsaFont.tables?.GSUB?.features,
-        featuresInGSUBLength: samsaFont.tables?.GSUB?.features?.length,
-        gsubKeys: samsaFont.tables?.GSUB ? Object.keys(samsaFont.tables.GSUB) : null,
-        fontKeys: Object.keys(samsaFont).filter(k => !k.startsWith('_'))
-      })
-
       return samsaFont
     } catch (error) {
       console.error('[useSamsa] Error in loadFont:', error)
