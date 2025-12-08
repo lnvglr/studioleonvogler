@@ -50,6 +50,7 @@
 
           <!-- Off Column -->
           <div
+          data-off-column
             class="md:col-span-5 leading-tight text-neutral-900 text-5xl break-words"
             :style="{
               fontFamily: fontFamily,
@@ -64,6 +65,7 @@
           <!-- On Column -->
           <div
             class="md:col-span-5 leading-tight text-neutral-900 text-5xl break-words"
+            data-on-column
             :style="{
               fontFamily: fontFamily,
               fontWeight: currentWeight,
@@ -71,7 +73,7 @@
               fontLanguageOverride: getLanguageOverride(feature.tag, true),
             }"
           >
-            <div v-html="feature.enabledText || feature.exampleText"></div>
+            <div v-html="feature.enabledText || getProcessedExampleText(feature)"></div>
           </div>
 
           <hr class="col-span-full border-t border-neutral-800 mt-4" />
@@ -322,7 +324,7 @@ const getProcessedExampleText = (feature: FontFeature): string => {
     const highlightedChars = highlighted.map(char => 
       char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     ).join('')
-    const regex = new RegExp(`[${highlightedChars}]`, 'g')
+    const regex = new RegExp(`[^${highlightedChars}]`, 'g')
     processed = processed.replace(regex, match => `<span style="opacity: 0.5">${match}</span>`)
     
     return processed

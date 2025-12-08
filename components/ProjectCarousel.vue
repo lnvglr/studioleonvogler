@@ -192,7 +192,9 @@ const calculateBrightness = (img: HTMLImageElement): Promise<number> => {
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
     
     try {
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      // Only get image data from the top third of the image
+      const topThirdHeight = Math.floor(canvas.height / 3)
+      const imageData = ctx.getImageData(0, 0, canvas.width, topThirdHeight)
       const data = imageData.data
       let r = 0
       let g = 0

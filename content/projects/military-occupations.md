@@ -4,7 +4,7 @@ title: Military Occupations – An Index
 category: editorial
 categoryName: Editorial Design
 description: An extensive index that explores the complex history and impact of military occupations through a carefully crafted typographic and editorial approach. The publication examines various case studies, historical contexts, and contemporary perspectives, using typography and layout as tools to navigate difficult subject matter with clarity and sensitivity.
-image: img/projects/military-occupations/03-mo-mockup-chapter-1-scaled.jpg
+image: img/projects/military-occupations/02-mo-mockup-perspective-contents.jpg
 alt: Open book with about military occupations
 date: 2020-07-01
 ---

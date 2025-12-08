@@ -330,7 +330,7 @@ $10.71; 1:41<br>
       },
       liga: {
         name: 'Standard Ligatures',
-        description: 'Common ligatures like fi, fl, ff. Enabled by default',
+        description: 'Special ligaures like אל and אאא, as well as gender-sensitive ligatures.',
         exampleText: [
           "צצ", "אא", "אאא", "אל", "אש", "<br>", "ה.ת", "ו.ה",
           "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת", "עי",
@@ -341,37 +341,37 @@ $10.71; 1:41<br>
       tnum: {
         name: 'Tabular numbers',
         description: 'Fixed-width numbers are useful for tabular data, where comparing columns across rows is desired.',
-        exampleText: `₪11.99; 0:08<br>
-₪10.71; 1:41<br>
-₪29.99; 7:12`,
-        highlighted: "0123456789",
+        exampleText: `0:08; ₪11.99<br>
+1:41;  ₪11.71<br>
+7:12; ₪29.99`,
+        highlighted: "₪0123456789",
         enabledByDefault: false,
       },
       zero: {
         name: 'Slashed zero',
         exampleText: `0123`,
-        highlighted: "123",
+        highlighted: "0",
         enabledByDefault: false,
       },
       ss01: {
         name: 'Stylistic Set 1',
         description: 'Sharper glyph set for otherwise rounder characters.',
         exampleText: `אבגדהוזחטיךכלםמןנסעףפץצקרשת`.split('').join(' '),
-        highlighted: "בדהוחיךןסףר",
+        highlighted: "אגזטכלמנעפצקשת",
         enabledByDefault: false,
       },
       ss02: {
         name: 'Stylistic Set 2',
         description: 'Alternate glyph for letters ק and ל.',
         exampleText: `אבגקל`.split('').join(' '),
-        highlighted: "אבג",
+        highlighted: "קל",
         enabledByDefault: false,
       },
       ss03: {
         name: 'Stylistic Set 3',
         description: 'Alternate glyph for letter ק.',
         exampleText: `אבגק`.split('').join(' '),
-        highlighted: "אבג",
+        highlighted: "ק",
         enabledByDefault: false,
       },
     },

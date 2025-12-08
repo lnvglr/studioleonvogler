@@ -4,7 +4,7 @@ title: Diode Global Next
 category: type
 categoryName: Type Design
 description: A comprehensive multi-script typeface family created through extensive research into typographic hierarchies in Israeli public space. The design explores how different scripts coexist and interact in urban environments, supporting Latin, Cyrillic, Greek, Georgian, and N'Ko scripts. The typeface addresses the complex challenges of multilingual typography while maintaining visual coherence and readability across all supported languages.
-image: img/projects/diode-global-next/diode-global.png
+image: img/projects/diode-global-next/diode-mockup.jpg
 alt: Typeface specimen for Diode Global Next
 fontName: ديود جلوبال نيكست
 date: 2024-09-01

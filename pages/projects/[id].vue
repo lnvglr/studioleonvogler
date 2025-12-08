@@ -40,16 +40,7 @@
       </div>
 
       <div class="max-w-2xl">
-        <p class="text-lg leading-relaxed mb-8 sm:mb-10 font-normal">{{ project.description }}</p>
-      </div>
-
-      <div class="w-full">
-        <img
-          :src="getImagePath(project.image)"
-          :alt="project.alt || project.title"
-          class="rounded-xl bg-stone-50 w-full object-cover"
-          loading="lazy"
-        />
+        <p class="text-lg leading-relaxed font-normal">{{ project.description }}</p>
       </div>
 
       <div
@@ -81,7 +72,6 @@
 </template>
 
 <script setup lang="ts">
-import { projects, getProjectById } from '~/data/projects'
 import { getFontById } from '~/data/fonts'
 
 const route = useRoute()
@@ -123,10 +113,7 @@ const { data: content } = await useAsyncData(`project-${projectId}`, async () =>
 
 // Get project data (from content or fallback to data file)
 const project = computed(() => {
-  if (content.value) {
-    return content.value
-  }
-  return getProjectById(projectId)
+  return content.value
 })
 
 const contentHtml = computed(() => {

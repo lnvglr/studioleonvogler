@@ -57,8 +57,21 @@
 <script setup lang="ts">
 import { getProjectsWithDates } from '~/data/projects'
 
-// Load projects with dates
-const { data: projects } = await useAsyncData('home-projects-with-dates', () => getProjectsWithDates())
+// Shuffle array function (Fisher-Yates algorithm)
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
+
+// Load projects with dates and randomize order
+const { data: projects } = await useAsyncData('home-projects-with-dates', async () => {
+  const projectsData = await getProjectsWithDates()
+  return shuffleArray(projectsData)
+})
 
 useHead({
   htmlAttrs: {

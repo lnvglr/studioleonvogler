@@ -4,7 +4,7 @@ title: Klapster Configurator
 category: web
 categoryName: Interface Design
 description: An interactive configurator interface for custom product design that enables users to personalize products in real-time. The interface balances complexity with clarity, guiding users through customization options while providing immediate visual feedback. The design emphasizes user experience and accessibility, ensuring that the customization process is both enjoyable and efficient, regardless of the user's technical background.
-image: img/projects/klapster-configurator/Klapster - individueller Treppen Konfigurator _ Jetzt entdecken.jpeg
+image: img/projects/klapster-configurator/klapster-mockup.jpg
 alt: Landing page of a webshop configurator
 date: 2024-10-01
 ---
