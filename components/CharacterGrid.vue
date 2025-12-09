@@ -235,7 +235,7 @@
           v-for="(char, charIdx) in currentCharacters"
           :key="charIdx"
           :ref="(el) => setGridItemRef(el, charIdx)"
-          class="aspect-square flex items-center justify-center ring-1 ring-green-300 transition-colors cursor-pointer group relative text-4xl text-white hover:ring-green-200 hover:bg-green-600"
+          class="aspect-square flex items-center justify-center ring-1 ring-green-300 transition-colors cursor-pointer group relative text-4xl text-white hover:ring-green-200 hover:bg-green-600 overflow-hidden"
           :data-selected="previewChar === char"
           :class="previewChar === char ? 'bg-green-500 ring-green-300' : ''"
           :style="{
@@ -873,9 +873,13 @@ const characterGroups = computed(() => {
   });
 
   // Currency symbols
+  const currencySymbols = "₿¢¤$€₴₾₺₽₹₪£₩¥".split("");
+  if (supportsArabic) {
+    currencySymbols.push("﷼");
+  }
   groups.push({
     name: "Currency",
-    characters: "₿¢¤$€₴₾₺₽₹₪£₩¥".split(""),
+    characters: currencySymbols,
   });
 
   // Mathematical symbols

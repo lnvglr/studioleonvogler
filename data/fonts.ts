@@ -275,10 +275,10 @@ export const fonts: Font[] = [
       tnum: {
         name: 'Tabular numbers',
         description: 'Fixed-width numbers are useful for tabular data, where comparing columns across rows is desired.',
-        exampleText: `0:12; $23.45<br>
-6:78; $90.71<br>
-٢٣٫٤٥$ ;٠:١٢<br>
-٩١٫١٠$ ;٦:٧٨`,
+        exampleText: `0:12; ₪23.45<br>
+6:78; ₪90.71<br>
+٢٣٫٤٥₪ ;٠:١٢<br>
+٩١٫١٠₪ ;٦:٧٨`,
         highlighted: "0123456789٠١٢٣٤٥٦٧٨٩",
         enabledByDefault: false,
       },
@@ -349,6 +349,14 @@ export const fonts: Font[] = [
         enabledText: `ﬡﬢﬣﬤﬥﬦﬧﬨ`.split('').join(' '),
         enabledByDefault: false,
       },
+
+      calt: {
+        name: 'Contextual alternates',
+        description: 'Depending on the surrounding context, different glyphs are used. Enabled by default',
+        exampleText: ["מספר: 13.", "12:34", "<br>", "1+2", "1−2", "1×2", "1÷2", "1=2",].join(' '),
+        highlighted: [":", "+", "−", "×", "÷", "="].join(''),
+        enabledByDefault: true,
+      },
       liga: {
         name: 'Standard Ligatures',
         description: 'Special ligaures like אל and אאא, as well as gender-sensitive ligatures.',
@@ -372,6 +380,13 @@ export const fonts: Font[] = [
         name: 'Slashed zero',
         exampleText: `0123`,
         highlighted: "0",
+        enabledByDefault: false,
+      },
+      smcp: {
+        name: 'Small capitals',
+        description: 'Small capital figures for Hebrew letters.',
+        exampleText: `קוד 9187,56 תקין ב-40.23%`.split('').join(''),
+        highlighted: "0123456789%",
         enabledByDefault: false,
       },
       ss01: {
