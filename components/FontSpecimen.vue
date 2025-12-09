@@ -11,7 +11,7 @@
             class="font-medium"
             :class="
               fontName
-                ? 'text-xl sm:text-2xl text-neutral-400'
+                ? 'text-xl sm:text-2xl text-neutral-400 mix-blend-multiply'
                 : 'uppercase text-5xl sm:text-6xl'
             "
             :style="fontName ? {} : mastheadStyle"
