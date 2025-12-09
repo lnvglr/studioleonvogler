@@ -359,11 +359,11 @@ export const fonts: Font[] = [
       },
       liga: {
         name: 'Standard Ligatures',
-        description: 'Special ligaures like אל and אאא, as well as gender-sensitive ligatures.',
+        description: 'Special ligaures like אל and אאא, as well as gender-neutral ligatures.',
         exampleText: [
-          "צצ", "אא", "אאא", "אל", "אש", "<br>", "ה.ת", "ו.ה",
-          "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת", "עי",
-          "ת.ד", "י.ו"
+          "צצ", "אא", "אאא", "אל", "אש", "עי", "<br>", "כל הא.נשים שורים.ות. מי הו.יא שי.תחליט בשבילי מי אני.", "<br>", "ה.ת", "ו.ה",
+          "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת", 
+          "ת.ד", "י.ו", "ת.ם", "ים.ות", 
         ].join(' '),
         enabledByDefault: true,
       },
