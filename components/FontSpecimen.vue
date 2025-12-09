@@ -1,7 +1,7 @@
 <template>
   <div
     class="text-neutral-800 w-full transition-opacity duration-300"
-    :class="{ 'opacity-0': !fontReady, '[font-kerning:none] [font-feature-settings:\'ss03\']': font.id === 'seoul-grotesk' }"
+    :class="{ 'opacity-0': !fontReady, '[font-kerning:none]': font.id === 'seoul-grotesk' }"
     :style="{ visibility: fontReady ? 'visible' : 'hidden' }"
   >
     <section v-if="title || fontName || content" class="mb-16">

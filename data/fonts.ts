@@ -247,6 +247,18 @@ export const fonts: Font[] = [
     },
     defaultWeight: 600,
     featureMetadata: {
+      rlig: {
+        name: 'Required ligatures',
+        description: 'Required ligatures for Arabic letters like ل+ا.',
+        exampleText: [
+          "لا",
+          "لٱ",
+          "لأ",
+          "لإ",
+          "لآ"
+        ].join(' '),
+        enabledByDefault: true,
+      },
       calt: {
         name: 'Contextual alternates',
         description: 'Depending on the surrounding context, different glyphs are used. Enabled by default',
@@ -263,10 +275,10 @@ export const fonts: Font[] = [
       tnum: {
         name: 'Tabular numbers',
         description: 'Fixed-width numbers are useful for tabular data, where comparing columns across rows is desired.',
-        exampleText: `$11.99; 0:08<br>
-$10.71; 1:41<br>
-١١٫٩٩$; ٠:٠٨<br>
-١٠٫٧١$; ١:٤١`,
+        exampleText: `0:12; $23.45<br>
+6:78; $90.71<br>
+٢٣٫٤٥$ ;٠:١٢<br>
+٩١٫١٠$ ;٦:٧٨`,
         highlighted: "0123456789٠١٢٣٤٥٦٧٨٩",
         enabledByDefault: false,
       },
@@ -291,6 +303,15 @@ $10.71; 1:41<br>
           "مي"
         ].join(' '),
         highlighted: ["ج", "چ", "ح", "خ", "م", "ي"].join(''),
+        enabledByDefault: false,
+      },
+      ss02: {
+        name: 'Stylistic Set 1',
+        description: 'Slanted arabic-indic numerals.',
+        exampleText: [
+          "٠١٢٣٤٥٦٧٨٩",
+        ].join(' '),
+        highlighted: "١٢٣٦٩",
         enabledByDefault: false,
       },
       

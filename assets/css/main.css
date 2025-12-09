@@ -7,18 +7,21 @@
 	src: url("/fonts/Gramatika-Regular.woff2") format("woff2");
 	font-weight: normal;
   font-display: swap;
+	font-feature-settings: "ss02", "ss03", "ss04", "ss06";
 }
 @font-face {
 	font-family: "Gramatika";
 	src: url("/fonts/Gramatika-Medium.woff2") format("woff2");
 	font-weight: medium;
   font-display: swap;
+	font-feature-settings: "ss02", "ss03", "ss04", "ss06";
 }
 @font-face {
   font-family: "Gramatika";
 	src: url("/fonts/Gramatika-Bold.woff2") format("woff2");
 	font-weight: bold;
   font-display: swap;
+	font-feature-settings: "ss02", "ss03", "ss04", "ss06";
 }
 @font-face {
 	font-family: "Heebo";
@@ -42,10 +45,10 @@
 	font-weight: 100 900;
 	font-style: normal;
 	font-display: swap;
+	font-feature-settings: "ss03";
 }
-body {
-	font-feature-settings: "ss02", "ss03", "ss04", "ss06";
-}
+
+
 :is(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table, dl) + :is(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, pre, hr, table, dl) {
   @apply mt-2;
 }

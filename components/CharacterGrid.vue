@@ -145,6 +145,7 @@
               fontFamily: fontFamily,
               fontWeight: getCurrentWeight(),
               fontVariationSettings: fontVariationSettings,
+              fontFeatureSettings: getFontFeatureSettings(previewChar),
               lineHeight: 1,
             }"
           >
@@ -153,9 +154,8 @@
               :style="{
                 color: showDetails ? 'rgba(255, 255, 255, 0.2)' : 'white',
               }"
-            >
-              {{ previewChar === " " ? "·" : previewChar }}
-            </div>
+              v-html="renderArabicChar(previewChar)"
+            ></div>
 
             <!-- SVG with glyph outline and handles (when details enabled) -->
             <svg
@@ -242,10 +242,11 @@
             fontFamily: fontFamily,
             fontWeight: getCurrentWeight(),
             fontVariationSettings: fontVariationSettings,
+            fontFeatureSettings: getFontFeatureSettings(char),
           }"
           @click="selectCharacter(char)"
         >
-          <span>{{ char === " " ? "·" : char }}</span>
+          <span v-html="renderArabicChar(char)"></span>
         </div>
       </div>
     </div>
@@ -430,6 +431,121 @@ const fontVariationSettings = computed(() => {
   return settings.length > 0 ? settings.join(", ") : undefined;
 });
 
+// Get font feature settings for a character
+const getFontFeatureSettings = (char: string): string | undefined => {
+  return isArabicChar(char) ? 'calt 1' : undefined;
+};
+
+// Form markers for Arabic characters
+const FORM_ISOLATED = "\uE000";
+const FORM_INITIAL = "\uE001";
+const FORM_MEDIAL = "\uE002";
+const FORM_FINAL = "\uE003";
+
+// Arabic letter joining behavior lookup
+// Based on Unicode joining types: U=Non_Joining, R=Right_Joining, D=Dual_Joining
+const getArabicLetterForms = (letter: string): string[] => {
+  const codePoint = letter.codePointAt(0) || 0;
+  const forms: string[] = [];
+  
+  const specialLetters = new Set([
+    0x0640, // ـ FATHA,
+  ]);
+  // Non-joining letters (only isolated form)
+  // These don't connect to adjacent letters
+  const nonJoining = new Set([
+    0x0621, // ء HAMZA
+    0x0622, // آ ALEF WITH MADDA ABOVE
+    0x0623, // أ ALEF WITH HAMZA ABOVE
+    0x0624, // ؤ WAW WITH HAMZA ABOVE
+    0x0625, // إ ALEF WITH HAMZA BELOW
+    0x0626, // ئ YEH WITH HAMZA ABOVE
+    0x0671, // ٱ ALEF WASLA
+  ]);
+  
+  // Right-joining letters (isolated and final forms only)
+  // These connect only to the preceding letter
+  const rightJoining = new Set([
+    0x0627, // ا ALEF
+    0x062F, // د DAL
+    0x0630, // ذ THAL
+    0x0631, // ر REH
+    0x0632, // ز ZAIN
+    0x0648, // و WAW
+    0x0649, // ى ALEF MAKSURA
+  ]);
+  
+  // Check if letter is non-joining
+  if (nonJoining.has(codePoint) || specialLetters.has(codePoint)) {
+    forms.push(FORM_ISOLATED);
+    return forms;
+  }
+  
+  // Check if letter is right-joining
+  if (rightJoining.has(codePoint)) {
+    forms.push(FORM_ISOLATED);
+    forms.push(FORM_FINAL);
+    return forms;
+  }
+  
+  // Default: dual-joining (all four forms)
+  // This includes most Arabic letters like ب ت ث ج ح خ س ش ص ض ط ظ ع غ ف ق ك ل م ن ه ي
+  // and extended Arabic characters like پ چ گ etc.
+  forms.push(FORM_ISOLATED);
+  forms.push(FORM_INITIAL);
+  forms.push(FORM_MEDIAL);
+  forms.push(FORM_FINAL);
+  return forms;
+};
+
+// Extract base character and form from stored string
+const getArabicCharAndForm = (char: string): { baseChar: string; form: string | null } => {
+  if (char.length < 2) return { baseChar: char, form: null };
+  const lastChar = char[char.length - 1];
+  if (lastChar === FORM_ISOLATED || lastChar === FORM_INITIAL || lastChar === FORM_MEDIAL || lastChar === FORM_FINAL) {
+    return { baseChar: char.slice(0, -1), form: lastChar };
+  }
+  return { baseChar: char, form: null };
+};
+
+// Render Arabic character with context to force specific form
+const renderArabicChar = (char: string): string => {
+  const { baseChar, form } = getArabicCharAndForm(char);
+  if (!form || !isArabicChar(baseChar)) return char === " " ? "·" : char;
+  
+  // Arabic connecting letter used for context (ب is a common connecting letter)
+  const connectingLetter = "ب";
+  // Zero-width joiner to force connection
+  const ZWJ = "\u200D";
+  // Zero-width non-joiner to prevent connection
+  const ZWNJ = "\u200C";
+  
+  // Create HTML structure with context characters that are invisible but still affect shaping
+  // Use opacity: 0 to hide visually while keeping in text flow for shaping
+  // This ensures the context characters affect Arabic shaping but are not visible
+  const hiddenStyle = "opacity: 0; user-select: none; pointer-events: none; display: inline; position: absolute;";
+  const connection = `<span style="${hiddenStyle}">${connectingLetter}</span>`;
+  
+  if (form === FORM_ISOLATED) {
+    // Isolated: use ZWNJ to prevent joining on both sides
+    return `${ZWNJ}${baseChar}${ZWNJ}`;
+  } else if (form === FORM_INITIAL) {
+    // Initial: base char connects forward, so add connecting letter after (hidden)
+    // The connecting letter after forces the initial form
+    return `${baseChar}${ZWJ}${connection}`;
+  } else if (form === FORM_MEDIAL) {
+    // Medial: connecting letter before + base char + connecting letter after (both hidden)
+    // Both context letters force the medial form
+    return `${connection}${ZWJ}${baseChar}${ZWJ}${connection}`;
+  } else if (form === FORM_FINAL) {
+    // Final: connecting letter before + base char (hidden)
+    // The connecting letter before forces the final form
+    return `${connection}${ZWJ}${baseChar}`;
+  }
+  
+  return baseChar;
+};
+
 // Load font and get metrics using samsa
 const loadFontMetrics = async () => {
   if (typeof window === "undefined" || !props.fontId) return;
@@ -594,14 +710,19 @@ const characterGroups = computed(() => {
     // Extended Arabic from font
     const arabicLetters =
       "ءأإآٱٮبپتثجچحخدذرسشصضطظعغفڤڡٯقكکگلمنںهہھةوؤىيئـ".split("");
+    
+    // For each Arabic letter, add only the forms it supports consecutively
+    const arabicWithAllForms: string[] = [];
+    arabicLetters.forEach(letter => {
+      const supportedForms = getArabicLetterForms(letter);
+      supportedForms.forEach(form => {
+        arabicWithAllForms.push(letter + form);
+      });
+    });
+    
     groups.push({
       name: "Arabic",
-      characters: arabicLetters,
-    });
-    const arabicNumbers = "٠١٢٣٤٥٦٧٨٩".split("");
-    groups.push({
-      name: "Arabic-Indic Numerals",
-      characters: arabicNumbers,
+      characters: arabicWithAllForms,
     });
     // Arabic punctuation
     groups.push({
@@ -698,11 +819,6 @@ const characterGroups = computed(() => {
       name: "N'Ko",
       characters: nkoLetters,
     });
-    // N'Ko numbers
-    groups.push({
-      name: "N'Ko Numbers",
-      characters: "߀߁߂߃߄߅߆߇߈߉".split(""),
-    });
     // N'Ko punctuation
     groups.push({
       name: "N'Ko Punctuation",
@@ -715,6 +831,19 @@ const characterGroups = computed(() => {
     name: "Numbers",
     characters: "0123456789".split(""),
   });
+  // Arabic numbers
+  if (supportsArabic) {
+    groups.push({
+      name: "Arabic-Indic Numerals",
+      characters:  "٠١٢٣٤٥٦٧٨٩".split(""),
+    });
+  }
+
+    // N'Ko numbers
+    groups.push({
+      name: "N'Ko Numbers",
+      characters: "߀߁߂߃߄߅߆߇߈߉".split(""),
+    });
   // Punctuation (universal)
   groups.push({
     name: "Punctuation",
@@ -832,8 +961,12 @@ const filterCharacters = async () => {
   const batchSize = 50;
   for (let i = 0; i < all.length; i += batchSize) {
     const batch = all.slice(i, i + batchSize);
+    // Extract base character for checking (remove form markers)
     const results = await Promise.all(
-      batch.map((char) => checkCharacterExists(char))
+      batch.map((char) => {
+        const { baseChar } = getArabicCharAndForm(char);
+        return checkCharacterExists(baseChar);
+      })
     );
     batch.forEach((char, idx) => {
       if (results[idx]) {
@@ -853,9 +986,25 @@ const filterCharacters = async () => {
 
 const getCharCode = (char: string): string => {
   if (char.length === 0) return "0000";
-  const codePoint = char.codePointAt(0);
+  // Extract base character for Arabic characters with form markers
+  const { baseChar } = getArabicCharAndForm(char);
+  const codePoint = baseChar.codePointAt(0);
   if (codePoint === undefined) return "0000";
   return codePoint.toString(16).toUpperCase().padStart(4, "0");
+};
+
+// Check if a character is Arabic (handles both single chars and context strings)
+const isArabicChar = (char: string): boolean => {
+  if (!char || char.length === 0) return false;
+  // Check all characters in the string for Arabic
+  for (let i = 0; i < char.length; i++) {
+    const codePoint = char.codePointAt(i) || 0;
+    // Arabic Unicode range: U+0600 to U+06FF
+    if (codePoint >= 0x0600 && codePoint <= 0x06FF) {
+      return true;
+    }
+  }
+  return false;
 };
 watch(
   samsaFontInstance,
@@ -870,10 +1019,13 @@ const getGlyphName = (char: string): string => {
   if (char === " ") return "space";
   if (char.length === 0) return "unknown";
 
+  // Extract base character for Arabic characters with form markers
+  const { baseChar, form } = getArabicCharAndForm(char);
+
   // Try to get PostScript glyph name from Samsa if font is loaded
-  if (samsaFontInstance.value && char) {
+  if (samsaFontInstance.value && baseChar) {
     try {
-      const charCode = char.codePointAt(0) || 0;
+      const charCode = baseChar.codePointAt(0) || 0;
       const glyphIndex =
         samsaFontInstance.value.cmap?.getGlyphIndex?.(charCode) ??
         samsaFontInstance.value.cmap?.glyphIndexMap?.[charCode];
@@ -899,9 +1051,15 @@ const getGlyphName = (char: string): string => {
       console.warn("Error getting PostScript glyph name from Samsa:", e);
     }
   }
+  const arabicFormMap = {
+    [FORM_INITIAL]: "initial",
+    [FORM_MEDIAL]: "medial",
+    [FORM_FINAL]: "final",
+  };
+  const arabicForm = arabicFormMap[form as keyof typeof arabicFormMap] || '';
 
   // Fallback: return the character itself
-  return char === " " ? "space" : char;
+  return char === " " ? "space" : baseChar + (arabicForm ? ` (${arabicForm})` : '');
 };
 
 const selectCharacter = async (char: string) => {
@@ -929,6 +1087,9 @@ const loadGlyphOutline = async (char: string) => {
 
   try {
     const samsaFont = samsaFontInstance.value;
+    
+    // Extract base character for Arabic characters with form markers
+    const { baseChar } = getArabicCharAndForm(char);
 
     // Get glyph outline using Samsa composable
     // For variable fonts, pass the tuple with axis values in the order of font.axes
@@ -944,7 +1105,7 @@ const loadGlyphOutline = async (char: string) => {
         return axis.default || 0;
       });
     }
-    const outline = getGlyphOutline(samsaFont, char, tuple);
+    const outline = getGlyphOutline(samsaFont, baseChar, tuple);
     if (!outline) {
       console.warn("No outline returned for character:", char);
       return;
