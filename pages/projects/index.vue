@@ -18,7 +18,7 @@
           'px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300',
           selectedCategory === null
             ? 'bg-green-500 text-white'
-            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 mix-blend-multiply',
+            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200',
         ]"
         :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
       >
@@ -32,7 +32,7 @@
           'px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300',
           selectedCategory === category.value
             ? 'bg-green-500 text-white'
-            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 mix-blend-multiply',
+            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200',
         ]"
         :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
       >
@@ -41,7 +41,7 @@
     </div>
 
     <!-- Projects Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 z-20">
       <NuxtLink
         v-for="project in filteredProjects"
         :key="project.id"
@@ -64,10 +64,9 @@
             loading="lazy"
           />
         </div>
-        <div class="flex items-center gap-2 flex-wrap">
+        <div class="flex items-center gap-2 flex-wrap mix-blend-multiply">
           <span
             class="text-xs px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-600 uppercase transition-colors duration-300 mix-blend-multiply"
-            :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
           >
             {{ getCategoryTag(project.category) }}
           </span>

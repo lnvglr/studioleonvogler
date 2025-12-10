@@ -1,7 +1,8 @@
 <template>
   <div class="font-normal flex flex-col text-stone-700">
     <div
-      class="inset-0 fixed -z-10 bg-[radial-gradient(circle_at_left,_var(--tw-gradient-stops))] via-20% to-50% to-white bg-cover duration-1000"
+      class="inset-0 fixed z-10 bg-[radial-gradient(circle_at_left,_var(--tw-gradient-stops))] via-20% to-50% to-white bg-cover duration-1000 mix-blend-multiply pointer-events-none"
+      aria-hidden="true"
       :class="{
         'from-purple-200 via-green-50': route.name === 'contact-about',
         'from-red-200 via-orange-50':
@@ -26,16 +27,26 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 const hue = ref(Math.floor(Math.random() * 360))
-const interval = ref()
+
+const updateHue = (event) => {
+  const x = event.clientX
+  const y = event.clientY
+  const width = window.innerWidth
+  const height = window.innerHeight
+  
+  // Calculate hue based on pointer position (0-360 degrees)
+  // Using both x and y for more variation
+  const xHue = (x / width) * 180
+  const yHue = (y / height) * 180
+  hue.value = Math.floor(xHue + yHue)
+}
 
 onMounted(async () => {
   await router.isReady()
-  // Defer hue rotation animation to reduce initial load work
-  requestAnimationFrame(() => {
-    interval.value = setInterval(() => hue.value++, 1000)
-  })
+  window.addEventListener('mousemove', updateHue)
 })
+
 onBeforeUnmount(() => {
-  clearInterval(interval.value)
+  window.removeEventListener('mousemove', updateHue)
 })
 </script>

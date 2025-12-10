@@ -1,5 +1,5 @@
 <template>
-  <footer role="banner" class="flex flex-col gap-5 bg-neutral-100  mix-blend-multiply">
+  <footer role="banner" class="flex flex-col gap-5 bg-neutral-100">
     <nav role="navigation">
       <ul aria-expanded="false" class="flex flex-col sm:flex-row sm:items-center gap-3">
         <li v-for="(item, i) in menu" :key="i">

@@ -11,7 +11,7 @@
             class="font-medium"
             :class="
               fontName
-                ? 'text-xl sm:text-2xl text-neutral-400 mix-blend-multiply'
+                ? 'text-xl sm:text-2xl text-neutral-400'
                 : 'uppercase text-5xl sm:text-6xl'
             "
             :style="fontName ? {} : mastheadStyle"
@@ -56,7 +56,7 @@
       <h2 class="text-2xl font-medium mb-8">Alphabet</h2>
       <textarea
         :value="alphabetDisplay"
-        class="w-full focus:outline-none whitespace-pre-wrap mix-blend-multiply resize-none border-none leading-snug rounded-xl [field-sizing:content]"
+        class="w-full focus:outline-none whitespace-pre-wrap resize-none border-none leading-snug rounded-xl [field-sizing:content]"
         :style="{
           fontFamily: currentFontFamily,
           fontSize: 'clamp(2.5rem, 6vw, 6rem)',
@@ -73,7 +73,7 @@
         <div
           v-for="(weight, weightIdx) in weightExamples"
           :key="weight"
-          class="rounded-xl mix-blend-multiply"
+          class="rounded-xl"
         >
           <div class="text-xs text-neutral-400 mb-1">
             {{ getWeightName(weight) }} {{ weight }}
@@ -93,10 +93,10 @@
     </section>
 
     <!-- Font Features -->
-    <FontFeatures :font="font" :feature-metadata="font.featureMetadata" />
+    <FontFeatures :font="font" :feature-metadata="font.featureMetadata" class="z-20"/>
 
     <!-- Character Grid -->
-    <section class="mb-16 w-screen relative -mx-5 sm:-mx-10 md:-mx-20">
+    <section class="mb-16 w-screen relative -mx-5 sm:-mx-10 md:-mx-20 z-20">
       <CharacterGrid
         :font-family="currentFontFamily"
         :font-weight="currentVariant.weight"
@@ -122,7 +122,7 @@
           <a
             v-for="lang in languages"
             :key="lang"
-            class="px-2 py-0.5 rounded-sm bg-stone-100 mix-blend-multiply hover:bg-stone-200 transition-colors duration-300"
+            class="px-2 py-0.5 rounded-sm bg-stone-100 hover:bg-stone-200 transition-colors duration-300"
             :href="`https://en.wikipedia.org/wiki/${lang.replace(
               ' ',
               '_'
@@ -144,6 +144,123 @@
           >Hyperglot</a
         >, a database for detecting language support in fonts.
       </p>
+    </section>
+
+    <!-- Donation & Licensing Section -->
+    <section class="mb-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Donation Box -->
+        <div
+          v-if="font.donationUrl"
+          class="bg-stone-50 rounded-xl p-6 border border-stone-200"
+        >
+          <h2 class="text-2xl font-medium mb-4">Support This Font</h2>
+          <p class="text-neutral-700 mb-6 leading-relaxed">
+            If you find this font useful, please consider making a donation to
+            support its development and maintenance.
+          </p>
+          <a
+            :href="font.donationUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-300 font-medium"
+            :style="{
+              transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)',
+            }"
+          >
+            Donate via PayPal
+          </a>
+        </div>
+
+        <!-- Licensing Information -->
+        <div
+          v-if="font.license"
+          class="bg-stone-50 rounded-xl p-6 border border-stone-200"
+        >
+          <h2 class="text-2xl font-medium mb-4">License</h2>
+          <div class="mb-4">
+            <h3 class="text-lg font-medium text-neutral-800 mb-2">
+              {{ font.license.type }}
+            </h3>
+            <p
+              v-if="font.license.description"
+              class="text-neutral-700 leading-relaxed mb-4"
+            >
+              {{ font.license.description }}
+            </p>
+          </div>
+          <a
+            v-if="font.license.url"
+            :href="font.license.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-green-500 hover:underline underline-offset-4 inline-flex items-center gap-1"
+          >
+            Read full license
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download Section (Last) -->
+    <section
+      v-if="font.downloadLinks && font.downloadLinks.length > 0"
+      class="mb-16"
+    >
+      <h2 class="text-2xl font-medium mb-8">Download</h2>
+      <div class="space-y-4">
+        <div
+          v-for="(link, index) in font.downloadLinks"
+          :key="index"
+          class="flex items-center justify-between p-4 bg-stone-50 rounded-lg border border-stone-200 hover:bg-stone-100 transition-colors duration-300"
+          :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
+        >
+          <div class="flex flex-col">
+            <span class="font-medium text-neutral-900">{{ link.label }}</span>
+            <span v-if="link.format" class="text-sm text-neutral-600"
+              >{{ link.format }} format</span
+            >
+          </div>
+          <a
+            :href="link.url"
+            :download="link.url.split('/').pop()"
+            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-300 font-medium inline-flex items-center gap-2"
+            :style="{
+              transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)',
+            }"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              ></path>
+            </svg>
+            Download
+          </a>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -198,7 +315,6 @@ const getInitialVariableWeight = () => {
   }
   return 400;
 };
-
 
 const currentVariant = computed(() => {
   return {

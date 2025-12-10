@@ -30,6 +30,17 @@ export interface Font {
   }
   featureMetadata?: Record<string, FontFeatureMetadata>
   defaultWeight?: number
+  downloadLinks?: {
+    label: string
+    url: string
+    format?: string
+  }[]
+  donationUrl?: string
+  license?: {
+    type: string
+    description?: string
+    url?: string
+  }
 }
 
 export const fonts: Font[] = [
@@ -325,8 +336,20 @@ export const fonts: Font[] = [
         highlighted: "დლრწ",
         enabledByDefault: false,
       }
-      
     },
+    downloadLinks: [
+      {
+        label: 'Diode Global Next',
+        url: '/fonts/DiodeGlobalNewVF.ttf',
+        format: 'TTF'
+      }
+    ],
+    donationUrl: 'https://paypal.me/StudioLeonVogler',
+    license: {
+      type: 'SIL Open Font License 1.1',
+      description: 'This font is licensed under the SIL Open Font License, Version 1.1. This license allows you to use, study, modify and redistribute this font freely.',
+      url: 'https://scripts.sil.org/OFL'
+    }
   },
   {
     id: 'seoul-grotesk',
@@ -433,6 +456,20 @@ export const fonts: Font[] = [
         enabledByDefault: false,
       },
     },
+
+    downloadLinks: [
+      {
+        label: 'Seoul Grotesk',
+        url: '/fonts/SeoulGrotesqueVF.ttf',
+        format: 'TTF'
+      }
+    ],
+    donationUrl: 'https://paypal.me/StudioLeonVogler',
+    license: {
+      type: 'SIL Open Font License 1.1',
+      description: 'This font is licensed under the SIL Open Font License, Version 1.1. This license allows you to use, study, modify and redistribute this font freely.',
+      url: 'https://scripts.sil.org/OFL'
+    }
   },
 ]
 
