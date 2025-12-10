@@ -251,11 +251,7 @@ export const fonts: Font[] = [
         name: 'Required ligatures',
         description: 'Required ligatures for Arabic letters like ل+ا.',
         exampleText: [
-          "لا",
-          "لٱ",
-          "لأ",
-          "لإ",
-          "لآ"
+          "لا", "لأ", "لإ", "لآ"
         ].join(' '),
         enabledByDefault: true,
       },
@@ -286,7 +282,7 @@ export const fonts: Font[] = [
         name: 'Localized forms',
         description: 'Bulgarian localized glyph forms',
         exampleText: `АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЪЮЯабвгдежзийклмнопрстуфхцчшщьъюя`.split('').join(' '),
-        highlighted: "ДЛФбвгджзийклптцшщьъю",
+        highlighted: "ДЛФвгджзийклптцшщьъю",
         languageTag: 'BGR',
         enabledByDefault: false,
       },
@@ -294,13 +290,9 @@ export const fonts: Font[] = [
         name: 'Stylistic Set 1',
         description: 'Alternate glyphs for Arabic letters.',
         exampleText: [
-          "جاي",
-          "چپ",
-          "حبي",
-          "خوي",
-          "مي",
-          "يار",
-          "مي"
+          "حب",
+          "هي",
+          "ما"
         ].join(' '),
         highlighted: ["ج", "چ", "ح", "خ", "م", "ي"].join(''),
         enabledByDefault: false,
@@ -357,11 +349,19 @@ export const fonts: Font[] = [
         highlighted: [":", "+", "−", "×", "÷", "="].join(''),
         enabledByDefault: true,
       },
+      dlig: {
+        name: 'Discretionary ligatures',
+        description: 'Discretionary ligatures like אל and אאא.',
+        exampleText: [
+          "צצ", "אא", "אאא", "אל", "אש", "עי"
+        ].join(' '),
+        enabledByDefault: false,
+      },
       liga: {
         name: 'Standard Ligatures',
-        description: 'Special ligaures like אל and אאא, as well as gender-neutral ligatures.',
+        description: 'Gender-neutral ligatures.',
         exampleText: [
-          "צצ", "אא", "אאא", "אל", "אש", "עי", "<br>", "כל הא.נשים שורים.ות. מי הו.יא שי.תחליט בשבילי מי אני.", "<br>", "ה.ת", "ו.ה",
+          "כל הא.נשים שורים.ות. מי הו.יא שי.תחליט בשבילי מי אני.", "<br>", "ה.ת", "ו.ה",
           "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת", 
           "ת.ד", "י.ו", "ת.ם", "ים.ות", 
         ].join(' '),
@@ -370,10 +370,10 @@ export const fonts: Font[] = [
       tnum: {
         name: 'Tabular numbers',
         description: 'Fixed-width numbers are useful for tabular data, where comparing columns across rows is desired.',
-        exampleText: `0:08; ₪11.99<br>
-1:41;  ₪11.71<br>
-7:12; ₪29.99`,
-        highlighted: "₪0123456789",
+        exampleText: `12.3%; ₪45.67<br>
+12:90;  ₪11.71<br>
+07:12; ₪29.99`,
+        highlighted: "%₪0123456789",
         enabledByDefault: false,
       },
       zero: {

@@ -19,15 +19,16 @@
             <!-- Weight Slider (for variable fonts) -->
             <div v-if="isVariableFont" class="grid grid-cols-2 grid-rows-2 items-center gap-x-4 gap-y-0">
               <span class="text-sm text-white/70">Weight</span>
-              <div class="relative w-full max-w-32 h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2">
+              <div class="relative w-full max-w-32 h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2 touch-none" style="touch-action: none;" :style="{
+                '--w': `calc(${weightPercentage}% - ${weightPercentage/9}px)`
+              }">
                 <div
-                  class="absolute top-1/2 -translate-y-1/2 h-full bg-white rounded-full"
-                  :style="{ width: `${weightPercentage}%` }"
+                  class="absolute top-1/2 -translate-y-1/2 h-full bg-white rounded-full w-[calc(var(--w)+3px)]"
                 ></div>
                 <div
-                  class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 bg-white rounded-full cursor-pointer"
-                  :style="{ left: `${weightPercentage}%` }"
+                  class="absolute top-1/2 -translate-y-1/2 bg-white rounded-full cursor-pointer start-[calc(var(--w))] touch-none w-3 h-3  pointer-coarse:w-5 pointer-coarse:h-5"
                   @mousedown="startWeightSliderDrag"
+                  @touchstart="startWeightSliderDrag"
                 ></div>
               </div>
               <span class="text-sm text-white font-medium tabular-nums row-start-1 col-start-2 text-right">{{
@@ -37,15 +38,17 @@
             <!-- SHPE Axis Slider (for diode-global-next) -->
             <div v-if="isVariableFont && hasShapeAxis" class="grid grid-cols-2 grid-rows-2 items-center gap-x-4 gap-y-0">
               <span class="text-sm text-white/70">Shape</span>
-              <div class="relative w-full max-w-32 h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2">
+              <div class="relative w-full max-w-32 h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2 touch-none" style="touch-action: none;" :style="{
+                '--w': `calc(${shapePercentage}% - ${shapePercentage/9}px)`
+              }">
                 <div
-                  class="absolute top-1/2 -translate-y-1/2 h-full bg-white rounded-full"
-                  :style="{ width: `${shapePercentage}%` }"
+                  class="absolute top-1/2 -translate-y-1/2 h-full bg-white rounded-full w-[calc(var(--w)+3px)]"
                 ></div>
                 <div
-                  class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 bg-white rounded-full cursor-pointer"
-                  :style="{ left: `${shapePercentage}%` }"
+                  class="absolute top-1/2 -translate-y-1/2 bg-white rounded-full cursor-pointer start-[calc(var(--w))] touch-none  w-3 h-3  pointer-coarse:w-5 pointer-coarse:h-5"
+                  style="touch-action: none;"
                   @mousedown="startShapeSliderDrag"
+                  @touchstart="startShapeSliderDrag"
                 ></div>
               </div>
               <span class="text-sm text-white font-medium tabular-nums row-start-1 col-start-2 text-right">{{
@@ -145,7 +148,6 @@
               fontFamily: fontFamily,
               fontWeight: getCurrentWeight(),
               fontVariationSettings: fontVariationSettings,
-              fontFeatureSettings: getFontFeatureSettings(previewChar),
               lineHeight: 1,
             }"
           >
@@ -230,6 +232,11 @@
       <div
         ref="gridContainer"
         class="grid grid-cols-[repeat(auto-fill,minmax(64px,1fr))] gap-px"
+        :style="{
+            fontFamily: fontFamily,
+            fontWeight: getCurrentWeight(),
+            fontVariationSettings: fontVariationSettings,
+          }"
       >
         <div
           v-for="(char, charIdx) in currentCharacters"
@@ -238,12 +245,6 @@
           class="aspect-square flex items-center justify-center ring-1 ring-green-300 transition-colors cursor-pointer group relative text-4xl text-white hover:ring-green-200 hover:bg-green-600 overflow-hidden"
           :data-selected="previewChar === char"
           :class="previewChar === char ? 'bg-green-500 ring-green-300' : ''"
-          :style="{
-            fontFamily: fontFamily,
-            fontWeight: getCurrentWeight(),
-            fontVariationSettings: fontVariationSettings,
-            fontFeatureSettings: getFontFeatureSettings(char),
-          }"
           @click="selectCharacter(char)"
         >
           <span v-html="renderArabicChar(char)"></span>
@@ -431,10 +432,6 @@ const fontVariationSettings = computed(() => {
   return settings.length > 0 ? settings.join(", ") : undefined;
 });
 
-// Get font feature settings for a character
-const getFontFeatureSettings = (char: string): string | undefined => {
-  return isArabicChar(char) ? 'calt 1' : undefined;
-};
 
 // Form markers for Arabic characters
 const FORM_ISOLATED = "\uE000";
@@ -674,40 +671,42 @@ const characterGroups = computed(() => {
       lang.toLowerCase().includes("nko") || lang.toLowerCase().includes("n'ko")
   );
 
-  // Latin characters
+  // Latin characters - Standard specimen order: Uppercase → Lowercase → Numerals → Punctuation
   if (supportsLatin) {
     groups.push({
-      name: "Uppercase",
+      name: "Latin Uppercase",
       characters: "AÀÁÂĂÃÄÅÆBCÇDÐEÈÉÊËFGĞHIÏİĲJKLMNÑOÒÓÔÕÖØŒŐPÞQRSŞẞTUÙÚÛÜVWXYŸZ".split(""),
-      // characters: "AÀÁÂĂÃÄÅÆBCÇDÐEÈÉÊËFGĞHIÌÍÎÏİĲJKLMNÑOÒÓÔÕÖØŒŐPÞQRSŞẞTUÙÚÛÜVWXYŸZ".split(""),
     });
     groups.push({
-      name: "Lowercase",
+      name: "Latin Lowercase",
       characters: "aăäåæbcçdðeèéëfgğhiìíîïıĳjȷklmnñoõöøœőpþqrsşßtuüvwxyz".split(""),
-      // characters: "aàáâăãäåæbcçdðeèéêëfgğhiìíîïıĳjȷklmnñoòóôõöøœőpþqrsşßtuùúûüvwxyÿz".split(""),
+    });
+    groups.push({
+      name: "Latin Numerals",
+      characters: "0123456789".split(""),
+    });
+    groups.push({
+      name: "Latin Punctuation",
+      characters: ".,:;…!¡?¿·•*#/\\-–—_(){}[]‚„\"\"\'\'«»‹›\'\"ʹ͵".split(""),
     });
   }
 
-
-  // Hebrew characters
+  // Hebrew characters - Letters → Numerals → Punctuation
   if (supportsHebrew) {
-    // Extended Hebrew from font
     const hebrewLetters = "אבגדהוזחטיךכלםמןנסעףפץצקרשת".split("");
     groups.push({
-      name: "Hebrew",
+      name: "Hebrew Letters",
       characters: hebrewLetters,
     });
-
     const stretchedHebrewLetters = "ﬡﬢﬣﬤﬥﬦﬧﬨ".split("");
     groups.push({
-      name: "Stretched Hebrew",
+      name: "Hebrew Stretched",
       characters: stretchedHebrewLetters,
     });
   }
 
-  // Arabic characters
+  // Arabic characters - Letters → Numerals → Punctuation
   if (supportsArabic) {
-    // Extended Arabic from font
     const arabicLetters =
       "ءأإآٱٮبپتثجچحخدذرسشصضطظعغفڤڡٯقكکگلمنںهہھةوؤىيئـ".split("");
     
@@ -721,19 +720,21 @@ const characterGroups = computed(() => {
     });
     
     groups.push({
-      name: "Arabic",
+      name: "Arabic Letters",
       characters: arabicWithAllForms,
     });
-    // Arabic punctuation
+    groups.push({
+      name: "Arabic-Indic Numerals",
+      characters: "٠١٢٣٤٥٦٧٨٩".split(""),
+    });
     groups.push({
       name: "Arabic Punctuation",
       characters: "،؛؟٭".split(""),
     });
   }
 
-  // Cyrillic characters
+  // Cyrillic characters - Uppercase → Lowercase → Numerals → Punctuation
   if (supportsCyrillic) {
-    // Extended Cyrillic from font
     const cyrillicUpper = "АБВГҐДЕЁЀЖЗИЙЍКЛМНОПРСТУЎФХЦЧШЩЬЫЪЄЭІЇЮЯ".split("");
     groups.push({
       name: "Cyrillic Uppercase",
@@ -746,27 +747,24 @@ const characterGroups = computed(() => {
     });
     // Belarusian characters
     if (supportsBelarusian) {
-      // Extended Belarusian from font
       const belarusianUpper = "Ўў".split("");
       groups.push({
-        name: "Belarusian Uppercase",
+        name: "Belarusian",
         characters: belarusianUpper,
       });
     }
     // Bulgarian characters
     if (supportsBulgarian) {
-      // Extended Bulgarian from font
       const bulgarianUpper = "ЀЍѐѝ".split("");
       groups.push({
-        name: "Bulgarian Uppercase",
+        name: "Bulgarian",
         characters: bulgarianUpper,
       });
     }
   }
 
-  // Georgian characters
+  // Georgian characters - Uppercase (Mtavruli) → Lowercase → Numerals → Punctuation
   if (supportsGeorgian) {
-    // Extended Georgian from font (including Mtavruli)
     const georgianMtavruli = "ᲐᲑᲒᲓᲔᲕᲖᲗᲘᲙᲚᲛᲜᲝᲞᲟᲠᲡᲢᲣᲤᲥᲦᲧᲨᲩᲪᲫᲬᲭᲮᲯᲰ".split("");
     groups.push({
       name: "Georgian Mtavruli",
@@ -774,17 +772,16 @@ const characterGroups = computed(() => {
     });
     const georgianLetters = "აბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ".split("");
     groups.push({
-      name: "Georgian",
+      name: "Georgian Lowercase",
       characters: georgianLetters,
     });
   }
 
-  // Armenian characters
+  // Armenian characters - Uppercase → Lowercase → Numerals → Punctuation
   if (supportsArmenian) {
-    // Extended Armenian from font
     const armenianUpper = "ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ".split("");
     groups.push({
-      name: "Armenian",
+      name: "Armenian Uppercase",
       characters: armenianUpper,
     });
     const armenianLower = "աբգդեզէըթժիլխծկհձղճմյնշոչպջռսվտրցւփքօֆև".split("");
@@ -794,9 +791,8 @@ const characterGroups = computed(() => {
     });
   }
 
-  // Greek characters
+  // Greek characters - Uppercase → Lowercase → Numerals → Punctuation
   if (supportsGreek) {
-    // Extended Greek with accents from font
     const greekUpper = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΆΈΉΊΌΎΏΪΫϏ".split("");
     groups.push({
       name: "Greek Uppercase",
@@ -809,62 +805,22 @@ const characterGroups = computed(() => {
     });
   }
 
-  // N'Ko characters
+  // N'Ko characters - Letters → Numerals → Punctuation
   if (supportsNko) {
-    // Extended N'Ko from font
-    const nkoLetters = "ߊߋߌߍߎߏߐߑߒߓߔߕߖߗߘߙߚߛߜߝߞߟߠߡߢߣߤߥߦߧߨߩߪ߲߫߬߭߮߯߰߱߳ߴߵߺ".split(
-      ""
-    );
+    const nkoLetters = "ߊߋߌߍߎߏߐߑߒߓߔߕߖߗߘߙߚߛߜߝߞߟߠߡߢߣߤߥߦߧߨߩߪ߲߫߬߭߮߯߰߱߳ߴߵߺ".split("");
     groups.push({
-      name: "N'Ko",
+      name: "N'Ko Letters",
       characters: nkoLetters,
     });
-    // N'Ko punctuation
+    groups.push({
+      name: "N'Ko Numerals",
+      characters: "߀߁߂߃߄߅߆߇߈߉".split(""),
+    });
     groups.push({
       name: "N'Ko Punctuation",
       characters: "߷߸߹".split(""),
     });
   }
-
-  // Numbers (universal)
-  groups.push({
-    name: "Numbers",
-    characters: "0123456789".split(""),
-  });
-  // Arabic numbers
-  if (supportsArabic) {
-    groups.push({
-      name: "Arabic-Indic Numerals",
-      characters:  "٠١٢٣٤٥٦٧٨٩".split(""),
-    });
-  }
-
-    // N'Ko numbers
-    groups.push({
-      name: "N'Ko Numbers",
-      characters: "߀߁߂߃߄߅߆߇߈߉".split(""),
-    });
-  // Punctuation (universal)
-  groups.push({
-    name: "Punctuation",
-    characters: [
-      ...".,:;…!¡?¿·•*#/\\-–—_(){}[]".split(""),
-      "‚",
-      "„",
-      '"',
-      '"',
-      "'",
-      "'",
-      "«",
-      "»",
-      "‹",
-      "›",
-      "'",
-      '"',
-      "ʹ",
-      "͵",
-    ],
-  });
 
   // Symbols (universal)
   groups.push({
@@ -896,7 +852,6 @@ const characterGroups = computed(() => {
 
   return groups;
 });
-
 // Character existence detection using canvas
 const characterExistsCache = ref<Map<string, boolean>>(new Map());
 const isCheckingCharacters = ref(false);
@@ -1398,7 +1353,7 @@ const stopWeightDrag = () => {
   isDraggingWeight.value = false;
 };
 
-const startWeightSliderDrag = (e: MouseEvent) => {
+const startWeightSliderDrag = (e: MouseEvent | TouchEvent) => {
   e.preventDefault();
   e.stopPropagation();
   isDraggingWeightSlider.value = true;
@@ -1406,9 +1361,17 @@ const startWeightSliderDrag = (e: MouseEvent) => {
   const slider = (e.currentTarget as HTMLElement).closest(".relative");
   if (!slider) return;
 
-  const handleMove = (moveEvent: MouseEvent) => {
+  const isTouch = e.type.startsWith('touch');
+  const getClientX = (event: MouseEvent | TouchEvent): number => {
+    if (isTouch && 'touches' in event && event.touches.length > 0) {
+      return event.touches[0].clientX;
+    }
+    return (event as MouseEvent).clientX;
+  };
+
+  const handleMove = (moveEvent: MouseEvent | TouchEvent) => {
     const rect = slider.getBoundingClientRect();
-    const x = moveEvent.clientX - rect.left;
+    const x = getClientX(moveEvent) - rect.left;
     const percentage = Math.max(0, Math.min(1, x / rect.width));
 
     const { min, max } = weightRange.value;
@@ -1417,22 +1380,29 @@ const startWeightSliderDrag = (e: MouseEvent) => {
 
   const handleUp = () => {
     isDraggingWeightSlider.value = false;
-    document.removeEventListener("mousemove", handleMove);
+    document.removeEventListener("mousemove", handleMove as EventListener);
     document.removeEventListener("mouseup", handleUp);
+    document.removeEventListener("touchmove", handleMove as EventListener);
+    document.removeEventListener("touchend", handleUp);
   };
 
-  // Update immediately on click
+  // Update immediately on click/touch
   const rect = slider.getBoundingClientRect();
-  const x = e.clientX - rect.left;
+  const x = getClientX(e) - rect.left;
   const percentage = Math.max(0, Math.min(1, x / rect.width));
   const { min, max } = weightRange.value;
   currentWeight.value = Math.round(min + percentage * (max - min));
 
-  document.addEventListener("mousemove", handleMove);
-  document.addEventListener("mouseup", handleUp);
+  if (isTouch) {
+    document.addEventListener("touchmove", handleMove as EventListener, { passive: false });
+    document.addEventListener("touchend", handleUp);
+  } else {
+    document.addEventListener("mousemove", handleMove as EventListener);
+    document.addEventListener("mouseup", handleUp);
+  }
 };
 
-const startShapeSliderDrag = (e: MouseEvent) => {
+const startShapeSliderDrag = (e: MouseEvent | TouchEvent) => {
   e.preventDefault();
   e.stopPropagation();
   isDraggingShapeSlider.value = true;
@@ -1440,9 +1410,17 @@ const startShapeSliderDrag = (e: MouseEvent) => {
   const slider = (e.currentTarget as HTMLElement).closest(".relative");
   if (!slider) return;
 
-  const handleMove = (moveEvent: MouseEvent) => {
+  const isTouch = e.type.startsWith('touch');
+  const getClientX = (event: MouseEvent | TouchEvent): number => {
+    if (isTouch && 'touches' in event && event.touches.length > 0) {
+      return event.touches[0].clientX;
+    }
+    return (event as MouseEvent).clientX;
+  };
+
+  const handleMove = (moveEvent: MouseEvent | TouchEvent) => {
     const rect = slider.getBoundingClientRect();
-    const x = moveEvent.clientX - rect.left;
+    const x = getClientX(moveEvent) - rect.left;
     const percentage = Math.max(0, Math.min(1, x / rect.width));
 
     const { min, max } = shapeRange.value;
@@ -1451,19 +1429,26 @@ const startShapeSliderDrag = (e: MouseEvent) => {
 
   const handleUp = () => {
     isDraggingShapeSlider.value = false;
-    document.removeEventListener("mousemove", handleMove);
+    document.removeEventListener("mousemove", handleMove as EventListener);
     document.removeEventListener("mouseup", handleUp);
+    document.removeEventListener("touchmove", handleMove as EventListener);
+    document.removeEventListener("touchend", handleUp);
   };
 
-  // Update immediately on click
+  // Update immediately on click/touch
   const rect = slider.getBoundingClientRect();
-  const x = e.clientX - rect.left;
+  const x = getClientX(e) - rect.left;
   const percentage = Math.max(0, Math.min(1, x / rect.width));
   const { min, max } = shapeRange.value;
   currentShape.value = min + percentage * (max - min);
 
-  document.addEventListener("mousemove", handleMove);
-  document.addEventListener("mouseup", handleUp);
+  if (isTouch) {
+    document.addEventListener("touchmove", handleMove as EventListener, { passive: false });
+    document.addEventListener("touchend", handleUp);
+  } else {
+    document.addEventListener("mousemove", handleMove as EventListener);
+    document.addEventListener("mouseup", handleUp);
+  }
 };
 
 // Wait for font to load

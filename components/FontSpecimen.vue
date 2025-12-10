@@ -72,22 +72,19 @@
 
     <!-- Weight Examples (for variable fonts) -->
     <section v-if="isVariableFont" class="mb-16">
-      <h2 class="text-2xl font-medium mb-8">Weight</h2>
-      <div class="space-y-8">
+      <div class="space-y-8 text-3xl leading-snug">
         <div
           v-for="(weight, weightIdx) in weightExamples"
           :key="weight"
-          class="p-6 rounded-xl bg-stone-50 mix-blend-multiply"
+          class="rounded-xl mix-blend-multiply"
         >
-          <div class="text-sm text-neutral-500 mb-4">
+          <div class="text-xs text-neutral-400 mb-1">
             {{ getWeightName(weight) }} {{ weight }}
           </div>
           <div
             :style="{
               fontFamily: currentFontFamily,
-              fontSize: '2rem',
               fontWeight: weight,
-              lineHeight: 1.3,
             }"
           >
             {{ weightSampleTexts[weightIdx % weightSampleTexts.length] }}
