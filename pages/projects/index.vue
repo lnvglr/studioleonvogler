@@ -7,7 +7,7 @@
       >
         ← Back to home
       </NuxtLink>
-      <h1 class="text-3xl sm:text-4xl font-bold">Projects</h1>
+      <h1 class="text-3xl sm:text-4xl font-medium">Projects</h1>
     </div>
 
     <!-- Filter Tags -->

@@ -32,10 +32,7 @@
         v-if="content"
         class="prose prose-neutral max-w-none prose-headings:font-medium prose-p:font-normal prose-p:text-neutral-700 prose-p:leading-relaxed prose-img:rounded-xl prose-img:my-16 prose-img:mb-20 prose-p:mb-8"
       >
-        <ContentRenderer 
-          :value="content"
-          :components="{ img: ProseImg }"
-        />
+        <ContentRenderer :value="content" :components="{ img: ProseImg }" />
       </div>
     </section>
 
@@ -54,25 +51,25 @@
       </div>
     </section>
 
-    <!-- Large Alphabet Display (like Inter) -->
+    <!-- Large Alphabet Display -->
     <section class="mb-16">
       <h2 class="text-2xl font-medium mb-8">Alphabet</h2>
       <textarea
         :value="alphabetDisplay"
-        class="w-full p-8 rounded-xl bg-stone-50 focus:outline-none focus:ring-2 focus:ring-green-500 min-h-[300px] whitespace-pre-wrap mix-blend-multiply resize-none border-none"
+        class="w-full focus:outline-none whitespace-pre-wrap mix-blend-multiply resize-none border-none leading-snug rounded-xl [field-sizing:content]"
         :style="{
           fontFamily: currentFontFamily,
           fontSize: 'clamp(2.5rem, 6vw, 6rem)',
           fontWeight: currentVariant.weight,
-          lineHeight: 1.1,
-          letterSpacing: '0.02em',
         }"
-      ></textarea>
+        spellcheck="false"
+        dir="auto"
+      />
     </section>
 
     <!-- Weight Examples (for variable fonts) -->
     <section v-if="isVariableFont" class="mb-16">
-      <div class="space-y-8 text-3xl leading-snug">
+      <div class="space-y-8 text-3xl md:text-4xl lg:text-5xl leading-snug">
         <div
           v-for="(weight, weightIdx) in weightExamples"
           :key="weight"
@@ -86,6 +83,8 @@
               fontFamily: currentFontFamily,
               fontWeight: weight,
             }"
+            class="whitespace-nowrap overflow-hidden py-2 -my-2"
+            dir="auto"
           >
             {{ weightSampleTexts[weightIdx % weightSampleTexts.length] }}
           </div>
@@ -200,19 +199,11 @@ const getInitialVariableWeight = () => {
   return 400;
 };
 
-const variableWeight = ref(getInitialVariableWeight());
 
 const currentVariant = computed(() => {
-  if (isVariableFont.value) {
-    return {
-      ...props.font.variants[0],
-      weight: variableWeight.value,
-    };
-  }
-  return (
-    props.font.variants.find((v) => v.id === selectedVariantId.value) ||
-    props.font.variants[0]
-  );
+  return {
+    weight: 700,
+  };
 });
 
 const currentFontFamily = computed(() => {

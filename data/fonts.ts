@@ -251,14 +251,21 @@ export const fonts: Font[] = [
         name: 'Required ligatures',
         description: 'Required ligatures for Arabic letters like ل+ا.',
         exampleText: [
-          "لا", "لأ", "لإ", "لآ"
+          "لاعب",
+          "لأمل",
+          "لإله",
+          "لآية",
+          "لٱمر"
         ].join(' '),
+        highlighted: [
+          "لا", "لأ", "لإ", "لآ"
+        ],
         enabledByDefault: true,
       },
       calt: {
         name: 'Contextual alternates',
         description: 'Depending on the surrounding context, different glyphs are used. Enabled by default',
-        exampleText: ["See: 13.", "12:34", "<br>", "1+2", "1−2", "1×2", "1÷2", "1=2", "~1", "<br>", "[CALT]", "(BRACKET)", "{BRACE}"].join(' '),
+        exampleText: ["See: 13.", "12:34", "<br>", "1+2", "1−2", "1×2", "1÷2", "1=2", "~1", "<br>", "[BRACKET]", "(PAREN)", "{BRACE}"].join(' '),
         highlighted: [":", "+", "−", "×", "÷", "=", "~", "[", "(", "{", "]", ")", "}"].join(''),
         enabledByDefault: true,
       },
@@ -271,16 +278,21 @@ export const fonts: Font[] = [
       tnum: {
         name: 'Tabular numbers',
         description: 'Fixed-width numbers are useful for tabular data, where comparing columns across rows is desired.',
-        exampleText: `0:12; ₪23.45<br>
-6:78; ₪90.71<br>
-٢٣٫٤٥₪ ;٠:١٢<br>
-٩١٫١٠₪ ;٦:٧٨`,
+        exampleText: `1,234; ₪5678,90
+1,111; ₪1111,11
+<span dir="rtl">
+١٢٬٣٤٥؛ ٦٧٬٨٩٠
+</span><br>
+<span dir="ltr">
+١١٬٥٦٧؛ ٨٩٬٠١٢
+</span>
+`,
         highlighted: "0123456789٠١٢٣٤٥٦٧٨٩",
         enabledByDefault: false,
       },
       locl: {
         name: 'Localized forms',
-        description: 'Bulgarian localized glyph forms',
+        description: 'Bulgarian localized glyph forms.',
         exampleText: `АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЪЮЯабвгдежзийклмнопрстуфхцчшщьъюя`.split('').join(' '),
         highlighted: "ДЛФвгджзийклптцшщьъю",
         languageTag: 'BGR',
@@ -291,8 +303,8 @@ export const fonts: Font[] = [
         description: 'Alternate glyphs for Arabic letters.',
         exampleText: [
           "حب",
-          "هي",
-          "ما"
+          "نبي",
+          "ماء‌"
         ].join(' '),
         highlighted: ["ج", "چ", "ح", "خ", "م", "ي"].join(''),
         enabledByDefault: false,
@@ -306,6 +318,13 @@ export const fonts: Font[] = [
         highlighted: "١٢٣٦٩",
         enabledByDefault: false,
       },
+      ss03: {
+        name: 'Stylistic Set 3',
+        description: 'Alternate glyph for Georgian letters.',
+        exampleText: `ბგდვზთკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ`.split('').join(' '),
+        highlighted: "დლრწ",
+        enabledByDefault: false,
+      }
       
     },
   },
@@ -351,7 +370,7 @@ export const fonts: Font[] = [
       },
       dlig: {
         name: 'Discretionary ligatures',
-        description: 'Discretionary ligatures like אל and אאא.',
+        description: 'Optional ligatures like אל and אאא.',
         exampleText: [
           "צצ", "אא", "אאא", "אל", "אש", "עי"
         ].join(' '),
@@ -361,10 +380,13 @@ export const fonts: Font[] = [
         name: 'Standard Ligatures',
         description: 'Gender-neutral ligatures.',
         exampleText: [
-          "כל הא.נשים שורים.ות. מי הו.יא שי.תחליט בשבילי מי אני.", "<br>", "ה.ת", "ו.ה",
+          "<span dir='rtl'>כל הא.נשים שורים.ות. מי הו.יא שי.תחליט בשבילי מי אני.</span>", "<br>", "ה.ת", "ו.ה",
           "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת", 
-          "ת.ד", "י.ו", "ת.ם", "ים.ות", 
+          "ת.ד", "י.ו", "ת.ם", "ים.ות", "א.נ", "ו.יא",
         ].join(' '),
+        highlighted: ["ה.ת", "ו.ה",
+          "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת", 
+          "ת.ד", "י.ו", "ת.ם", "ים.ות", "א.נ", "ו.יא"],
         enabledByDefault: true,
       },
       tnum: {
