@@ -41,7 +41,7 @@
     </div>
 
     <!-- Projects Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 z-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-8 z-20">
       <NuxtLink
         v-for="project in filteredProjects"
         :key="project.id"
@@ -64,9 +64,9 @@
             loading="lazy"
           />
         </div>
-        <div class="flex items-center gap-2 flex-wrap mix-blend-multiply">
+        <div class="flex items-center gap-2 flex-wrap">
           <span
-            class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-neutral-600 uppercase mix-blend-multiply"
+            class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-neutral-600 mix-blend-multiply"
           >
             {{ getCategoryTag(project.category) }}
           </span>

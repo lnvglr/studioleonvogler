@@ -5,21 +5,21 @@
 @font-face {
 	font-family: "Gramatika";
 	src: url("/fonts/Gramatika-Regular.woff2") format("woff2");
-	font-weight: normal;
+	font-weight: 400;
   font-display: swap;
 	font-feature-settings: "ss02", "ss03", "ss04", "ss06";
 }
 @font-face {
 	font-family: "Gramatika";
 	src: url("/fonts/Gramatika-Medium.woff2") format("woff2");
-	font-weight: medium;
+	font-weight: 500;
   font-display: swap;
 	font-feature-settings: "ss02", "ss03", "ss04", "ss06";
 }
 @font-face {
   font-family: "Gramatika";
 	src: url("/fonts/Gramatika-Bold.woff2") format("woff2");
-	font-weight: bold;
+	font-weight: 700;
   font-display: swap;
 	font-feature-settings: "ss02", "ss03", "ss04", "ss06";
 }

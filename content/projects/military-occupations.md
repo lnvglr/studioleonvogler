@@ -16,11 +16,11 @@ The project explores shifting national borders—how military occupation redraws
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/military-occupations/binding-1.jpg" alt="Binding prototype 1" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/binding-2.jpg" alt="Binding prototype 2" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/binding-3.jpg" alt="Binding prototype 3" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/binding-4.jpg" alt="Binding prototype 4" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/binding-5.jpg" alt="Binding prototype 5" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/binding-1.jpg" alt="Binding prototype 1" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/binding-2.jpg" alt="Binding prototype 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/binding-3.jpg" alt="Binding prototype 3" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/binding-4.jpg" alt="Binding prototype 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/binding-5.jpg" alt="Binding prototype 5" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
     </div>
   </div>
   <p class="text-sm text-neutral-400">Five binding prototypes evolving from initial concepts to the final design solution.</p>
@@ -31,14 +31,14 @@ The typographic approach reflects the project's critical stance. Layouts shift a
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/military-occupations/01-mo-mockup-cover.jpg" alt="Book cover" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/02-mo-mockup-perspective-contents.jpg" alt="Perspective view of contents" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/03-mo-mockup-chapter-1-scaled.jpg" alt="Chapter 1 spreads" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/04-mo-mockup-ongoing-1.jpg" alt="Ongoing occupations section 1" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/05-mo-mockup-ongoing-2.jpg" alt="Ongoing occupations section 2" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/06-mo-mockup-chapter-2.1.jpg" alt="Chapter 2.1 spreads" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/07-mo-mockup-chapter-2.2.jpg" alt="Chapter 2.2 spreads" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/08-mo-mockup-historical.jpg" alt="Historical occupations section" class="h-64 sm:h-80 object-cover rounded-xl bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/01-mo-mockup-cover.jpg" alt="Book cover" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/02-mo-mockup-perspective-contents.jpg" alt="Perspective view of contents" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/03-mo-mockup-chapter-1-scaled.jpg" alt="Chapter 1 spreads" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/04-mo-mockup-ongoing-1.jpg" alt="Ongoing occupations section 1" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/05-mo-mockup-ongoing-2.jpg" alt="Ongoing occupations section 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/06-mo-mockup-chapter-2.1.jpg" alt="Chapter 2.1 spreads" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/07-mo-mockup-chapter-2.2.jpg" alt="Chapter 2.2 spreads" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/08-mo-mockup-historical.jpg" alt="Historical occupations section" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
     </div>
   </div>
 </div>

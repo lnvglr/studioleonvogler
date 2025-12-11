@@ -1,6 +1,6 @@
 <template>
   <header role="banner">
-    <div class="font-bold uppercase">
+    <div class="font-medium uppercase text-[var(--header-text-color,inherit)] sm:!text-neutral-700">
       <h1 class="text-xl sm:text-2xl lg:text-3xl">
         <NuxtLink
           to="/"
@@ -10,7 +10,7 @@
         >
       </h1>
       <span
-        class="text-lg sm:text-xl leading-none text-neutral-400 font-bold"
+        class="text-base sm:text-xl leading-none opacity-50"
         >{{ description }}</span
       >
     </div>

@@ -1,7 +1,7 @@
 <template>
   <main class="max-w-xl gap-5 sm:gap-10">
-    <div>
-      <h1 class="text-lg sm:text-xl font-bold">Contact / About</h1>
+    <div class="font-normal">
+      <h1 class="text-lg sm:text-xl font-medium">Contact / About</h1>
       <p>
         I was born and raised in the south of Germany and started out as a
         graphic designer when I was still a teenager. While I was studying
@@ -45,7 +45,7 @@
         class="rounded-full w-16 h-16 sm:w-24 sm:h-24 -ml-2 border border-white object-cover"
       />
       <div class="flex flex-col flex-gap">
-        <p class="font-bold text-lg">Leon Vogler</p>
+        <p class="font-medium text-lg">Leon Vogler</p>
         <ClientOnly
           ><a :href="`mailto:${mail}`" class="hover:underline">{{
             mail

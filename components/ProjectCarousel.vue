@@ -3,22 +3,39 @@
     ref="carouselRef"
     class="relative w-full h-full flex flex-col group"
     style="mix-blend-mode: normal;"
-    @mouseenter="pauseAutoplay"
-    @mouseleave="resumeAutoplay"
+    @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove"
+    @touchend="handleTouchEnd"
   >
     <!-- Carousel Container -->
-    <div class="relative flex-1 overflow-hidden w-full h-full">
+    <div 
+      class="relative flex-1 w-full h-full"
+      :class="{ 
+        'overflow-x-auto snap-x snap-mandatory scrollbar-hide': isMobile,
+        'overflow-hidden': !isMobile
+      }"
+      ref="scrollContainer"
+      :style="isMobile ? { 
+        WebkitOverflowScrolling: 'touch',
+        scrollBehavior: 'smooth'
+      } : {}"
+    >
       <div
-        class="flex transition-transform duration-500 h-full w-full"
+        class="flex h-full"
+        :class="{ 
+          'transition-transform duration-500': !isDragging && !isMobile,
+        }"
         :style="{ 
-          transform: `translateX(-${currentIndex * 100}%)`,
-          transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)'
+          transform: isMobile ? 'none' : `translateX(-${currentIndex * 100}%)`,
+          transitionTimingFunction: isMobile ? 'none' : 'cubic-bezier(0.1, 1, 0.1, 1)',
+          width: isMobile ? `${projects.length * 100}%` : '100%'
         }"
       >
         <div
           v-for="(project, index) in projects"
           :key="project.id"
-          class="w-full h-full shrink-0 relative"
+          class="h-full shrink-0 relative snap-start"
+          :style="{ width: isMobile ? `${100 / projects.length}%` : '100%' }"
         >
           <NuxtLink
             :to="`/projects/${project.id}`"
@@ -47,15 +64,16 @@
             />
           </NuxtLink>
           
-          <!-- Floating Label -->
+          <!-- Floating Label - Top on desktop, bottom on mobile -->
           <div
-            class="absolute top-0 left-0 right-0 pt-6 sm:pt-10 px-6 sm:px-10 pointer-events-none"
+            class="absolute left-0 right-0 px-6 sm:px-10 pointer-events-none sm:top-0 sm:pt-6 bottom-0 pb-14 sm:pb-0"
             :class="textColorClass"
           >
             <div class="flex flex-col gap-1.5">
-              <span class="text-[10px] uppercase tracking-wide opacity-70">
-                {{ getCategoryTag(project.category) }}
-              </span>
+              <div class="text-[10px] tracking-wide text-[var(--header-text-color,inherit)] w-auto me-auto relative px-2 py-0.5 -mx-0.5">
+              <div class="block w-full h-full absolute inset-0 rounded-full bg-stone-50 opacity-20" aria-hidden="true"/>
+                <span class="relative z-10">{{ getCategoryTag(project.category) }}</span>
+              </div>
               <h3 class="text-sm sm:text-base font-medium">
                 {{ project.title }}
               </h3>
@@ -67,12 +85,13 @@
 
     <!-- Navigation Controls: Arrow-left - Dots Progress - Arrow-right -->
     <div
-      class="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20 pointer-events-none"
+      class="absolute bottom-6 sm:bottom-10 flex items-center gap-3 z-20 pointer-events-none start-6 sm:start-1/2 sm:-translate-x-1/2"
       :class="textColorClass"
     >
+      <!-- Arrow buttons - hidden on mobile -->
       <button
         @click.stop="previous"
-        class="pointer-events-auto hover:opacity-70 transition-opacity duration-300 p-2"
+        class="hidden sm:block pointer-events-auto hover:opacity-70 transition-opacity duration-300 p-2"
         :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
         aria-label="Previous project"
       >
@@ -123,9 +142,10 @@
         </button>
       </div>
       
+      <!-- Arrow buttons - hidden on mobile -->
       <button
         @click.stop="next"
-        class="pointer-events-auto hover:opacity-70 transition-opacity duration-300 p-2"
+        class="hidden sm:block pointer-events-auto hover:opacity-70 transition-opacity duration-300 p-2"
         :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
         aria-label="Next project"
       >
@@ -140,6 +160,33 @@
             stroke-linejoin="round"
             stroke-width="2"
             d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile: Scroll down indicator animation -->
+    <div
+      v-if="isMobile"
+      class="absolute bottom-6 end-6 z-20 sm:hidden"
+      :class="textColorClass"
+    >
+      <button
+        @click="scrollToNextSection"
+        class="pointer-events-auto scroll-indicator cursor-pointer hover:opacity-80 transition-opacity"
+        aria-label="Scroll to next section"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
           />
         </svg>
       </button>
@@ -167,6 +214,12 @@ const isPaused = ref(false)
 const progressStartTime = ref(0)
 const imageRefs = ref<(HTMLImageElement | null)[]>([])
 const imageBrightness = ref<number[]>([])
+const isMobile = ref(false)
+const isDragging = ref(false)
+const touchStartX = ref(0)
+const touchStartY = ref(0)
+const scrollContainer = ref<HTMLElement | null>(null)
+let resizeHandler: (() => void) | null = null
 
 // Computed property to get indices that should be loaded (current, previous, next only)
 const indicesToLoad = computed(() => {
@@ -198,6 +251,33 @@ const textColorClass = computed(() => {
     return 'text-white' // Default to white
   }
   return imageBrightness.value[currentIndex.value] > 128 ? 'text-black' : 'text-white'
+})
+
+// Update CSS variable for header text color
+const updateHeaderTextColor = () => {
+  if (typeof document !== 'undefined') {
+    const brightness = imageBrightness.value[currentIndex.value]
+    if (brightness !== undefined) {
+      const textColor = brightness > 128 ? '#000000' : '#ffffff'
+      document.documentElement.style.setProperty('--header-text-color', textColor)
+    } else {
+      document.documentElement.style.setProperty('--header-text-color', '#ffffff')
+    }
+  }
+}
+
+// Watch for brightness changes and update CSS variable
+watch([currentIndex, imageBrightness], () => {
+  updateHeaderTextColor()
+}, { deep: true, immediate: true })
+
+// Also watch currentIndex specifically to ensure immediate updates
+watch(currentIndex, () => {
+  updateHeaderTextColor()
+  // Force reactivity update
+  nextTick(() => {
+    updateHeaderTextColor()
+  })
 })
 
 const setImageRef = (el: any, index: number) => {
@@ -233,29 +313,54 @@ const calculateBrightness = (img: HTMLImageElement): Promise<number> => {
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
     
     try {
-      // Only get image data from the top third of the image
-      const topThirdHeight = Math.floor(canvas.height / 3)
-      const imageData = ctx.getImageData(0, 0, canvas.width, topThirdHeight)
-      const data = imageData.data
-      let r = 0
-      let g = 0
-      let b = 0
-      let count = 0
+      // Get image data from the top third and bottom third of the image
+      const sectionHeight = Math.floor(canvas.height / 4)
+      const topSectionData = ctx.getImageData(0, 0, canvas.width, sectionHeight)
+      const bottomSectionStart = canvas.height - sectionHeight
+      const bottomSectionData = ctx.getImageData(0, bottomSectionStart, canvas.width, sectionHeight)
+      
+      // Calculate brightness for top third
+      const topData = topSectionData.data
+      let topR = 0
+      let topG = 0
+      let topB = 0
+      let topCount = 0
       
       // Sample pixels (every 10th pixel for performance)
-      for (let i = 0; i < data.length; i += 40) {
-        r += data[i]
-        g += data[i + 1]
-        b += data[i + 2]
-        count++
+      for (let i = 0; i < topData.length; i += 40) {
+        topR += topData[i]
+        topG += topData[i + 1]
+        topB += topData[i + 2]
+        topCount++
       }
       
-      const avgR = r / count
-      const avgG = g / count
-      const avgB = b / count
+      const avgTopR = topR / topCount
+      const avgTopG = topG / topCount
+      const avgTopB = topB / topCount
+      const topBrightness = (avgTopR * 0.299 + avgTopG * 0.587 + avgTopB * 0.114)
       
-      // Calculate perceived brightness
-      const brightness = (avgR * 0.299 + avgG * 0.587 + avgB * 0.114)
+      // Calculate brightness for bottom third
+      const bottomData = bottomSectionData.data
+      let bottomR = 0
+      let bottomG = 0
+      let bottomB = 0
+      let bottomCount = 0
+      
+      // Sample pixels (every 10th pixel for performance)
+      for (let i = 0; i < bottomData.length; i += 40) {
+        bottomR += bottomData[i]
+        bottomG += bottomData[i + 1]
+        bottomB += bottomData[i + 2]
+        bottomCount++
+      }
+      
+      const avgBottomR = bottomR / bottomCount
+      const avgBottomG = bottomG / bottomCount
+      const avgBottomB = bottomB / bottomCount
+      const bottomBrightness = (avgBottomR * 0.299 + avgBottomG * 0.587 + avgBottomB * 0.114)
+      
+      // Average the top and bottom brightness
+      const brightness = (topBrightness + bottomBrightness) / 2
       resolve(brightness)
     } catch (e) {
       resolve(128) // Default to medium brightness on error
@@ -269,25 +374,44 @@ const onImageLoad = async (index: number, event: Event) => {
   if (target && target.tagName === 'IMG') {
     const brightness = await calculateBrightness(target)
     imageBrightness.value[index] = brightness
+    // Update CSS variable if this is the current image or if brightness was just calculated
+    if (index === currentIndex.value) {
+      nextTick(() => {
+        updateHeaderTextColor()
+      })
+    }
   }
 }
 
 const goToIndex = (index: number) => {
   currentIndex.value = index
+  if (isMobile.value) {
+    scrollToIndex(index)
+  }
   resetProgress()
+  updateHeaderTextColor()
 }
 
 const next = () => {
-  currentIndex.value = (currentIndex.value + 1) % props.projects.length
+  const newIndex = (currentIndex.value + 1) % props.projects.length
+  currentIndex.value = newIndex
+  if (isMobile.value) {
+    scrollToIndex(newIndex)
+  }
   resetProgress()
+  updateHeaderTextColor()
 }
 
 const previous = () => {
-  currentIndex.value =
-    currentIndex.value === 0
-      ? props.projects.length - 1
-      : currentIndex.value - 1
+  const newIndex = currentIndex.value === 0
+    ? props.projects.length - 1
+    : currentIndex.value - 1
+  currentIndex.value = newIndex
+  if (isMobile.value) {
+    scrollToIndex(newIndex)
+  }
   resetProgress()
+  updateHeaderTextColor()
 }
 
 const resetProgress = () => {
@@ -318,6 +442,8 @@ const startProgress = () => {
   }, updateInterval)
 }
 
+// Ensure autoplay works on mobile - the next() function already handles scrolling
+
 const startAutoplay = () => {
   if (intervalId.value) {
     clearInterval(intervalId.value)
@@ -335,11 +461,112 @@ const resumeAutoplay = () => {
   progressStartTime.value = Date.now() - (props.autoplayInterval - remainingTime)
 }
 
+
+const carouselRef = ref<HTMLElement | null>(null)
+
+// Touch/swipe handlers for natural mobile gestures (using native scroll)
+const handleTouchStart = () => {
+  if (!isMobile.value) return
+  pauseAutoplay()
+}
+
+const handleTouchMove = () => {
+  // Let native scroll handle it
+}
+
+const handleTouchEnd = () => {
+  if (!isMobile.value) return
+  // Update index after scroll settles
+  setTimeout(() => {
+    if (scrollContainer.value) {
+      syncIndexFromScroll()
+    }
+    resumeAutoplay()
+  }, 100)
+}
+
+// Sync currentIndex from scroll position
+const syncIndexFromScroll = () => {
+  if (!scrollContainer.value || !isMobile.value) return
+  const scrollLeft = scrollContainer.value.scrollLeft
+  const containerWidth = scrollContainer.value.clientWidth
+  const newIndex = Math.round(scrollLeft / containerWidth)
+  if (newIndex !== currentIndex.value && newIndex >= 0 && newIndex < props.projects.length) {
+    currentIndex.value = newIndex
+    resetProgress()
+    // Explicitly update header text color when index changes - use nextTick to ensure reactivity
+    nextTick(() => {
+      updateHeaderTextColor()
+    })
+  } else if (newIndex === currentIndex.value) {
+    // Even if index hasn't changed, ensure text color is synced (in case brightness was just calculated)
+    updateHeaderTextColor()
+  }
+}
+
+// Handle scroll events for mobile to sync currentIndex
+const handleScroll = () => {
+  if (!isMobile.value) return
+  // Use requestAnimationFrame for smoother updates
+  requestAnimationFrame(() => {
+    syncIndexFromScroll()
+  })
+}
+
+// Scroll to current index on mobile
+const scrollToIndex = (index: number) => {
+  if (!isMobile.value || !scrollContainer.value) return
+  const containerWidth = scrollContainer.value.clientWidth
+  scrollContainer.value.scrollTo({
+    left: index * containerWidth,
+    behavior: 'smooth'
+  })
+}
+
+// Scroll to next section (article) on mobile
+const scrollToNextSection = () => {
+  if (!isMobile.value || typeof window === 'undefined') return
+  const articleSection = document.getElementById('mobile-article-section')
+  if (articleSection) {
+    articleSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
 onMounted(() => {
   startAutoplay()
   startProgress()
   // Initialize brightness array
   imageBrightness.value = new Array(props.projects.length).fill(undefined)
+  
+  // Check if mobile
+  if (typeof window !== 'undefined') {
+    isMobile.value = window.innerWidth < 640 // sm breakpoint
+    resizeHandler = () => {
+      const wasMobile = isMobile.value
+      isMobile.value = window.innerWidth < 640
+      // If switching to mobile, scroll to current index
+      if (isMobile.value && !wasMobile && scrollContainer.value) {
+        nextTick(() => {
+          scrollToIndex(currentIndex.value)
+        })
+      }
+    }
+    window.addEventListener('resize', resizeHandler)
+    
+    // Set up scroll listener for mobile
+    nextTick(() => {
+      if (scrollContainer.value) {
+        scrollContainer.value.addEventListener('scroll', handleScroll, { passive: true })
+        // Scroll to initial index on mobile
+        if (isMobile.value) {
+          scrollToIndex(currentIndex.value)
+        }
+      }
+    })
+    
+    // Initial CSS variable
+    updateHeaderTextColor()
+  }
   
   // Initial images will be loaded via shouldLoadImage computed property
   // which automatically includes current (0), next (1), and previous (last)
@@ -352,12 +579,40 @@ onBeforeUnmount(() => {
   if (progressIntervalId.value) {
     clearInterval(progressIntervalId.value)
   }
+  if (scrollContainer.value) {
+    scrollContainer.value.removeEventListener('scroll', handleScroll)
+  }
+  if (typeof window !== 'undefined' && resizeHandler) {
+    window.removeEventListener('resize', resizeHandler)
+  }
 })
-
-const carouselRef = ref<HTMLElement | null>(null)
 </script>
 
 <style scoped>
 /* Smooth transitions */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+/* Scroll indicator animation */
+.scroll-indicator {
+  animation: nudgeDown 2s ease-in-out infinite;
+}
+
+@keyframes nudgeDown {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
 </style>
 

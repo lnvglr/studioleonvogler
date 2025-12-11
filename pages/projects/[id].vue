@@ -25,7 +25,7 @@
         ← Back to projects
       </NuxtLink>
       <div class="flex flex-col gap-2">
-        <span class="text-xs text-neutral-500 uppercase">{{
+        <span class="text-xs text-neutral-500">{{
           project.categoryName || project.category
         }}</span>
         <div class="flex flex-col gap-1">

@@ -1,6 +1,6 @@
 <template>
   <main class="max-w-xl">
-    <h1 class="text-lg sm:text-xl font-bold">Privacy Policy</h1>
+    <h1 class="text-lg sm:text-xl font-medium">Privacy Policy</h1>
     <p>
       Each time a document from *.leonvogler.com is accessed, access data is
       stored. Each data record consists at least of
