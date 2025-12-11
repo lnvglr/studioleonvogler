@@ -380,7 +380,6 @@ export const fonts: Font[] = [
       jalt: {
         name: 'Justification alternates',
         exampleText: `אדהכלםרת`.split('').join(' '),
-        enabledText: `ﬡﬢﬣﬤﬥﬦﬧﬨ`.split('').join(' '),
         enabledByDefault: false,
       },
 

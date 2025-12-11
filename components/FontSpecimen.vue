@@ -235,9 +235,8 @@
               >{{ link.format }} format</span
             >
           </div>
-          <a
-            :href="link.url"
-            :download="link.url.split('/').pop()"
+          <button
+            @click="handleDownload(link, font.id, font.name)"
             class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-300 font-medium inline-flex items-center gap-2"
             :style="{
               transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)',
@@ -258,7 +257,7 @@
               ></path>
             </svg>
             Download
-          </a>
+          </button>
         </div>
       </div>
     </section>
@@ -497,4 +496,37 @@ onMounted(() => {
     document.documentElement.classList.add("dark");
   }
 });
+
+// Download tracking handler
+const handleDownload = async (link: { url: string; format?: string }, fontId: string, fontName: string) => {
+  try {
+    // Track the download (fire and forget - don't block the download)
+    $fetch('/api/downloads/track', {
+      method: 'POST',
+      body: {
+        fontId,
+        fontName,
+        downloadUrl: link.url,
+        format: link.format,
+      },
+    }).catch(console.error)
+
+    // Trigger the actual download
+    const linkElement = document.createElement('a')
+    linkElement.href = link.url
+    linkElement.download = link.url.split('/').pop() || 'font'
+    document.body.appendChild(linkElement)
+    linkElement.click()
+    document.body.removeChild(linkElement)
+  } catch (error) {
+    console.error('Error tracking download:', error)
+    // Still allow download even if tracking fails
+    const linkElement = document.createElement('a')
+    linkElement.href = link.url
+    linkElement.download = link.url.split('/').pop() || 'font'
+    document.body.appendChild(linkElement)
+    linkElement.click()
+    document.body.removeChild(linkElement)
+  }
+}
 </script>
