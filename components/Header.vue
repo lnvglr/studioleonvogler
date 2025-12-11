@@ -1,7 +1,7 @@
 <template>
   <header role="banner">
     <div class="font-bold uppercase">
-      <h1 class="text-xl sm:text-2xl md:text-3xl">
+      <h1 class="text-xl sm:text-2xl lg:text-3xl">
         <NuxtLink
           to="/"
           rel="home"
