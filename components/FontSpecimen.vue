@@ -45,7 +45,7 @@
         >
           {{ font.name }}
         </h1>
-        <p class="text-lg text-neutral-600 max-w-2xl">
+        <p class="text-lg text-neutral-600 max-w-2xl font-medium">
           {{ font.description }}
         </p>
       </div>

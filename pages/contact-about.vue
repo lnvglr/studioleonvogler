@@ -47,7 +47,7 @@
       <div class="flex flex-col flex-gap">
         <p class="font-medium text-lg">Leon Vogler</p>
         <ClientOnly
-          ><a :href="`mailto:${mail}`" class="hover:underline">{{
+          ><a :href="`mailto:${mail}`" class="hover:underline underline-offset-4">{{
             mail
           }}</a></ClientOnly
         >

@@ -40,7 +40,7 @@
       </div>
 
       <div class="max-w-2xl">
-        <p class="text-lg leading-relaxed font-normal">{{ project.description }}</p>
+        <p class="text-lg leading-relaxed font-medium">{{ project.description }}</p>
       </div>
 
       <div
