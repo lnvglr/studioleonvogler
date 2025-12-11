@@ -56,7 +56,7 @@
       <h2 class="text-2xl font-medium mb-8">Alphabet</h2>
       <textarea
         :value="alphabetDisplay"
-        class="w-full focus:outline-none whitespace-pre-wrap resize-none border-none leading-snug rounded-xl [field-sizing:content]"
+        class="w-full focus:outline-none whitespace-pre-wrap resize-none border-none leading-snug rounded-xl [field-sizing:content] bg-transparent"
         :style="{
           fontFamily: currentFontFamily,
           fontSize: 'clamp(2.5rem, 6vw, 6rem)',
@@ -122,7 +122,7 @@
           <a
             v-for="lang in languages"
             :key="lang"
-            class="px-2 py-0.5 rounded-sm bg-stone-100 hover:bg-stone-200 transition-colors duration-300"
+            class="px-2 py-0.5 rounded-sm bg-stone-100 hover:bg-stone-200 transition-colors duration-300 mix-blend-multiply"
             :href="`https://en.wikipedia.org/wiki/${lang.replace(
               ' ',
               '_'
@@ -152,7 +152,7 @@
         <!-- Donation Box -->
         <div
           v-if="font.donationUrl"
-          class="bg-stone-50 rounded-xl p-6 border border-stone-200"
+          class="bg-stone-50 p-6 py-5 mix-blend-multiply rounded-sm"
         >
           <h2 class="text-2xl font-medium mb-4">Support This Font</h2>
           <p class="text-neutral-700 mb-6 leading-relaxed">
@@ -163,7 +163,7 @@
             :href="font.donationUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-300 font-medium"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 font-medium"
             :style="{
               transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)',
             }"
@@ -175,7 +175,7 @@
         <!-- Licensing Information -->
         <div
           v-if="font.license"
-          class="bg-stone-50 rounded-xl p-6 border border-stone-200"
+          class="bg-stone-50 p-6 py-5 mix-blend-multiply rounded-sm"
         >
           <h2 class="text-2xl font-medium mb-4">License</h2>
           <div class="mb-4">
@@ -226,7 +226,7 @@
         <div
           v-for="(link, index) in font.downloadLinks"
           :key="index"
-          class="flex items-center justify-between p-4 bg-stone-50 rounded-lg border border-stone-200 hover:bg-stone-100 transition-colors duration-300"
+          class="flex items-center justify-between p-4 bg-stone-50 mix-blend-multiply rounded-sm"
           :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
         >
           <div class="flex flex-col">
@@ -237,7 +237,7 @@
           </div>
           <button
             @click="handleDownload(link, font.id, font.name)"
-            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-300 font-medium inline-flex items-center gap-2"
+            class="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 font-medium inline-flex items-center gap-2"
             :style="{
               transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)',
             }"

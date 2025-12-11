@@ -39,7 +39,7 @@
           >
         </div>
         <!-- Footer on left side for desktop -->
-        <Footer class="hidden sm:block mt-auto bg-transparent" />
+        <Footer class="hidden sm:flex mt-auto bg-transparent" />
       </div>
 
       <!-- Right side: Fixed full-size carousel (50%) -->

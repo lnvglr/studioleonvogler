@@ -32,7 +32,7 @@
           'px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300',
           selectedCategory === category.value
             ? 'bg-green-500 text-white'
-            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200',
+            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 mix-blend-multiply',
         ]"
         :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
       >
@@ -66,7 +66,7 @@
         </div>
         <div class="flex items-center gap-2 flex-wrap mix-blend-multiply">
           <span
-            class="text-xs px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-600 uppercase transition-colors duration-300 mix-blend-multiply"
+            class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-neutral-600 uppercase mix-blend-multiply"
           >
             {{ getCategoryTag(project.category) }}
           </span>

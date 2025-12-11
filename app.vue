@@ -1,7 +1,7 @@
 <template>
   <div class="font-normal flex flex-col text-stone-700">
     <div
-      class="inset-0 fixed z-10 bg-[radial-gradient(circle_at_left,_var(--tw-gradient-stops))] via-20% to-50% to-white bg-cover duration-1000 mix-blend-multiply pointer-events-none"
+      class="inset-0 fixed -z-10 bg-[radial-gradient(circle_at_left,_var(--tw-gradient-stops))] via-20% to-50% to-white bg-cover duration-1000 pointer-events-none"
       aria-hidden="true"
       :class="{
         'from-purple-200 via-green-50': route.name === 'contact-about',

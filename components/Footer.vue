@@ -1,9 +1,9 @@
 <template>
   <footer role="banner" class="flex flex-col gap-5 bg-neutral-100">
     <nav role="navigation">
-      <ul aria-expanded="false" class="flex flex-col sm:flex-row sm:items-center gap-3">
+      <ul aria-expanded="false" class="flex flex-col sm:flex-row sm:items-center gap-x-3 flex-wrap">
         <li v-for="(item, i) in menu" :key="i">
-          <NuxtLink :to="item.link" class="hover:underline leading-none">{{ item.name }}</NuxtLink>
+          <NuxtLink :to="item.link" class="hover:underline leading-none whitespace-nowrap">{{ item.name }}</NuxtLink>
         </li>
       </ul>
     </nav>
