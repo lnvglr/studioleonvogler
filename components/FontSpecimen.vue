@@ -163,10 +163,7 @@
             :href="font.donationUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 font-medium"
-            :style="{
-              transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)',
-            }"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 font-medium ease-expressive-out"
           >
             Donate via PayPal
           </a>
@@ -226,8 +223,7 @@
         <div
           v-for="(link, index) in font.downloadLinks"
           :key="index"
-          class="flex items-center justify-between p-4 bg-stone-50 mix-blend-multiply rounded-sm"
-          :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
+          class="flex items-center justify-between p-4 bg-stone-50 mix-blend-multiply rounded-sm transition-all duration-300 ease-expressive-out"
         >
           <div class="flex flex-col">
             <span class="font-medium text-neutral-900">{{ link.label }}</span>
@@ -237,10 +233,7 @@
           </div>
           <button
             @click="handleDownload(link, font.id, font.name)"
-            class="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 font-medium inline-flex items-center gap-2"
-            :style="{
-              transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)',
-            }"
+            class="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300 font-medium inline-flex items-center gap-2 ease-expressive-out"
           >
             <svg
               class="w-5 h-5"
@@ -478,6 +471,8 @@ const getWeightName = (weight: number): string => {
 const mastheadStyle = computed(() => ({
   fontFamily: currentFontFamily.value,
   fontWeight: 700,
+  lineHeight: props.font.id === 'seoul-grotesk' ? 0.75 : 1.25,
+  marginTop: props.font.id === 'seoul-grotesk' ? "16px" : undefined
 }));
 
 const toggleDarkMode = () => {

@@ -2,6 +2,15 @@
 
 import plugin from "tailwindcss/plugin";
 
+
+
+const transitionTimingFunction = {
+  expressive: "cubic-bezier(.8, 0, .2, 1)",
+  "expressive-out": "cubic-bezier(.1, 1, .1, 1)",
+  "expressive-in": "cubic-bezier(1, .1, 1, .1)",
+  "expressive-in-out": "cubic-bezier(1, .1, .1, 1)",
+};
+
 export default {
   darkMode: 'class',
   content: [
@@ -20,6 +29,7 @@ export default {
       body: ['Gramatika', 'Heebo', 'system-ui', 'sans-serif'],
     },
     extend: {
+      transitionTimingFunction,
       colors: {
         green: {
           50: '#f0f7f2',

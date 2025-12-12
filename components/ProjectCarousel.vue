@@ -23,11 +23,10 @@
       <div
         class="flex h-full"
         :class="{ 
-          'transition-transform duration-500': !isDragging && !isMobile,
+          'transition-transform duration-500 ease-expressive-out': !isDragging && !isMobile,
         }"
         :style="{ 
           transform: isMobile ? 'none' : `translateX(-${currentIndex * 100}%)`,
-          transitionTimingFunction: isMobile ? 'none' : 'cubic-bezier(0.1, 1, 0.1, 1)',
           width: isMobile ? `${projects.length * 100}%` : '100%'
         }"
       >
@@ -39,14 +38,15 @@
         >
           <NuxtLink
             :to="`/projects/${project.id}`"
-            class="block w-full h-full cursor-pointer"
+            class="block w-full h-full cursor-pointer group/project"
           >
             <NuxtImg
               v-if="shouldLoadImage(index)"
               :ref="(el) => setImageRef(el, index)"
               :src="project.image.startsWith('/') ? project.image : `/${project.image}`"
               :alt="project.alt"
-              class="w-full h-full object-cover"
+              class="w-full h-full object-cover pointer-fine:group-hover/project:scale-[1.02] transition-transform duration-1000 ease-out"
+              :class="imageBrightness[currentIndex] > 128 ? 'bg-stone-100' : 'bg-gray-500'"
               :loading="index === currentIndex ? 'eager' : 'lazy'"
               :fetchpriority="index === currentIndex ? 'high' : undefined"
               :placeholder="index === 0 ? true : false"
@@ -62,8 +62,6 @@
               v-else
               class="w-full h-full bg-stone-100"
             />
-          </NuxtLink>
-          
           <!-- Floating Label - Top on desktop, bottom on mobile -->
           <div
             class="absolute left-0 right-0 px-6 sm:px-10 pointer-events-none sm:top-0 sm:pt-6 bottom-0 pb-14 sm:pb-0"
@@ -75,11 +73,13 @@
                 <span class="relative z-10">{{ getCategoryTag(project.category) }}</span>
               </div>
               <h3 class="text-sm sm:text-base font-medium">
-                {{ project.title }}
+                {{ project.title }} <span class="inline-block pointer-coarse:hidden opacity-0 group-hover/project:opacity-100 translate-x-0 group-hover:translate-x-2 duration-100 group-hover:duration-1000 ease-in group-hover:ease-expressive-out transition-all"> →</span>
               </h3>
             </div>
           </div>
+          </NuxtLink>
         </div>
+          
       </div>
     </div>
 
@@ -91,8 +91,7 @@
       <!-- Arrow buttons - hidden on mobile -->
       <button
         @click.stop="previous"
-        class="hidden sm:block pointer-events-auto hover:opacity-70 transition-opacity duration-300 p-2"
-        :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
+        class="hidden pointer-fine:block opacity-0 group-hover:opacity-50 pointer-coarse:hidden pointer-events-auto group-hover:hover:opacity-100 transition-opacity duration-300 p-2 ease-expressive-out"
         aria-label="Previous project"
       >
         <svg
@@ -111,20 +110,18 @@
       </button>
       
       <!-- Dots Progress -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center -mx-1">
         <button
           v-for="(project, index) in projects"
           :key="project.id"
           @click.stop="goToIndex(index)"
-          class="pointer-events-auto transition-all duration-500 rounded-full relative overflow-hidden"
-          :class="index === currentIndex ? 'opacity-100' : 'opacity-40'"
-          :style="{ 
-            transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)',
-            width: index === currentIndex ? '100px' : '4px',
-            height: '4px',
-            backgroundColor: index === currentIndex ? 'transparent' : 'currentColor'
-          }"
           :aria-label="`Go to project ${index + 1}`"
+          class="pointer-events-auto flex items-center justify-center h-10 w-4 group/page p-1.5"
+          :style="{ width: index === currentIndex ? '100px' : undefined }"
+          >
+        <div
+          class="transition-all duration-500 rounded-full relative overflow-hidden ease-expressive-out h-1"
+          :class="index === currentIndex ? 'opacity-100 w-full bg-transparent' : 'opacity-40 group-hover/page:opacity-100 w-1 bg-current'"
         >
           <!-- Progress bar background -->
           <div
@@ -139,14 +136,14 @@
               width: `${progress}%`
             }"
           />
+        </div>
         </button>
       </div>
       
       <!-- Arrow buttons - hidden on mobile -->
       <button
         @click.stop="next"
-        class="hidden sm:block pointer-events-auto hover:opacity-70 transition-opacity duration-300 p-2"
-        :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
+        class="hidden pointer-fine:block opacity-0 group-hover:opacity-50 pointer-coarse:hidden pointer-events-auto group-hover:hover:opacity-100 transition-opacity duration-300 p-2 ease-expressive-out"
         aria-label="Next project"
       >
         <svg

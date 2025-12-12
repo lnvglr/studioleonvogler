@@ -15,12 +15,11 @@
       <button
         @click="selectedCategory = null"
         :class="[
-          'px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300',
+          'px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300 ease-expressive-out',
           selectedCategory === null
             ? 'bg-green-500 text-white'
             : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 mix-blend-multiply',
         ]"
-        :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
       >
         All
       </button>
@@ -29,12 +28,11 @@
         :key="category.value"
         @click="selectedCategory = category.value"
         :class="[
-          'px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300',
+          'px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300 ease-expressive-out',
           selectedCategory === category.value
             ? 'bg-green-500 text-white'
             : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 mix-blend-multiply',
         ]"
-        :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
       >
         {{ category.label }}
       </button>
@@ -56,10 +54,7 @@
                 : `/${project.image}`
             "
             :alt="project.alt"
-            class="w-full h-64 object-cover group-hover:scale-[1.02] transition-transform duration-1000"
-            :style="{
-              transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)',
-            }"
+            class="w-full h-64 object-cover group-hover:scale-[1.02] transition-transform duration-1000 ease-expressive-out"
             format="webp"
             quality="80"
             sizes="480px"
@@ -82,10 +77,7 @@
             </span>
           </div>
           <h3
-            class="font-medium text-lg group-hover:underline underline-offset-4 transition-colors duration-300 leading-tight"
-            :style="{
-              transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)',
-            }"
+            class="font-medium text-lg group-hover:underline underline-offset-4 transition-colors duration-300 leading-tight ease-expressive-out"
           >
             {{ project.title }}
           </h3>

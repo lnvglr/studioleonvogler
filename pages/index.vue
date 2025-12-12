@@ -36,8 +36,7 @@
         </article>
         <NuxtLink
           to="mailto:studio@leonvogler.com"
-          class="p-2 py-1 text-green-400 hover:!bg-green-500 hover:text-white border border-current ite rounded mr-auto transition-all duration-300 w-fit"
-          :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
+          class="p-2 py-1 text-green-400 hover:!bg-green-500 hover:text-white border border-current ite rounded mr-auto transition-all duration-300 w-fit ease-expressive-out"
           >Let's collab ❤️</NuxtLink
         >
         <!-- Footer on mobile -->
@@ -78,8 +77,7 @@
           </article>
           <NuxtLink
             to="mailto:studio@leonvogler.com"
-            class="p-2 py-1 text-green-400 hover:!bg-green-500 hover:text-white border border-current ite rounded mr-auto transition-all duration-300 w-fit"
-            :style="{ transitionTimingFunction: 'cubic-bezier(0.1, 1, 0.1, 1)' }"
+            class="p-2 py-1 text-green-400 hover:!bg-green-500 hover:text-white border border-current ite rounded mr-auto transition-all duration-300 w-fit ease-expressive-out"
             >Let's collab ❤️</NuxtLink
           >
         </div>

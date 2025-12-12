@@ -432,6 +432,9 @@ const fontVariationSettings = computed(() => {
   return settings.length > 0 ? settings.join(", ") : undefined;
 });
 
+const breaksLigatures =
+  /Safari/.test(navigator.userAgent) &&
+  !/Chrome|Chromium|Edg|OPR/.test(navigator.userAgent);
 
 // Form markers for Arabic characters
 const FORM_ISOLATED = "\uE000";
@@ -715,6 +718,10 @@ const characterGroups = computed(() => {
     arabicLetters.forEach(letter => {
       const supportedForms = getArabicLetterForms(letter);
       supportedForms.forEach(form => {
+        // If breaksLigatures is true, skip initial, medial, and final forms
+        if (breaksLigatures && (form === FORM_INITIAL || form === FORM_MEDIAL || form === FORM_FINAL)) {
+          return;
+        }
         arabicWithAllForms.push(letter + form);
       });
     });
