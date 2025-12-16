@@ -11,7 +11,7 @@
     <div 
       class="relative flex-1 w-full h-full"
       :class="{ 
-        'overflow-x-auto snap-x snap-mandatory scrollbar-hide': isMobile,
+        'overflow-y-hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide': isMobile,
         'overflow-hidden': !isMobile
       }"
       ref="scrollContainer"
@@ -65,10 +65,10 @@
           <!-- Floating Label - Top on desktop, bottom on mobile -->
           <div
             class="absolute left-0 right-0 px-6 sm:px-10 pointer-events-none sm:top-0 sm:pt-6 bottom-0 pb-14 sm:pb-0"
-            :class="textColorClass"
+            :class="textColorClass(index)"
           >
             <div class="flex flex-col gap-1.5">
-              <div class="text-[10px] tracking-wide text-[var(--header-text-color,inherit)] w-auto me-auto relative px-2 py-0.5 -mx-0.5">
+              <div class="text-[10px] tracking-wide w-auto me-auto relative px-2 py-0.5 -mx-0.5">
               <div class="block w-full h-full absolute inset-0 rounded-full bg-stone-50 opacity-20" aria-hidden="true"/>
                 <span class="relative z-10">{{ getCategoryTag(project.category) }}</span>
               </div>
@@ -85,13 +85,13 @@
 
     <!-- Navigation Controls: Arrow-left - Dots Progress - Arrow-right -->
     <div
-      class="absolute bottom-6 sm:bottom-10 flex items-center gap-3 z-20 pointer-events-none start-6 sm:start-1/2 sm:-translate-x-1/2"
-      :class="textColorClass"
+      class="absolute bottom-3 sm:bottom-10 flex items-center gap-3 z-20 pointer-events-none start-6 sm:start-1/2 sm:-translate-x-1/2"
+      :class="textColorClass(currentIndex)"
     >
       <!-- Arrow buttons - hidden on mobile -->
       <button
         @click.stop="previous"
-        class="hidden pointer-fine:block opacity-0 group-hover:opacity-50 pointer-coarse:hidden pointer-events-auto group-hover:hover:opacity-100 transition-opacity duration-300 p-2 ease-expressive-out"
+        class="hidden pointer-fine:block opacity-50 sm:opacity-0 group-hover:opacity-50 pointer-coarse:hidden pointer-events-auto group-hover:hover:opacity-100 transition-opacity duration-300 p-2 ease-expressive-out -ms-3 sm:ms-0"
         aria-label="Previous project"
       >
         <svg
@@ -143,7 +143,7 @@
       <!-- Arrow buttons - hidden on mobile -->
       <button
         @click.stop="next"
-        class="hidden pointer-fine:block opacity-0 group-hover:opacity-50 pointer-coarse:hidden pointer-events-auto group-hover:hover:opacity-100 transition-opacity duration-300 p-2 ease-expressive-out"
+        class="hidden pointer-fine:block opacity-50 sm:opacity-0 group-hover:opacity-50 pointer-coarse:hidden pointer-events-auto group-hover:hover:opacity-100 transition-opacity duration-300 p-2 ease-expressive-out -me-3 sm:me-0"
         aria-label="Next project"
       >
         <svg
@@ -166,7 +166,7 @@
     <div
       v-if="isMobile"
       class="absolute bottom-6 end-6 z-20 sm:hidden"
-      :class="textColorClass"
+      :class="textColorClass(currentIndex)"
     >
       <button
         @click="scrollToNextSection"
@@ -243,39 +243,27 @@ const shouldLoadImage = (index: number): boolean => {
   return indicesToLoad.value.has(index)
 }
 
-const textColorClass = computed(() => {
-  if (imageBrightness.value[currentIndex.value] === undefined) {
+const textColorClass = (index: number) => {
+  if (imageBrightness.value[index] === undefined) {
     return 'text-white' // Default to white
   }
-  return imageBrightness.value[currentIndex.value] > 128 ? 'text-black' : 'text-white'
-})
+  return imageBrightness.value[index] > 128 ? 'text-black' : 'text-white'
+}
 
 // Update CSS variable for header text color
 const updateHeaderTextColor = () => {
   if (typeof document !== 'undefined') {
     const brightness = imageBrightness.value[currentIndex.value]
-    if (brightness !== undefined) {
-      const textColor = brightness > 128 ? '#000000' : '#ffffff'
-      document.documentElement.style.setProperty('--header-text-color', textColor)
-    } else {
-      document.documentElement.style.setProperty('--header-text-color', '#ffffff')
-    }
+    const textColor = brightness > 128 ? '#000000' : '#ffffff'
+    document.documentElement.style.setProperty('--header-text-color', textColor)
   }
 }
 
 // Watch for brightness changes and update CSS variable
-watch([currentIndex, imageBrightness], () => {
+watch([currentIndex, () => imageBrightness.value[currentIndex.value]], () => {
   updateHeaderTextColor()
-}, { deep: true, immediate: true })
+}, { immediate: true })
 
-// Also watch currentIndex specifically to ensure immediate updates
-watch(currentIndex, () => {
-  updateHeaderTextColor()
-  // Force reactivity update
-  nextTick(() => {
-    updateHeaderTextColor()
-  })
-})
 
 const setImageRef = (el: any, index: number) => {
   if (el) {
@@ -371,12 +359,6 @@ const onImageLoad = async (index: number, event: Event) => {
   if (target && target.tagName === 'IMG') {
     const brightness = await calculateBrightness(target)
     imageBrightness.value[index] = brightness
-    // Update CSS variable if this is the current image or if brightness was just calculated
-    if (index === currentIndex.value) {
-      nextTick(() => {
-        updateHeaderTextColor()
-      })
-    }
   }
 }
 
@@ -386,7 +368,6 @@ const goToIndex = (index: number) => {
     scrollToIndex(index)
   }
   resetProgress()
-  updateHeaderTextColor()
 }
 
 const next = () => {
@@ -396,7 +377,6 @@ const next = () => {
     scrollToIndex(newIndex)
   }
   resetProgress()
-  updateHeaderTextColor()
 }
 
 const previous = () => {
@@ -408,7 +388,6 @@ const previous = () => {
     scrollToIndex(newIndex)
   }
   resetProgress()
-  updateHeaderTextColor()
 }
 
 const resetProgress = () => {
@@ -491,13 +470,6 @@ const syncIndexFromScroll = () => {
   if (newIndex !== currentIndex.value && newIndex >= 0 && newIndex < props.projects.length) {
     currentIndex.value = newIndex
     resetProgress()
-    // Explicitly update header text color when index changes - use nextTick to ensure reactivity
-    nextTick(() => {
-      updateHeaderTextColor()
-    })
-  } else if (newIndex === currentIndex.value) {
-    // Even if index hasn't changed, ensure text color is synced (in case brightness was just calculated)
-    updateHeaderTextColor()
   }
 }
 
@@ -537,15 +509,13 @@ onMounted(() => {
   
   // Check if mobile
   if (typeof window !== 'undefined') {
-    isMobile.value = window.innerWidth < 640 // sm breakpoint
+    isMobile.value = window.innerWidth < 640; // sm breakpoint
     resizeHandler = () => {
       const wasMobile = isMobile.value
       isMobile.value = window.innerWidth < 640
       // If switching to mobile, scroll to current index
       if (isMobile.value && !wasMobile && scrollContainer.value) {
-        nextTick(() => {
-          scrollToIndex(currentIndex.value)
-        })
+        nextTick(() => scrollToIndex(currentIndex.value))
       }
     }
     window.addEventListener('resize', resizeHandler)
@@ -560,13 +530,7 @@ onMounted(() => {
         }
       }
     })
-    
-    // Initial CSS variable
-    updateHeaderTextColor()
   }
-  
-  // Initial images will be loaded via shouldLoadImage computed property
-  // which automatically includes current (0), next (1), and previous (last)
 })
 
 onBeforeUnmount(() => {

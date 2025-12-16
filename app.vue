@@ -13,7 +13,7 @@
     />
     <div
       class="flex flex-col min-h-screen p-5 sm:p-10 md:px-20 sm:pb-20 md:pb-32 gap-5 sm:gap-10"
-      :class="{ 'sm:pr-0': route.name === 'index', 'relative z-10': route.name === 'index' }"
+      :class="{ 'relative z-10': route.name === 'index' }"
     >
       <Header 
         :class="{ 
