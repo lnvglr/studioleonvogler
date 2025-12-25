@@ -829,10 +829,17 @@ const characterGroups = computed(() => {
     });
   }
 
+  if (!supportsLatin) {
+    groups.push({
+      name: "Latin Punctuation",
+      characters: ".,:;…!¡?¿·•*#/\\-–—_(){}[]‚„\"\"\'\'«»‹›\'\"ʹ͵".split(""),
+    });
+  }
+
   // Symbols (universal)
   groups.push({
     name: "Symbols",
-    characters: "@&|~^∞%‰↑↗→↘↓↙←↖↔↕".split(""),
+    characters: "@&|↑↗→↘↓↙←↖↔↕".split(""),
   });
 
   // Currency symbols
@@ -848,7 +855,7 @@ const characterGroups = computed(() => {
   // Mathematical symbols
   groups.push({
     name: "Mathematical",
-    characters: "+−×÷=><~^∞%‰".split(""),
+    characters: "+−×÷=≠><±≈¬~^∅∞∫%‰".split(""),
   });
 
   // Emojis

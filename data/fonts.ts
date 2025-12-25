@@ -455,6 +455,12 @@ export const fonts: Font[] = [
         highlighted: "ק",
         enabledByDefault: false,
       },
+      ss04: {
+        name: 'Stylistic Set 4',
+        description: 'Replaces modular arrows with optically corrected, text-fit variants.',
+        exampleText: `↑↗→↘↓↙←↖↔↕`.split('').join(' '),
+        enabledByDefault: false,
+      },
     },
 
     downloadLinks: [

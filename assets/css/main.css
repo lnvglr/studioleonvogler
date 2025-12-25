@@ -25,8 +25,15 @@
 }
 @font-face {
 	font-family: "Heebo";
-  src: url("/fonts/Heebo-Medium.woff2") format("woff2");
+  src: url("/fonts/Heebo-Regular.woff2") format("woff2");
   font-weight: normal;
+  unicode-range: U+0590-05FF, U+0030-0039;
+  font-display: swap;
+}
+@font-face {
+	font-family: "Heebo";
+  src: url("/fonts/Heebo-Medium.woff2") format("woff2");
+  font-weight: medium;
   unicode-range: U+0590-05FF, U+0030-0039;
   font-display: swap;
 }
