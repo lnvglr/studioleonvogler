@@ -44,7 +44,7 @@
     </div>
 
 
-    <div class="relative w-full h-screen sm:w-1/2 sm:fixed sm:right-0 sm:top-0 sm:overflow-hidden sm:z-20">
+    <div class="relative w-full h-screen portrait:h-[100svh] sm:w-1/2 sm:fixed sm:right-0 sm:top-0 sm:overflow-hidden sm:z-20">
       <ProjectCarousel v-if="projects" :projects="projects" :autoplay-interval="5000" />
     </div>
     <!-- Mobile: Article text after carousel -->
