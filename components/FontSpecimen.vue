@@ -106,6 +106,7 @@
         "
         :is-variable-font="isVariableFont"
         :weight-range="variableWeightRange"
+        :feature-metadata="font.featureMetadata"
       />
     </section>
 

@@ -55,6 +55,65 @@
                 currentShape.toFixed()
               }}</span>
             </div>
+            <!-- OpenType Features Dropdown -->
+            <div v-if="availableFeatures.length > 0" class="relative" ref="featureDropdownRef">
+              <button
+                @click.stop="showFeatureDropdown = !showFeatureDropdown"
+                class="flex flex-col items-start text-sm text-white/70 hover:text-white transition-colors"
+              >
+                <div class="flex items-center gap-2">
+                  <span>Features</span>
+                  <svg 
+                    class="w-4 h-4 transition-transform" 
+                    :class="showFeatureDropdown ? 'rotate-180' : ''"
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <span v-if="activeFeaturesDisplay" class="text-white font-medium font-mono text-xs">{{ activeFeaturesDisplay }}</span>
+                <span v-else class="text-white/50 text-xs">none</span>
+              </button>
+              
+              <!-- Dropdown Menu -->
+              <div
+                v-if="showFeatureDropdown"
+                class="absolute top-full left-0 mt-2 w-64 bg-green-800 border border-green-500 rounded-lg shadow-xl z-50 overflow-hidden"
+              >
+                <div class="max-h-64 overflow-y-auto" @mouseleave="hoveredFeatureTag = null">
+                  <button
+                    v-for="feature in availableFeatures"
+                    :key="feature.tag"
+                    @click.stop="toggleFeature(feature.tag)"
+                    @mouseenter="handleFeatureHover(feature.tag)"
+                    class="w-full px-4 py-2 flex items-start gap-3 hover:bg-green-700 transition-colors text-left"
+                  >
+                    <div 
+                      class="mt-0.5 w-4 h-4 rounded border-2 flex-shrink-0 flex items-center justify-center transition-colors"
+                      :class="activeFeatures.has(feature.tag) ? 'bg-white border-white' : 'border-white/50'"
+                    >
+                      <svg 
+                        v-if="activeFeatures.has(feature.tag)"
+                        class="w-3 h-3 text-green-700" 
+                        fill="currentColor" 
+                        viewBox="0 0 20 20"
+                      >
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs text-white/50 font-mono uppercase">{{ feature.tag }}</span>
+                        <span class="text-sm text-white font-medium truncate">{{ feature.name }}</span>
+                      </div>
+                      <p v-if="feature.description" class="text-xs text-white/60 mt-0.5 line-clamp-2">{{ feature.description }}</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
             <!-- Details Toggle -->
             <div class="hidden items-center gap-2">
               <span class="text-sm text-white/70">Details</span>
@@ -148,6 +207,7 @@
               fontFamily: fontFamily,
               fontWeight: getCurrentWeight(),
               fontVariationSettings: fontVariationSettings,
+              fontFeatureSettings: fontFeatureSettingsCSS,
               lineHeight: 1,
             }"
           >
@@ -236,15 +296,17 @@
             fontFamily: fontFamily,
             fontWeight: getCurrentWeight(),
             fontVariationSettings: fontVariationSettings,
+            fontFeatureSettings: fontFeatureSettingsCSS,
           }"
       >
         <div
           v-for="(char, charIdx) in currentCharacters"
           :key="charIdx"
           :ref="(el) => setGridItemRef(el, charIdx)"
-          class="aspect-square flex items-center justify-center ring-1 ring-green-300 transition-colors cursor-pointer group relative text-4xl text-white hover:ring-green-200 hover:bg-green-600 overflow-hidden"
+          class="aspect-square flex items-center justify-center ring-1 ring-green-300 transition-all cursor-pointer group relative text-4xl text-white hover:ring-green-200 hover:bg-green-600 overflow-hidden"
           :data-selected="previewChar === char"
           :class="previewChar === char ? 'bg-green-500 ring-green-300' : ''"
+          :style="{ opacity: isCharDimmed(char) ? 0.2 : 1 }"
           @click="selectCharacter(char)"
         >
           <span v-html="renderArabicChar(char)"></span>
@@ -259,6 +321,16 @@ import { ref, computed, onMounted, onUnmounted, nextTick, watch } from "vue";
 import { useSamsa } from "~/composables/useSamsa";
 import { useFontLoading } from "~/composables/useFontLoading";
 
+interface FontFeatureMetadata {
+  name: string;
+  description?: string;
+  exampleText: string;
+  enabledText?: string;
+  enabledByDefault?: boolean;
+  highlighted?: string | string[];
+  languageTag?: string;
+}
+
 interface Props {
   fontFamily: string;
   fontWeight: number | string;
@@ -266,11 +338,163 @@ interface Props {
   supportedLanguages?: string[];
   isVariableFont?: boolean;
   weightRange?: { min: number; max: number };
+  featureMetadata?: Record<string, FontFeatureMetadata>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isVariableFont: false,
   weightRange: () => ({ min: 100, max: 900 }),
+  featureMetadata: () => ({}),
+});
+
+// OpenType feature state
+const activeFeatures = ref<Set<string>>(new Set());
+const showFeatureDropdown = ref(false);
+const featureDropdownRef = ref<HTMLElement | null>(null);
+const hoveredFeatureTag = ref<string | null>(null);
+
+// Features to exclude (irrelevant for individual glyphs)
+const excludedFeatures = new Set(['calt', 'dlig', 'liga', 'rlig']);
+
+// Available features from featureMetadata
+const availableFeatures = computed(() => {
+  if (!props.featureMetadata) return [];
+  return Object.entries(props.featureMetadata)
+    .filter(([tag]) => !excludedFeatures.has(tag))
+    .map(([tag, metadata]) => ({
+      tag,
+      name: metadata.name,
+      description: metadata.description,
+      enabledByDefault: metadata.enabledByDefault || false,
+      highlighted: metadata.highlighted,
+    }));
+});
+
+// Get highlighted characters for the currently hovered feature
+const highlightedCharsForHoveredFeature = computed(() => {
+  if (!hoveredFeatureTag.value || !props.featureMetadata) return null;
+  
+  const metadata = props.featureMetadata[hoveredFeatureTag.value];
+  if (!metadata?.highlighted) return null;
+  
+  // highlighted can be string or string[]
+  const highlighted = metadata.highlighted;
+  if (Array.isArray(highlighted)) {
+    return new Set(highlighted.flatMap(h => h.split('')));
+  }
+  return new Set(highlighted.split(''));
+});
+
+// Check if a character should be dimmed (not highlighted by hovered feature)
+const isCharDimmed = (char: string): boolean => {
+  if (!highlightedCharsForHoveredFeature.value) return false;
+  
+  // Extract base character for Arabic characters with form markers
+  const { baseChar } = getArabicCharAndForm(char);
+  return !highlightedCharsForHoveredFeature.value.has(baseChar);
+};
+
+// Scroll to first highlighted glyph when hovering a feature
+const scrollToFirstHighlightedGlyph = (featureTag: string) => {
+  if (!props.featureMetadata) return;
+  
+  const metadata = props.featureMetadata[featureTag];
+  if (!metadata?.highlighted) return;
+  
+  // Get highlighted characters as a set
+  const highlighted = metadata.highlighted;
+  const highlightedSet = Array.isArray(highlighted) 
+    ? new Set(highlighted.flatMap(h => h.split('')))
+    : new Set(highlighted.split(''));
+  
+  // Find the first character in currentCharacters that matches
+  const chars = currentCharacters.value;
+  for (let i = 0; i < chars.length; i++) {
+    const { baseChar } = getArabicCharAndForm(chars[i]);
+    if (highlightedSet.has(baseChar)) {
+      // Found the first highlighted character, scroll to it
+      const element = gridItemRefs.value.get(i);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      break;
+    }
+  }
+};
+
+// Handle feature hover
+const handleFeatureHover = (featureTag: string) => {
+  hoveredFeatureTag.value = featureTag;
+  scrollToFirstHighlightedGlyph(featureTag);
+};
+
+// Initialize active features based on enabledByDefault (excluding irrelevant features)
+watch(() => props.featureMetadata, (metadata) => {
+  if (metadata) {
+    const defaultFeatures = new Set<string>();
+    Object.entries(metadata).forEach(([tag, meta]) => {
+      if (meta.enabledByDefault && !excludedFeatures.has(tag)) {
+        defaultFeatures.add(tag);
+      }
+    });
+    activeFeatures.value = defaultFeatures;
+  }
+}, { immediate: true });
+
+// Toggle feature
+const toggleFeature = (tag: string) => {
+  const newSet = new Set(activeFeatures.value);
+  if (newSet.has(tag)) {
+    newSet.delete(tag);
+  } else {
+    newSet.add(tag);
+  }
+  activeFeatures.value = newSet;
+};
+
+// Compute font-feature-settings CSS for active features
+const fontFeatureSettingsCSS = computed(() => {
+  if (availableFeatures.value.length === 0) return undefined;
+  
+  const settings: string[] = [];
+  availableFeatures.value.forEach(({ tag }) => {
+    const isActive = activeFeatures.value.has(tag);
+    settings.push(`'${tag}' ${isActive ? 1 : 0}`);
+  });
+  
+  return settings.length > 0 ? settings.join(', ') : undefined;
+});
+
+// Display text for active features (e.g., "JALT, TNUM, SS01 + 2")
+const activeFeaturesDisplay = computed(() => {
+  const activeTags = Array.from(activeFeatures.value).filter(tag => !excludedFeatures.has(tag));
+  if (activeTags.length === 0) return null;
+  
+  const maxVisible = 3;
+  const visibleTags = activeTags.slice(0, maxVisible).map(tag => tag.toUpperCase());
+  const remaining = activeTags.length - maxVisible;
+  
+  let display = visibleTags.join(', ');
+  if (remaining > 0) {
+    display += ` + ${remaining}`;
+  }
+  return display;
+});
+
+// Close dropdown when clicking outside
+const handleClickOutside = (e: MouseEvent) => {
+  if (featureDropdownRef.value && !featureDropdownRef.value.contains(e.target as Node)) {
+    showFeatureDropdown.value = false;
+    hoveredFeatureTag.value = null;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
 });
 
 const previewChar = ref<string>("A");
@@ -732,7 +956,7 @@ const characterGroups = computed(() => {
     });
     groups.push({
       name: "Arabic-Indic Numerals",
-      characters: "٠١٢٣٤٥٦٧٨٩".split(""),
+      characters: "ּּּ٠١٢٣٤٥٦٧٨٩".split(""),
     });
     groups.push({
       name: "Arabic Punctuation",
@@ -831,6 +1055,10 @@ const characterGroups = computed(() => {
 
   if (!supportsLatin) {
     groups.push({
+      name: "Latin Numerals",
+      characters: "0123456789".split(""),
+    });
+    groups.push({
       name: "Latin Punctuation",
       characters: ".,:;…!¡?¿·•*#/\\-–—_(){}[]‚„\"\"\'\'«»‹›\'\"ʹ͵".split(""),
     });
@@ -864,53 +1092,36 @@ const characterGroups = computed(() => {
     characters: "🚆".split(""),
   })
 
+  console.log(groups);
+
   return groups;
 });
-// Character existence detection using canvas
+// Character existence detection using font's cmap table
 const characterExistsCache = ref<Map<string, boolean>>(new Map());
 const isCheckingCharacters = ref(false);
 
-const checkCharacterExists = async (char: string): Promise<boolean> => {
+const checkCharacterExists = (char: string): boolean => {
   // Check cache first
   if (characterExistsCache.value.has(char)) {
     return characterExistsCache.value.get(char)!;
   }
 
-  return new Promise((resolve) => {
-    if (typeof document === "undefined") {
-      resolve(true); // Server-side: assume exists
-      return;
-    }
+  // If font not loaded yet, assume exists (will filter later)
+  if (!samsaFontInstance.value?.cmap) {
+    return true;
+  }
 
-    // Create a canvas to measure character rendering
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      resolve(true);
-      return;
-    }
+  const charCode = char.codePointAt(0) || 0;
+  const glyphIndex =
+    samsaFontInstance.value.cmap?.getGlyphIndex?.(charCode) ??
+    samsaFontInstance.value.cmap?.glyphIndexMap?.[charCode];
 
-    const fontSize = 100;
-    const testFont = props.fontFamily.split(",")[0].replace(/"/g, "");
-    const fallbackFont = "monospace";
+  // glyphIndex 0 is typically the .notdef glyph (missing character)
+  const exists = glyphIndex !== undefined && glyphIndex !== 0;
 
-    // Measure with the font
-    ctx.font = `${getCurrentWeight()} ${fontSize}px ${testFont}, ${fallbackFont}`;
-    const widthWithFont = ctx.measureText(char).width;
-
-    // Measure with fallback only
-    ctx.font = `${getCurrentWeight()} ${fontSize}px ${fallbackFont}`;
-    const widthWithFallback = ctx.measureText(char).width;
-
-    // If widths are the same (or very close), the character doesn't exist in the font
-    // Also check if width is 0 (missing glyph)
-    const exists =
-      Math.abs(widthWithFont - widthWithFallback) > 0.1 && widthWithFont > 0;
-
-    // Cache the result
-    characterExistsCache.value.set(char, exists);
-    resolve(exists);
-  });
+  // Cache the result
+  characterExistsCache.value.set(char, exists);
+  return exists;
 };
 
 // Filter characters that exist in the font
@@ -923,36 +1134,21 @@ const allCharacters = computed(() => {
 
 const filteredCharacters = ref<string[]>([]);
 
-const filterCharacters = async () => {
+const filterCharacters = () => {
   if (isCheckingCharacters.value) return;
+  
+  // If font's cmap not loaded yet, show all characters
+  if (!samsaFontInstance.value?.cmap) {
+    filteredCharacters.value = allCharacters.value;
+    return;
+  }
+
   isCheckingCharacters.value = true;
 
-  const all = allCharacters.value;
-  const filtered: string[] = [];
-
-  // Check characters in batches to avoid blocking
-  const batchSize = 50;
-  for (let i = 0; i < all.length; i += batchSize) {
-    const batch = all.slice(i, i + batchSize);
-    // Extract base character for checking (remove form markers)
-    const results = await Promise.all(
-      batch.map((char) => {
-        const { baseChar } = getArabicCharAndForm(char);
-        return checkCharacterExists(baseChar);
-      })
-    );
-    batch.forEach((char, idx) => {
-      if (results[idx]) {
-        filtered.push(char);
-      }
-    });
-
-    // Update filtered list incrementally
-    filteredCharacters.value = [...filtered];
-
-    // Small delay to prevent blocking
-    await new Promise((resolve) => setTimeout(resolve, 10));
-  }
+  filteredCharacters.value = allCharacters.value.filter((char) => {
+    const { baseChar } = getArabicCharAndForm(char);
+    return checkCharacterExists(baseChar);
+  });
 
   isCheckingCharacters.value = false;
 };
@@ -981,8 +1177,12 @@ const isArabicChar = (char: string): boolean => {
 };
 watch(
   samsaFontInstance,
-  () => {
-    // Font instance loaded
+  (newFont) => {
+    if (newFont?.cmap) {
+      // Clear cache when font changes and re-filter
+      characterExistsCache.value.clear();
+      filterCharacters();
+    }
   },
   { immediate: true }
 );
