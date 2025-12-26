@@ -17,7 +17,7 @@
     >
       <Header 
         :class="{ 
-          'absolute top-0 left-0 right-0 z-50 p-5 sm:p-0 sm:relative sm:z-auto sm:top-auto sm:left-auto sm:right-auto': route.name === 'index' 
+          'absolute top-0 left-0 right-0 z-50 p-5 sm:p-0 sm:relative sm:z-auto sm:top-auto sm:left-auto sm:right-auto max-sm:text-[var(--header-text-color,inherit)]': route.name === 'index' 
         }" 
       />
       <NuxtPage class="flex flex-col" />

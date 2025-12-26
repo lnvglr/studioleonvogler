@@ -1,6 +1,6 @@
 <template>
   <header role="banner">
-    <div class="font-medium uppercase text-[var(--header-text-color,inherit)] sm:!text-neutral-700">
+    <div class="font-medium uppercase">
       <h1 class="text-xl sm:text-2xl lg:text-3xl">
         <NuxtLink
           to="/"
