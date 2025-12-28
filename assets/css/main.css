@@ -63,3 +63,71 @@
 .prose p:has(img) {
   @apply my-20;
 }
+
+/* Markdown Headlines */
+.prose h1 {
+  @apply text-2xl sm:text-3xl font-medium text-neutral-900 mt-16 mb-4;
+}
+
+.prose h2 {
+  @apply text-xl sm:text-2xl font-medium text-neutral-900 mt-12 mb-4;
+}
+
+.prose h3 {
+  @apply text-lg sm:text-xl font-medium text-neutral-900 mt-10 mb-3;
+}
+
+.prose h4 {
+  @apply text-base sm:text-lg font-medium text-neutral-900 mt-8 mb-3;
+}
+
+.prose h5 {
+  @apply text-sm sm:text-base font-medium text-neutral-900 mt-6 mb-2;
+}
+
+.prose h6 {
+  @apply text-xs sm:text-sm font-medium text-neutral-500 uppercase tracking-wide mt-6 mb-2;
+}
+
+/* Markdown Lists */
+.prose ul {
+  @apply list-disc pl-6 my-4 space-y-2;
+}
+
+.prose ol {
+  @apply list-decimal pl-6 my-4 space-y-2;
+}
+
+.prose li {
+  @apply text-neutral-700;
+}
+
+.prose li::marker {
+  @apply text-neutral-400;
+}
+
+.prose ul ul,
+.prose ol ol,
+.prose ul ol,
+.prose ol ul {
+  @apply mt-2 mb-0;
+}
+
+/* Markdown Links */
+.prose a:not(:is(h1, h2, h3, h4, h5, h6) a) {
+  @apply text-green-400 hover:underline underline-offset-4;
+}
+
+/* Headline anchor links */
+.prose :is(h1, h2, h3, h4, h5, h6) {
+  @apply scroll-mt-10;
+}
+
+.prose :is(h1, h2, h3, h4, h5, h6) a {
+  @apply relative;
+}
+
+.prose :is(h1, h2, h3, h4, h5, h6) a:hover::before {
+  content: '#';
+  @apply absolute -left-5 opacity-20;
+}
