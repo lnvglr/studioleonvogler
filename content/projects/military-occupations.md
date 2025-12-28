@@ -43,8 +43,8 @@ The production plan involved printing the yellow stripes as full pages, then cut
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/military-occupations/pagination-1-2048x1152.png" alt="Pagination problem with standard document setup" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/pagination-2-2048x1152.png" alt="Corrected pagination with single-page stripe setup" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/pagination-1-2048x1152.jpg" alt="Pagination problem with standard document setup" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/pagination-2-2048x1152.jpg" alt="Corrected pagination with single-page stripe setup" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
       <img src="/img/projects/military-occupations/mo-document-setup.jpg" alt="InDesign master page structure" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
     </div>
   </div>
