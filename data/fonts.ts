@@ -248,7 +248,7 @@ export const fonts: Font[] = [
       ],
       "N'Ko": [
         "Bambara", "Dyula", "Mandingo", "Maninka", "N'Ko"
-        
+
       ],
     },
     sampleText: {
@@ -387,8 +387,11 @@ export const fonts: Font[] = [
       calt: {
         name: 'Contextual alternates',
         description: 'Depending on the surrounding context, different glyphs are used. Enabled by default',
-        exampleText: ["מספר: 13.", "12:34", "<br>", "1+2", "1−2", "1×2", "1÷2", "1=2",].join(' '),
-        highlighted: [":", "+", "−", "×", "÷", "="].join(''),
+        exampleText: ["010.2*364+8(2).5",
+          "−51,67×8÷91{0}:1",
+          "010.2*364−8(2).5",
+          "+51,67×8÷91{0}:1"].join('<br>'),
+        highlighted: [":", "+", "−", "×", "*", "÷", "=", "{", "}", "[", "]", "(", ")"].join(''),
         enabledByDefault: true,
       },
       dlig: {
@@ -404,11 +407,11 @@ export const fonts: Font[] = [
         description: 'Gender-neutral ligatures.',
         exampleText: [
           "<span dir='rtl'>כל הא.נשים שורים.ות. מי הו.יא שי.תחליט בשבילי מי אני.</span>", "<br>", "ה.ת", "ו.ה",
-          "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת", 
+          "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת",
           "ת.ד", "י.ו", "ת.ם", "ים.ות", "א.נ", "ו.יא",
         ].join(' '),
         highlighted: ["ה.ת", "ו.ה",
-          "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת", 
+          "י.ות", "י.ת", "י.ו", "ן.ם", "נ.ת",
           "ת.ד", "י.ו", "ת.ם", "ים.ות", "א.נ", "ו.יא"],
         enabledByDefault: true,
       },
@@ -443,22 +446,29 @@ export const fonts: Font[] = [
       },
       ss02: {
         name: 'Stylistic Set 2',
-        description: 'Alternate glyph for letters ק and ל.',
-        exampleText: `אבגקל`.split('').join(' '),
-        highlighted: "קל",
+        description: 'Straight terminals on letters ו, י and ן.',
+        exampleText: `אקסיון`,
+        highlighted: "יון",
         enabledByDefault: false,
       },
       ss03: {
         name: 'Stylistic Set 3',
+        description: 'Replaces modular arrows with optically corrected, text-fit variants.',
+        exampleText: `↑↗→↘↓↙←↖↔↕`.split('').join(' '),
+        enabledByDefault: false,
+      },
+      cv01: {
+        name: 'Character Variant 1',
         description: 'Alternate glyph for letter ק.',
         exampleText: `אבגק`.split('').join(' '),
         highlighted: "ק",
         enabledByDefault: false,
       },
-      ss04: {
-        name: 'Stylistic Set 4',
-        description: 'Replaces modular arrows with optically corrected, text-fit variants.',
-        exampleText: `↑↗→↘↓↙←↖↔↕`.split('').join(' '),
+      cv02: {
+        name: 'Character Variant 2',
+        description: 'Alternate glyph for letters ק and ל.',
+        exampleText: `אבגקל`.split('').join(' '),
+        highlighted: "קל",
         enabledByDefault: false,
       },
     },

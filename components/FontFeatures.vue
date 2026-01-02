@@ -261,6 +261,13 @@ const extractFeaturesFromFont = async () => {
         return aNum - bNum;
       }
 
+      if (a.tag.startsWith("ss") && b.tag.startsWith("cv")) {
+        return -1;
+      }
+      if (a.tag.startsWith("cv") && b.tag.startsWith("ss")) {
+        return 1;
+      }
+
       return a.tag.localeCompare(b.tag);
     });
 
@@ -286,13 +293,16 @@ const getFeatureSettings = (tag: string, enabled: boolean): string => {
 
   // For "Off" state, explicitly disable the feature and also disable liga if it's a ligature feature
   if (!enabled && tag === "dlig") {
-    return `'dlig' 0, 'liga' 0`;
+    return `'dlig' 0, 'liga' 0, 'ss03' 0`;
   }
   // if (!enabled && tag === 'tnum') {
   // 	return "pnum"
   // }
 
-  return `'${tag}' ${value}`;
+  if (tag === "ss03") {
+    return `'ss03' ${value}`;
+  }
+  return `'ss03' 0, '${tag}' ${value}`;
 };
 
 // Get font-language-override CSS value for locl feature

@@ -55,6 +55,26 @@
                 currentShape.toFixed()
               }}</span>
             </div>
+            <!-- JUST Axis Slider -->
+            <div v-if="isVariableFont && hasJustAxis" class="grid grid-cols-2 grid-rows-2 items-center gap-x-4 gap-y-0">
+              <span class="text-sm text-white/70">Just</span>
+              <div class="relative w-full max-w-32 h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2 touch-none" style="touch-action: none;" :style="{
+                '--w': `calc(${justPercentage}% - ${justPercentage/9}px)`
+              }">
+                <div
+                  class="absolute top-1/2 -translate-y-1/2 h-full bg-white rounded-full w-[calc(var(--w)+3px)]"
+                ></div>
+                <div
+                  class="absolute top-1/2 -translate-y-1/2 bg-white rounded-full cursor-pointer start-[calc(var(--w))] touch-none  w-3 h-3  pointer-coarse:w-5 pointer-coarse:h-5"
+                  style="touch-action: none;"
+                  @mousedown="startJustSliderDrag"
+                  @touchstart="startJustSliderDrag"
+                ></div>
+              </div>
+              <span class="text-sm text-white font-medium tabular-nums row-start-1 col-start-2 text-right">{{
+                currentJust.toFixed()
+              }}</span>
+            </div>
             <!-- OpenType Features Dropdown -->
             <div v-if="availableFeatures.length > 0" class="relative" ref="featureDropdownRef">
               <button
@@ -208,6 +228,7 @@
               fontWeight: getCurrentWeight(),
               fontVariationSettings: fontVariationSettings,
               fontFeatureSettings: fontFeatureSettingsCSS,
+              fontLanguageOverride: fontLanguageOverride,
               lineHeight: 1,
             }"
           >
@@ -297,6 +318,7 @@
             fontWeight: getCurrentWeight(),
             fontVariationSettings: fontVariationSettings,
             fontFeatureSettings: fontFeatureSettingsCSS,
+            fontLanguageOverride: fontLanguageOverride,
           }"
       >
         <div
@@ -367,6 +389,7 @@ const availableFeatures = computed(() => {
       description: metadata.description,
       enabledByDefault: metadata.enabledByDefault || false,
       highlighted: metadata.highlighted,
+      languageTag: metadata.languageTag,
     }));
 });
 
@@ -415,7 +438,7 @@ const scrollToFirstHighlightedGlyph = (featureTag: string) => {
       // Found the first highlighted character, scroll to it
       const element = gridItemRefs.value.get(i);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
       break;
     }
@@ -463,6 +486,13 @@ const fontFeatureSettingsCSS = computed(() => {
   });
   
   return settings.length > 0 ? settings.join(', ') : undefined;
+});
+
+const fontLanguageOverride = computed(() => {
+  return "BGR"
+  console.log(availableFeatures.value)
+  if (availableFeatures.value.length === 0) return undefined;
+  return availableFeatures.value.find(({ tag }) => tag === "locl")?.languageTag;
 });
 
 // Display text for active features (e.g., "JALT, TNUM, SS01 + 2")
@@ -592,6 +622,35 @@ const shapePercentage = computed(() => {
   return ((currentShape.value - min) / (max - min)) * 100;
 });
 
+// JUST axis control for variable fonts
+const justAxis = computed(() => {
+  if (!samsaFontInstance.value || !samsaFontInstance.value.axes) return null;
+  return samsaFontInstance.value.axes.find((axis: any) => axis.tag === "JUST");
+});
+
+const hasJustAxis = computed(() => {
+  return !!justAxis.value;
+});
+
+const justRange = computed(() => {
+  if (!justAxis.value) return { min: 0, max: 1000 };
+  return {
+    min: justAxis.value.min,
+    max: justAxis.value.max,
+    default:
+      justAxis.value.default ||
+      (justAxis.value.min + justAxis.value.max) / 2,
+  };
+});
+
+const currentJust = ref<number>(0);
+
+const justPercentage = computed(() => {
+  if (!hasJustAxis.value) return 0;
+  const { min, max } = justRange.value;
+  return ((currentJust.value - min) / (max - min)) * 100;
+});
+
 // Typographic metrics positions (will be calculated from actual font metrics)
 const capHeightPosition = ref(50); // Percentage from top
 const xHeightPosition = ref(50); // Percentage from top
@@ -620,12 +679,15 @@ const glyphOutline = ref<{
 const { loadFont, getFontMetrics, getGlyphOutline } = useSamsa();
 const samsaFontInstance = ref<any>(null);
 
-// Initialize SHPE value when font loads
+// Initialize SHPE and JUST values when font loads
 watch(
   samsaFontInstance,
   (font) => {
     if (font && hasShapeAxis.value && shapeAxis.value) {
       currentShape.value = 0;
+    }
+    if (font && hasJustAxis.value && justAxis.value) {
+      currentJust.value = 0;
     }
   },
   { immediate: true }
@@ -647,6 +709,8 @@ const fontVariationSettings = computed(() => {
       settings.push(`'${axis.tag}' ${currentWeight.value}`);
     } else if (axis.tag === "SHPE") {
       settings.push(`'${axis.tag}' ${currentShape.value}`);
+    } else if (axis.tag === "JUST") {
+      settings.push(`'${axis.tag}' ${currentJust.value}`);
     } else {
       // Use default for other axes
       settings.push(`'${axis.tag}' ${axis.default || 0}`);
@@ -914,7 +978,7 @@ const characterGroups = computed(() => {
     });
     groups.push({
       name: "Latin Punctuation",
-      characters: ".,:;…!¡?¿·•*#/\\-–—_(){}[]‚„\"\"\'\'«»‹›\'\"ʹ͵".split(""),
+      characters: ".,:;…!¡?¿·•*#/\\-–—_(){}[]‚„\"\"\'\'«»‹›\'\"ʹ".split(""),
     });
   }
 
@@ -925,11 +989,11 @@ const characterGroups = computed(() => {
       name: "Hebrew Letters",
       characters: hebrewLetters,
     });
-    const stretchedHebrewLetters = "ﬡﬢﬣﬤﬥﬦﬧﬨ".split("");
-    groups.push({
-      name: "Hebrew Stretched",
-      characters: stretchedHebrewLetters,
-    });
+    // const stretchedHebrewLetters = "ﬡﬢﬣﬤﬥﬦﬧﬨ".split("");
+    // groups.push({
+    //   name: "Hebrew Stretched",
+    //   characters: stretchedHebrewLetters,
+    // });
   }
 
   // Arabic characters - Letters → Numerals → Punctuation
@@ -1060,7 +1124,7 @@ const characterGroups = computed(() => {
     });
     groups.push({
       name: "Latin Punctuation",
-      characters: ".,:;…!¡?¿·•*#/\\-–—_(){}[]‚„\"\"\'\'«»‹›\'\"ʹ͵".split(""),
+      characters: ".,:;…!¡?¿·•*#/\\-–—_(){}[]‚„\"\"\'\'«»‹›\'\"ʹ".split(""),
     });
   }
 
@@ -1087,10 +1151,10 @@ const characterGroups = computed(() => {
   });
 
   // Emojis
-  groups.push({
-    name: "Emojis",
-    characters: "🚆".split(""),
-  })
+  // groups.push({
+  //   name: "Emojis",
+  //   characters: "🚆".split(""),
+  // })
 
   console.log(groups);
 
@@ -1112,9 +1176,7 @@ const checkCharacterExists = (char: string): boolean => {
   }
 
   const charCode = char.codePointAt(0) || 0;
-  const glyphIndex =
-    samsaFontInstance.value.cmap?.getGlyphIndex?.(charCode) ??
-    samsaFontInstance.value.cmap?.glyphIndexMap?.[charCode];
+  const glyphIndex = samsaFontInstance.value.cmap?.[charCode];
 
   // glyphIndex 0 is typically the .notdef glyph (missing character)
   const exists = glyphIndex !== undefined && glyphIndex !== 0;
@@ -1145,7 +1207,7 @@ const filterCharacters = () => {
 
   isCheckingCharacters.value = true;
 
-  filteredCharacters.value = allCharacters.value.filter((char) => {
+  filteredCharacters.value = allCharacters.value.filter((char, i) => {
     const { baseChar } = getArabicCharAndForm(char);
     return checkCharacterExists(baseChar);
   });
@@ -1177,12 +1239,8 @@ const isArabicChar = (char: string): boolean => {
 };
 watch(
   samsaFontInstance,
-  (newFont) => {
-    if (newFont?.cmap) {
-      // Clear cache when font changes and re-filter
-      characterExistsCache.value.clear();
-      filterCharacters();
-    }
+  () => {
+    // Font instance loaded
   },
   { immediate: true }
 );
@@ -1273,6 +1331,8 @@ const loadGlyphOutline = async (char: string) => {
           return currentWeight.value;
         } else if (axis.tag === "SHPE") {
           return currentShape.value;
+        } else if (axis.tag === "JUST") {
+          return currentJust.value;
         }
         // Use default value for other axes
         return axis.default || 0;
@@ -1655,6 +1715,57 @@ const startShapeSliderDrag = (e: MouseEvent | TouchEvent) => {
   const percentage = Math.max(0, Math.min(1, x / rect.width));
   const { min, max } = shapeRange.value;
   currentShape.value = min + percentage * (max - min);
+
+  if (isTouch) {
+    document.addEventListener("touchmove", handleMove as EventListener, { passive: false });
+    document.addEventListener("touchend", handleUp);
+  } else {
+    document.addEventListener("mousemove", handleMove as EventListener);
+    document.addEventListener("mouseup", handleUp);
+  }
+};
+
+const isDraggingJustSlider = ref(false);
+
+const startJustSliderDrag = (e: MouseEvent | TouchEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  isDraggingJustSlider.value = true;
+
+  const slider = (e.currentTarget as HTMLElement).closest(".relative");
+  if (!slider) return;
+
+  const isTouch = e.type.startsWith('touch');
+  const getClientX = (event: MouseEvent | TouchEvent): number => {
+    if (isTouch && 'touches' in event && event.touches.length > 0) {
+      return event.touches[0].clientX;
+    }
+    return (event as MouseEvent).clientX;
+  };
+
+  const handleMove = (moveEvent: MouseEvent | TouchEvent) => {
+    const rect = slider.getBoundingClientRect();
+    const x = getClientX(moveEvent) - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
+
+    const { min, max } = justRange.value;
+    currentJust.value = min + percentage * (max - min);
+  };
+
+  const handleUp = () => {
+    isDraggingJustSlider.value = false;
+    document.removeEventListener("mousemove", handleMove as EventListener);
+    document.removeEventListener("mouseup", handleUp);
+    document.removeEventListener("touchmove", handleMove as EventListener);
+    document.removeEventListener("touchend", handleUp);
+  };
+
+  // Update immediately on click/touch
+  const rect = slider.getBoundingClientRect();
+  const x = getClientX(e) - rect.left;
+  const percentage = Math.max(0, Math.min(1, x / rect.width));
+  const { min, max } = justRange.value;
+  currentJust.value = min + percentage * (max - min);
 
   if (isTouch) {
     document.addEventListener("touchmove", handleMove as EventListener, { passive: false });
