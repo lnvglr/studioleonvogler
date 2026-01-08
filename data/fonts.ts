@@ -258,6 +258,17 @@ export const fonts: Font[] = [
     },
     defaultWeight: 600,
     featureMetadata: {
+      dlig: {
+        name: 'Discretionary Ligatures',
+        description: 'Optional ligatures like ff and ft.',
+        exampleText: [
+          "Sheffield", "Clifton"
+        ].join(' '),
+        highlighted: [
+          "ff", "ft"
+        ],
+        enabledByDefault: false,
+      },
       rlig: {
         name: 'Required ligatures',
         description: 'Required ligatures for Arabic letters like ل+ا.',
@@ -266,10 +277,10 @@ export const fonts: Font[] = [
           "لأمل",
           "لإله",
           "لآية",
-          "لٱمر"
+          "لٱمر",
         ].join(' '),
         highlighted: [
-          "لا", "لأ", "لإ", "لآ"
+          "لا", "لأ", "لإ", "لآ", "لٱ"
         ],
         enabledByDefault: true,
       },
@@ -298,7 +309,7 @@ export const fonts: Font[] = [
 ١١٬٥٦٧؛ ٨٩٬٠١٢
 </span>
 `,
-        highlighted: "0123456789٠١٢٣٤٥٦٧٨٩",
+        highlighted: "0123456789٠١٢٣٤٥٦٧٨٩₪",
         enabledByDefault: false,
       },
       locl: {

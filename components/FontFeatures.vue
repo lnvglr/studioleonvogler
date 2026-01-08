@@ -223,9 +223,10 @@ const extractFeaturesFromFont = async () => {
     // Sort features: common ones first, then stylistic sets, then character variants
     fontFeatures.sort((a, b) => {
       const order = [
-        "calt",
         "liga",
         "dlig",
+        "rlig",
+        "calt",
         "jalt",
         "tnum",
         "onum",
