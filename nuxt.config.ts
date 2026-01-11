@@ -56,6 +56,11 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
     // Reduce memory usage by limiting minification
     minify: true,
+    // Ensure links are crawled for SSG
+    prerender: {
+      crawlLinks: true,
+      routes: ['/'],
+    },
   },
   app: {
     head: {

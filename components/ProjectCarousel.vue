@@ -41,7 +41,6 @@
             class="block w-full h-full cursor-pointer group/project"
           >
             <NuxtImg
-              v-if="shouldLoadImage(index)"
               :ref="(el) => setImageRef(el, index)"
               :src="project.image.startsWith('/') ? project.image : `/${project.image}`"
               :alt="project.alt"
@@ -57,10 +56,6 @@
               width="1920"
               height="1920"
               @load="onImageLoad(index, $event)"
-            />
-            <div
-              v-else
-              class="w-full h-full bg-stone-100"
             />
           <!-- Floating Label - Top on desktop, bottom on mobile -->
           <div
@@ -217,31 +212,6 @@ const touchStartX = ref(0)
 const touchStartY = ref(0)
 const scrollContainer = ref<HTMLElement | null>(null)
 let resizeHandler: (() => void) | null = null
-
-// Computed property to get indices that should be loaded (current, previous, next only)
-const indicesToLoad = computed(() => {
-  const total = props.projects.length
-  const current = currentIndex.value
-  const indices = new Set<number>()
-  
-  // Always load current image
-  indices.add(current)
-  
-  // Load previous image (handle wrap-around)
-  const prevIndex = current === 0 ? total - 1 : current - 1
-  indices.add(prevIndex)
-  
-  // Load next image (handle wrap-around)
-  const nextIndex = current === total - 1 ? 0 : current + 1
-  indices.add(nextIndex)
-  
-  return indices
-})
-
-// Determine which images should be loaded (current, previous, next)
-const shouldLoadImage = (index: number): boolean => {
-  return indicesToLoad.value.has(index)
-}
 
 const textColorClass = (index: number) => {
   if (imageBrightness.value[index] === undefined) {
