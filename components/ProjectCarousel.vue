@@ -1,7 +1,8 @@
 <template>
   <div
     ref="carouselRef"
-    class="relative w-full h-full flex flex-col group"
+    class="relative w-full h-full flex flex-col group transition-all duration-[2000ms] ease-expressive-out"
+    :class="[isReady ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5']"
     style="mix-blend-mode: normal;"
     @touchstart="handleTouchStart"
     @touchmove="handleTouchMove"
@@ -61,6 +62,7 @@
           <div
             class="absolute left-0 right-0 px-6 sm:px-10 pointer-events-none sm:top-0 sm:pt-6 bottom-0 pb-14 sm:pb-0"
             :class="textColorClass(index)"
+            :aria-label="`${project.title} - ${getCategoryTag(project.category)}`"
           >
             <div class="flex flex-col gap-1.5">
               <div class="text-[10px] tracking-wide w-auto me-auto relative px-2 py-0.5 -mx-0.5">
@@ -212,6 +214,7 @@ const touchStartX = ref(0)
 const touchStartY = ref(0)
 const scrollContainer = ref<HTMLElement | null>(null)
 let resizeHandler: (() => void) | null = null
+const isReady = ref(false)
 
 const textColorClass = (index: number) => {
   if (imageBrightness.value[index] === undefined) {
@@ -329,6 +332,11 @@ const onImageLoad = async (index: number, event: Event) => {
   if (target && target.tagName === 'IMG') {
     const brightness = await calculateBrightness(target)
     imageBrightness.value[index] = brightness
+    
+    // Reveal carousel when the current image is loaded
+    if (index === currentIndex.value && !isReady.value) {
+      isReady.value = true
+    }
   }
 }
 
@@ -472,6 +480,11 @@ const scrollToNextSection = () => {
 }
 
 onMounted(() => {
+  // Set random start index
+  if (props.projects.length > 0) {
+    currentIndex.value = Math.floor(Math.random() * props.projects.length)
+  }
+
   startAutoplay()
   startProgress()
   // Initialize brightness array
@@ -501,6 +514,20 @@ onMounted(() => {
       }
     })
   }
+
+  // Reveal carousel after hydration and initial setup
+  nextTick(() => {
+    // Check if the current image is already loaded (from cache)
+    const currentImg = imageRefs.value[currentIndex.value]
+    if (currentImg && currentImg.complete && !isReady.value) {
+      isReady.value = true
+    }
+
+    // Fallback: show anyway after a timeout if load event doesn't fire
+    setTimeout(() => {
+      if (!isReady.value) isReady.value = true
+    }, 2000)
+  })
 })
 
 onBeforeUnmount(() => {

@@ -4,7 +4,7 @@
     <div class="hidden sm:grid sm:grid-cols-2 sm:h-screen sm:overflow-hidden relative z-10">
       <!-- Left side: Text + Button + Footer (50%) -->
       <div class="flex flex-col justify-between overflow-y-auto pr-10 gap-5 sm:gap-10">
-        <div class="flex flex-col gap-5 sm:gap-10">
+        <div class="flex flex-col gap-5 sm:gap-10" id="desktop-article-section">
           <article class="max-w-xs lg:max-w-sm">
             <p class="font-normal">Heyya!</p>
             <p class="font-normal">
@@ -89,20 +89,9 @@
 <script setup lang="ts">
 import { getProjectsWithDates } from '~/data/projects'
 
-// Shuffle array function (Fisher-Yates algorithm)
-function shuffleArray<T>(array: T[]): T[] {
-  const shuffled = [...array]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled
-}
-
-// Load projects with dates and randomize order
+// Load projects with dates
 const { data: projects } = await useAsyncData('home-projects-with-dates', async () => {
-  const projectsData = await getProjectsWithDates()
-  return shuffleArray(projectsData)
+  return await getProjectsWithDates()
 })
 
 useHead({

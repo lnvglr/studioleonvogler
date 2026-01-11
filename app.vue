@@ -16,11 +16,18 @@
       :class="{ 'relative z-10': route.name === 'index' }"
     >
       <Header 
-        :class="{ 
-          'absolute top-0 left-0 right-0 z-50 p-5 sm:p-0 sm:relative sm:z-auto sm:top-auto sm:left-auto sm:right-auto max-sm:text-[var(--header-text-color,inherit)]': route.name === 'index' 
-        }" 
+        :class="[
+          { 
+            'absolute top-0 left-0 right-0 z-50 p-5 sm:p-0 sm:relative sm:z-auto sm:top-auto sm:left-auto sm:right-auto max-sm:text-[var(--header-text-color,inherit)]': route.name === 'index' 
+          },
+          'transition-all duration-[2s] ease-expressive-out',
+          isReady ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
+        ]" 
       />
-      <NuxtPage class="flex flex-col" />
+      <NuxtPage 
+        class="flex flex-col [&_#desktop-article-section]:transition-all [&_#desktop-article-section]:duration-[2s] [&_#desktop-article-section]:ease-expressive-out [&_#desktop-article-section]:delay-100"
+        :class="isReady ? '[&_#desktop-article-section]:opacity-100 [&_#desktop-article-section]:translate-y-0' : '[&_#desktop-article-section]:opacity-0 [&_#desktop-article-section]:translate-y-5'"
+      />
     </div>
     <Footer v-if="route.name !== 'index'" class="mt-auto p-5 pt-20 sm:p-10 md:px-20 sm:mx-0" />
   </div>
@@ -31,6 +38,7 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 const hue = ref(Math.floor(Math.random() * 360))
+const isReady = ref(false)
 
 const updateHue = (event) => {
   const x = event.clientX
@@ -48,6 +56,11 @@ const updateHue = (event) => {
 onMounted(async () => {
   await router.isReady()
   window.addEventListener('mousemove', updateHue)
+  
+  // Fade in content
+  setTimeout(() => {
+    isReady.value = true
+  }, 50)
 })
 
 onBeforeUnmount(() => {
