@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NODE_ENV === 'development' },
   css: ['~/assets/css/main.css'],
   modules: [
     '@nuxt/content',
@@ -50,6 +50,12 @@ export default defineNuxtConfig({
     '/_ipx/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
     // Cache HTML pages for 1 hour, revalidate
     '/**': { headers: { 'Cache-Control': 'public, max-age=3600, must-revalidate' } },
+  },
+  nitro: {
+    // Optimize for production deployment
+    compressPublicAssets: true,
+    // Reduce memory usage by limiting minification
+    minify: true,
   },
   app: {
     head: {
