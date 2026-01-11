@@ -322,17 +322,6 @@ export const fonts: Font[] = [
       },
       ss01: {
         name: 'Stylistic Set 1',
-        description: 'Alternate glyphs for Arabic letters.',
-        exampleText: [
-          "حب",
-          "نبي",
-          "ماء‌"
-        ].join(' '),
-        highlighted: ["ج", "چ", "ح", "خ", "م", "ي"].join(''),
-        enabledByDefault: false,
-      },
-      ss02: {
-        name: 'Stylistic Set 1',
         description: 'Slanted arabic-indic numerals.',
         exampleText: [
           "٠١٢٣٤٥٦٧٨٩",
@@ -340,13 +329,31 @@ export const fonts: Font[] = [
         highlighted: "١٢٣٦٩",
         enabledByDefault: false,
       },
-      ss03: {
-        name: 'Stylistic Set 3',
+      ss02: {
+        name: 'Stylistic Set 2',
         description: 'Alternate glyph for Georgian letters.',
         exampleText: `ბგდვზთკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ`.split('').join(' '),
         highlighted: "დლრწ",
         enabledByDefault: false,
-      }
+      },
+      cv01: {
+        name: 'Character Variant 1',
+        description: 'Alternate glyph for Arabic letters ج, ح, خ, چ, څ, ڄ, ڃ.',
+        highlighted: ["ج", "ح", "خ", "چ", "څ", "ڄ", "ڃ"].join(''),
+        exampleText:["رجل", "بحر", "نخب", "بچه", "وڅښل", "سڄو", "ڄاڻ"].join(' '),
+      },
+      cv02: {
+        name: 'Character Variant 2',
+        description: 'Alternate glyph for Arabic letter م.',
+        highlighted: "م",
+        exampleText:["ماء", "كَمَل"].join(' '),
+      },
+      cv03: {
+        name: 'Character Variant 3',
+        description: 'Alternate glyph for Arabic letter ي.',
+        highlighted: "ي",
+        exampleText:["كتابي"].join(' '),
+      },
     },
     downloadLinks: [
       {
@@ -477,9 +484,9 @@ export const fonts: Font[] = [
       },
       cv02: {
         name: 'Character Variant 2',
-        description: 'Alternate glyph for letters ק and ל.',
-        exampleText: `אבגקל`.split('').join(' '),
-        highlighted: "קל",
+        description: 'Alternate glyph for letters ק, ל and ש.',
+        exampleText: `אבגקלש`.split('').join(' '),
+        highlighted: "קלש",
         enabledByDefault: false,
       },
     },

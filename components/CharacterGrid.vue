@@ -1001,6 +1001,8 @@ const characterGroups = computed(() => {
     const arabicLetters =
       "ءأإآٱٮبپتثجچحخدذرسشصضطظعغفڤڡٯقكکگلمنںهہھةوؤىيئـ".split("");
     
+    arabicLetters.push("ڪ") // supportsSindhi
+    
     // For each Arabic letter, add only the forms it supports consecutively
     const arabicWithAllForms: string[] = [];
     arabicLetters.forEach(letter => {
