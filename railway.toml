@@ -1,4 +1,5 @@
 [[services]]
 name = "nuxt"
-type = "web"
-startCommand = "npm run start"
+type = "static"
+buildCommand = "npm run generate"
+outputDirectory = ".output/public"
