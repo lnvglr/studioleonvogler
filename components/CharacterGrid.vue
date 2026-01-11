@@ -489,8 +489,8 @@ const fontFeatureSettingsCSS = computed(() => {
 });
 
 const fontLanguageOverride = computed(() => {
-  return "BGR"
-  console.log(availableFeatures.value)
+  // return "BGR"
+  // console.log(availableFeatures.value)
   if (availableFeatures.value.length === 0) return undefined;
   return availableFeatures.value.find(({ tag }) => tag === "locl")?.languageTag;
 });
@@ -1156,7 +1156,7 @@ const characterGroups = computed(() => {
   //   characters: "🚆".split(""),
   // })
 
-  console.log(groups);
+  // console.log(groups);
 
   return groups;
 });
