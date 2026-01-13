@@ -974,7 +974,7 @@ const characterGroups = computed(() => {
     });
     groups.push({
       name: "Latin Numerals",
-      characters: "0123456789".split(""),
+      characters: "0123456789⓪①②③④⑤⑥⑦⑧⑨".split(""),
     });
     groups.push({
       name: "Latin Punctuation",
@@ -1122,7 +1122,7 @@ const characterGroups = computed(() => {
   if (!supportsLatin) {
     groups.push({
       name: "Latin Numerals",
-      characters: "0123456789".split(""),
+      characters: "0123456789⓪①②③④⑤⑥⑦⑧⑨".split(""),
     });
     groups.push({
       name: "Latin Punctuation",

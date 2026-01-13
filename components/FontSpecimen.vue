@@ -121,7 +121,7 @@
         <h3 class="text-lg font-medium mb-3 text-neutral-700">{{ script }}</h3>
         <div class="flex flex-wrap gap-2">
           <a
-            v-for="lang in languages"
+            v-for="lang in languages.sort()"
             :key="lang"
             class="px-2 py-0.5 rounded-sm bg-stone-100 hover:bg-stone-200 transition-colors duration-300 mix-blend-multiply"
             :href="`https://en.wikipedia.org/wiki/${lang.replace(

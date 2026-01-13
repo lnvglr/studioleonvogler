@@ -28,21 +28,23 @@
         </button>
 
         <!-- Image Container -->
-        <div class="relative max-w-[95vw] max-h-[95vh] p-4 w-auto h-auto">
-          <NuxtImg
-            v-if="imageSrc"
-            :src="imageSrc"
-            :alt="imageAlt"
-            class="object-contain rounded-lg w-auto h-auto"
-            format="webp"
-            quality="85"
-            sizes="(max-width: 640px) 640px, (max-width: 1280px) 1280px, 1920px"
-            fit="inside"
-            width="1920"
-            height="1080"
-            placeholder
-            @click.stop
-          />
+        <div class="relative max-w-[95vw] max-h-[95vh] p-4 flex items-center justify-center">
+          <div class="relative max-w-full max-h-full flex items-center justify-center">
+            <NuxtImg
+              v-if="imageSrc"
+              :src="imageSrc"
+              :alt="imageAlt"
+              class="object-contain rounded-lg max-w-full max-h-full w-auto h-auto"
+              format="webp"
+              quality="85"
+              sizes="(max-width: 640px) 640px, (max-width: 1280px) 1280px, 1920px"
+              fit="inside"
+              width="1920"
+              height="1080"
+              placeholder
+              @click.stop
+            />
+          </div>
         </div>
       </div>
     </Transition>

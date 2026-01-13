@@ -13,6 +13,8 @@ A poster for a concert that never happened. Created in the early days of the COV
 
 The poster was created when live events were being canceled across the globe. It exists as a document of that moment—a design created with anticipation but never used. The design explores Hebrew calligraphy rather than standard typography, demonstrating how traditional calligraphic techniques can be integrated into contemporary contexts.
 
+![Safari – Polo & Pan / Artbat concert poster](/img/projects/safari-concert-poster/safari.jpg)
+
 
 The Hebrew calligraphy employs various techniques: letterforms flow and connect, creating organic shapes that contrast with structured elements. The calligraphy becomes both text and image, functioning as information and decoration.
 
