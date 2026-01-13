@@ -11,6 +11,9 @@ date: 2025-03-01
 
 A web application designed to help passengers understand and exercise their rights when traveling. The platform provides clear, actionable information about passenger rights across different transportation modes.
 
+![Landing page of passenger rights webapp](img/projects/rights-plus/rightsplus.jpg)
+
+
 The content is organized in an intuitive structure that makes complex legal information accessible to all users. The interface design emphasizes clarity and ease of use, making it simple for users to find the information they need.
 
 The application is optimized for mobile use, ensuring passengers can access their rights information on the go.
