@@ -721,8 +721,8 @@ const fontVariationSettings = computed(() => {
 });
 
 const breaksLigatures =
-  /Safari/.test(navigator.userAgent) &&
-  !/Chrome|Chromium|Edg|OPR/.test(navigator.userAgent);
+  /Safari/.test(navigator?.userAgent) &&
+  !/Chrome|Chromium|Edg|OPR/.test(navigator?.userAgent);
 
 // Form markers for Arabic characters
 const FORM_ISOLATED = "\uE000";
@@ -1133,7 +1133,17 @@ const characterGroups = computed(() => {
   // Symbols (universal)
   groups.push({
     name: "Symbols",
-    characters: "@&|↑↗→↘↓↙←↖↔↕".split(""),
+    characters: "@&¶§©®™°|¦†ℓ‡℮№↑↗→↘↓↙←↖↔↕".split(""),
+  });
+  // Symbols (weather)
+  groups.push({
+    name: "Symbols",
+    characters: "🌙🌤🌧🌨🌪🌫🌬☀☁⛈".split(""),
+  });
+  // Symbols (transport)
+  groups.push({
+    name: "Symbols",
+    characters: "🏃🚆🚗🚲".split(""),
   });
 
   // Currency symbols
@@ -1149,7 +1159,7 @@ const characterGroups = computed(() => {
   // Mathematical symbols
   groups.push({
     name: "Mathematical",
-    characters: "+−×÷=≠><±≈¬~^∅∞∫%‰".split(""),
+    characters: "+−×÷=≠><≥≤±≈¬~^∅∞∫∆µ◊%‰◌".split(""),
   });
 
   // Emojis

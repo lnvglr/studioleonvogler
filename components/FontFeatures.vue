@@ -320,8 +320,8 @@ const getLanguageOverride = (
   return undefined;
 };
 const breaksLigatures =
-  /Safari/.test(navigator.userAgent) &&
-  !/Chrome|Chromium|Edg|OPR/.test(navigator.userAgent);
+  /Safari/.test(navigator?.userAgent) &&
+  !/Chrome|Chromium|Edg|OPR/.test(navigator?.userAgent);
 // Process example text to mute specified characters
 const getProcessedExampleText = (feature: FontFeature): string => {
   const metadata = featureMetadata.value[feature.tag];

@@ -338,10 +338,10 @@ const getAlphabetForLanguage = (language: string): string => {
   const lang = language.toLowerCase();
 
   if (lang.includes("hebrew")) {
-    return "אבגדהוזחטיכךלמםנןסעפףצץקרשת";
+    return "דג סקרן שט לו בים זך אך לפתע פגש חבורה נחמדה שצצה כך";
   }
   if (lang.includes("arabic")) {
-    return "ابتثجحخدذرزسشصضطظعغفقكلمنهوي";
+    return "نص حكيم له سر قاطع وذو شأن عظيم مكتوب على ثوب أخضر ومغلف بجلد أزرق";
   }
   if (lang.includes("cyrillic") || lang.includes("russian")) {
     return "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
