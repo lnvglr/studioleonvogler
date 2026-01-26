@@ -112,13 +112,13 @@
 
     <!-- Supported Languages -->
     <section v-if="languagesByScript" class="mb-16">
-      <h2 class="text-2xl font-medium mb-8">Supported Languages</h2>
+      <h2 class="text-2xl font-medium mb-8 flex gap-2 items-center">Supported Languages <span class="text-xs bg-neutral-700/10 text-neutral-600 px-1 py-0.5 min-w-5 inline-block text-center rounded">{{ Object.values(languagesByScript).flat().length }}</span></h2>
       <div
         v-for="(languages, script) in languagesByScript"
         :key="script"
         class="mb-6"
       >
-        <h3 class="text-lg font-medium mb-3 text-neutral-700">{{ script }}</h3>
+        <h3 class="text-lg font-medium mb-3 text-neutral-700 flex gap-2 items-center">{{ script }} <span class="text-xs bg-neutral-700/10 text-neutral-600 px-1 py-0.5 min-w-5 inline-block text-center rounded">{{ languages.length }}</span></h3>
         <div class="flex flex-wrap gap-2">
           <a
             v-for="lang in languages.sort()"
