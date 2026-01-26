@@ -290,23 +290,27 @@ export const fonts: Font[] = [
       },
       rlig: {
         name: 'Required ligatures',
-        description: 'Required ligatures for Arabic letters like ل+ا.',
+        description: 'Required ligatures for Arabic letters like ل+ا, ل+م and الله.',
         exampleText: [
+          "لماذا",
+          "<br>",
           "لاعب",
           "لأمل",
           "لإله",
           "لآية",
           "لٱمر",
+          "<br>",
+          "الله",
         ].join(' '),
         highlighted: [
-          "لا", "لأ", "لإ", "لآ", "لٱ"
+          "لا", "لأ", "لإ", "لآ", "لٱ", "لم", "الله"
         ],
         enabledByDefault: true,
       },
       calt: {
         name: 'Contextual alternates',
         description: 'Depending on the surrounding context, different glyphs are used. Enabled by default',
-        exampleText: ["See: 13.", "12:34", "¿VERDAD?", "<br>", "1+2", "1−2", "1×2", "1÷2", "1=2", "~1", "<br>", "[BRACKET]", "(PAREN)", "{BRACE}", "«GUILLEMET»", "‹ANGLE›"].join(' '),
+        exampleText: ["See: 13.", "12:34", "¿VERDAD?", "<br>", "1+2", "1−2", "1×2", "1÷2", "1=2", "~1", "<br>", "[BRACK]", "(PAREN)", "{BRACE}", "«GUILL»", "‹ANGLE›"].join(' '),
         highlighted: [":", "+", "−", "×", "÷", "=", "~", "[", "(", "{", "]", ")", "}", "«", "»", "‹", "›", "¿",].join(''),
         enabledByDefault: true,
       },
