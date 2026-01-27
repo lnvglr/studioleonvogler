@@ -387,7 +387,7 @@ export const fonts: Font[] = [
       calt: {
         name: 'Contextual alternates',
         description: 'Depending on the surrounding context, different glyphs are used. Enabled by default',
-        exampleText: ["See: 13.", "12:34", "¿VERDAD?", "<br>", "1+2", "1−2", "1×2", "1÷2", "1=2", "~1", "<br>", "[BRACK]", "(PAREN)", "{BRACE}", "«GUILL»", "‹ANGLE›"].join(' '),
+        exampleText: ["See: 13.", "12:34", "¿VERDAD?", "<br>", "1+2", "1−2", "1×2", "1÷2", "1=2", "~1", "<br>", "[BRACK]", "(PAREN)", "{BRACE}", "«GUILL»", "‹ANGLE›", "(123)", "{456}"].join(' '),
         highlighted: [":", "+", "−", "×", "÷", "=", "~", "[", "(", "{", "]", ")", "}", "«", "»", "‹", "›", "¿",].join(''),
         enabledByDefault: true,
       },

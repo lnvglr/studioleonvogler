@@ -1,4 +1,5 @@
 import { ref, type Ref } from 'vue'
+import type { SamsaFont } from '~/assets/samsa-core.js'
 
 export interface SamsaFontMetrics {
   unitsPerEm: number
@@ -135,14 +136,17 @@ export function useSamsa() {
   const getFontMetrics = (samsaFont: any): SamsaFontMetrics | null => {
     if (!samsaFont) return null
 
-    const unitsPerEm = samsaFont.head?.unitsPerEm || 1000
-    const os2 = samsaFont.os2 || {}
-    const hhea = samsaFont.hhea || {}
 
-    const ascender = hhea.ascender ?? os2.sTypoAscender ?? 800
-    const descender = Math.abs(hhea.descender ?? os2.sTypoDescender ?? -200)
-    const capHeight = os2.sCapHeight ?? os2.capHeight ?? 700
-    const xHeight = os2.sxHeight ?? os2.xHeight ?? 500
+
+    const unitsPerEm = samsaFont.tables.head.data.unitsPerEm || 1000
+    const os2 = samsaFont.tables["OS/2"].data || {}
+
+    console.log(samsaFont);
+
+    const ascender = os2.sTypoAscender ?? 800
+    const descender = Math.abs(os2.sTypoDescender ?? -200)
+    const capHeight = os2.sCapHeight ?? os2.sCapHeight ?? 700
+    const xHeight = os2.sxHeight ?? os2.sxHeight ?? 500
 
     return {
       unitsPerEm,
@@ -153,16 +157,27 @@ export function useSamsa() {
     }
   }
 
+  const getGlyph = (samsaFont: any, char: string, tuple?: number[]): any | null => {
+    if (!samsaFont || !char || char === ' ') return null
+    const charCode = char.codePointAt(0) || 0
+    const glyphIndex = samsaFont.cmap[charCode]
+    if (glyphIndex === undefined) return null
+    return samsaFont.glyphs[glyphIndex].instantiate(tuple)
+  }
+
   const getGlyphOutline = (samsaFont: any, char: string, tuple?: number[]): SamsaGlyphOutline | null => {
     if (!samsaFont || !char || char === ' ') return null
 
     try {
       const charCode = char.codePointAt(0) || 0
-      const glyphIndex = samsaFont.cmap?.getGlyphIndex?.(charCode) ?? samsaFont.cmap?.glyphIndexMap?.[charCode]
+      const glyphIndex = samsaFont.cmap[charCode]
+      // const glyphIndex = samsaFont.cmap?.getGlyphIndex?.(charCode) ?? samsaFont.cmap?.glyphIndexMap?.[charCode]
       if (glyphIndex === undefined) return null
-
-      let glyph = samsaFont.getGlyph(glyphIndex)
+      
+      const glyph = samsaFont.glyphs[glyphIndex]
       if (!glyph) return null
+      console.log(glyph.instantiate(tuple));
+      return glyph
 
       // For variable fonts, decompose with tuple if provided
       if (glyph.decompose && tuple) {
@@ -238,5 +253,6 @@ export function useSamsa() {
     loadFont,
     getFontMetrics,
     getGlyphOutline,
+    getGlyph,
   }
 }

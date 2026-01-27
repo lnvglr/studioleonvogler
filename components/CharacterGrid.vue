@@ -164,22 +164,22 @@
 
       <!-- Character Preview Area -->
       <div
-        class="flex-1 relative flex items-center justify-center overflow-hidden"
+        class="flex-1 relative flex items-center justify-center overflow-hidden text-[10rem] sm:text-[20rem]"
         @mousemove="handleWeightDrag"
         @mouseup="stopWeightDrag"
         @mouseleave="stopWeightDrag"
         @mousedown="startWeightDrag"
       >
         <!-- Typographic Metrics (if details enabled) -->
+          <!-- v-if="showDetails && fontMetrics && glyphOutline" -->
         <div
-          v-if="showDetails && fontMetrics && glyphOutline"
-          class="absolute inset-0 pointer-events-none z-20"
+          class="absolute pointer-events-none z-20 h-[1em] bottom-[calc(50%-0.19em)] w-full opacity-50"
         >
           <!-- Cap Height -->
           <div
-            class="absolute left-0 right-0 border-t-2 border-white"
+            class="absolute left-0 right-0 border-t border-green-300"
             :style="{
-              top: `${capHeightPosition}%`,
+              bottom:  `${(fontMetrics?.capHeight ?? 0)}em`,
             }"
           >
             <span
@@ -189,9 +189,9 @@
           </div>
           <!-- X-Height -->
           <div
-            class="absolute left-0 right-0 border-t-2 border-white"
+            class="absolute left-0 right-0 border-t border-green-300"
             :style="{
-              top: `${xHeightPosition}%`,
+              bottom: `${(fontMetrics?.xHeight ?? 0) * 100}%`,
             }"
           >
             <span
@@ -201,9 +201,9 @@
           </div>
           <!-- Baseline -->
           <div
-            class="absolute left-0 right-0 border-t-2 border-white"
+            class="absolute left-0 right-0 border-t border-green-300"
             :style="{
-              top: `${baselinePosition}%`,
+              bottom: '0%',
             }"
           >
             <span
@@ -215,14 +215,14 @@
 
         <!-- Large Character Preview -->
         <div
-          class="text-center select-none relative"
+          class="text-center select-none relative translate-y-[-0.19em] z-50"
           :style="{
             cursor: isVariableFont ? 'ew-resize' : 'default',
           }"
         >
           <!-- Character container for proper baseline alignment -->
           <div
-            class="relative inline-block text-[10rem] sm:text-[20rem]"
+            class="relative inline-block"
             :style="{
               fontFamily: fontFamily,
               fontWeight: getCurrentWeight(),
@@ -242,7 +242,7 @@
 
             <!-- SVG with glyph outline and handles (when details enabled) -->
             <svg
-              v-if="showDetails && glyphOutline && glyphOutline.path"
+              v-if="glyphOutline?.path"
               class="absolute inset-0 w-full h-full"
               :viewBox="`${glyphOutline.bbox.xMin - 100} ${
                 -glyphOutline.bbox.yMax - 100
@@ -257,7 +257,7 @@
                 :d="glyphOutline.path"
                 fill="none"
                 stroke="white"
-                stroke-width="5"
+                stroke-width="2"
                 vector-effect="non-scaling-stroke"
               />
               <!-- Control points (handles) -->
@@ -676,7 +676,7 @@ const glyphOutline = ref<{
 } | null>(null);
 
 // Use Samsa composable
-const { loadFont, getFontMetrics, getGlyphOutline } = useSamsa();
+const { loadFont, getFontMetrics, getGlyphOutline, getGlyph } = useSamsa();
 const samsaFontInstance = ref<any>(null);
 
 // Initialize SHPE and JUST values when font loads
@@ -966,11 +966,11 @@ const characterGroups = computed(() => {
   if (supportsLatin) {
     groups.push({
       name: "Latin Uppercase",
-      characters: "AÀÁÂĂÃÄÅÆBCÇDÐEÈÉÊËFGĞHIÏİĲJKLMNÑOÒÓÔÕÖØŒŐPÞQRSŞẞTUÙÚÛÜVWXYŸZ".split(""),
+      characters: "AÁĂÂÄÀÅÃÆBCÇĊDÐEÉÊËÈẼƏFGĞĠHĦIĲÍÎÏİÌĨJKLMNÑOÓÔÖÒŐØÕŒPÞQRSŞȘẞTȚUÚÛÜÙŨVWẂŴẄẀXYÝŶŸỲỸZŻꞋ".split(""),
     });
     groups.push({
       name: "Latin Lowercase",
-      characters: "aăäåæbcçdðeèéëfgğhiìíîïıĳjȷklmnñoõöøœőpþqrsşßtuüvwxyz".split(""),
+      characters: "aáăâäàåãæbcçċdðeéêëèẽəfgğġhħiıíîïìĩĳjȷklmnñoóôöòőøõœpþqrsşșßtțuúûüùũvwẃŵẅẁxyýŷÿỳỹzżꞌ".split(""),
     });
     groups.push({
       name: "Latin Numerals",
@@ -1350,26 +1350,44 @@ const loadGlyphOutline = async (char: string) => {
         return axis.default || 0;
       });
     }
-    const outline = getGlyphOutline(samsaFont, baseChar, tuple);
+    const outline = getGlyph(samsaFont, baseChar, tuple)
+
+    console.log(outline);
     if (!outline) {
       console.warn("No outline returned for character:", char);
       return;
     }
 
-    const bbox = outline.bbox;
+    // glyphOutline.value = {
+    //   path: outline.svgPath(tuple),
+    //   bbox: { xMin: outline.xMin, yMin: outline.yMin, xMax: outline.xMax, yMax: outline.yMax },
+    //   scale: 1,
+    //   offsetX: 0,
+    //   offsetY: 0,
+    //   controlPoints: [],
+    // };
+    console.log(glyphOutline.value);
+
+    const bbox = outline;
 
     // Calculate scale for rendering
     const fontSize = 320; // 20rem = 320px
-    const unitsPerEm = samsaFont.head?.unitsPerEm || 1000;
+    
+    // Get metrics from samsa instance using the composable function
+    const metrics = getFontMetrics(samsaFont);
+    if (!metrics) {
+      console.warn("Failed to get font metrics from samsa instance");
+      return;
+    }
+    
+    const unitsPerEm = metrics.unitsPerEm;
     const scale = fontSize / unitsPerEm;
 
-    // Get metrics in font units
-    const os2 = samsaFont.os2 || {};
-    const hhea = samsaFont.hhea || {};
-    const ascender = hhea.ascender ?? os2.sTypoAscender ?? 800;
-    const descender = Math.abs(hhea.descender ?? os2.sTypoDescender ?? -200);
-    const capHeight = os2.sCapHeight ?? os2.capHeight ?? 700;
-    const xHeight = os2.sxHeight ?? os2.xHeight ?? 500;
+    // Convert normalized metrics back to font units for calculations
+    const capHeight = metrics.capHeight * unitsPerEm;
+    const xHeight = metrics.xHeight * unitsPerEm;
+    const ascender = metrics.ascender * unitsPerEm;
+    const descender = metrics.descender * unitsPerEm;
 
     // Calculate metric positions relative to preview area
     // The character is rendered at 20rem (320px), centered vertically
@@ -1414,12 +1432,22 @@ const loadGlyphOutline = async (char: string) => {
         glyphTopPercent + (xHeightPxFromTop / previewHeight) * 100;
     }
 
-    glyphOutline.value = {
-      ...outline,
-      scale,
-      offsetX: -bbox.xMin * scale,
-      offsetY: bbox.yMax * scale, // Flip Y
-    };
+    console.log(outline);
+
+    // glyphOutline.value = {
+    //   ...outline,
+    //   path: outline.svgPath(tuple),
+    //   scale,
+    //   offsetX: -bbox.xMin * scale,
+    //   offsetY: bbox.yMax * scale, // Flip Y
+    // };
+    console.log(glyphOutline.value);
+    // glyphOutline.value = {
+    //   ...outline,
+    //   scale,
+    //   offsetX: -bbox.xMin * scale,
+    //   offsetY: bbox.yMax * scale, // Flip Y
+    // };
   } catch (error) {
     console.warn("Failed to load glyph outline:", error);
     glyphOutline.value = null;
