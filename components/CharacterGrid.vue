@@ -978,11 +978,11 @@ const characterGroups = computed(() => {
   if (supportsLatin) {
     groups.push({
       name: "Latin Uppercase",
-      characters: "AÁĂÂÄÀÅÃÆBCÇĊDÐEÉÊËÈẼƏFGĞĠHĦIĲÍÎÏİÌĨJKLMNÑOÓÔÖÒŐØÕŒPÞQRSŞȘẞTȚUÚÛÜÙŨVWẂŴẄẀXYÝŶŸỲỸZŻꞋ".split(""),
+      characters: "AÁĂÂÄÀÅÃÆBCÇĊDÐEÉÊËÈẼĖƏFGĞĠHĦIĲÍÎÏİÌĨJKLMNÑOÓÔÖÒŐØÕŒPÞQRSŞȘẞTȚUÚÛÜÙŨŮVWẂŴẄẀXYÝŶŸỲỸZŻꞋ".split(""),
     });
     groups.push({
       name: "Latin Lowercase",
-      characters: "aáăâäàåãæbcçċdðeéêëèẽəfgğġhħiıíîïìĩĳjȷklmnñoóôöòőøõœpþqrsşșßtțuúûüùũvwẃŵẅẁxyýŷÿỳỹzżꞌ".split(""),
+      characters: "aáăâäàåãæbcçċdðeéêëèẽėəfgğġhħiıíîïìĩĳjȷklmnñoóôöòőøõœpþqrsşșßtțuúûüùũůvwẃŵẅẁxyýŷÿỳỹzżꞌ".split(""),
     });
     groups.push({
       name: "Latin Numerals",
