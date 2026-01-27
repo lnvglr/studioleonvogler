@@ -215,6 +215,7 @@ export const fonts: Font[] = [
         "Kinyarwanda",
         "Kituba (DRC)",
         "Klingon",
+        "Kölsch",
         "Kongo",
         "Konzo",
         "Ladino",
