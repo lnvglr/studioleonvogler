@@ -211,6 +211,18 @@
               >Baseline</span
             >
           </div>
+          <!-- Descender line -->
+          <div
+            class="absolute left-0 right-0 border-t border-green-300"
+            :style="{
+              bottom: `${(fontMetrics?.descender ?? 0) * -100}%`,
+            }"
+          >
+            <span
+              class="absolute left-4 -translate-y-1/2 text-xs text-white font-medium bg-green-700 px-2 py-0.5 rounded whitespace-nowrap"
+              >Descender</span
+            >
+          </div>
         </div>
 
         <!-- Large Character Preview -->
