@@ -10,7 +10,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "split:codepoint-names": "node scripts/split-codepoint-names.mjs"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",

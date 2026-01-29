@@ -19,7 +19,7 @@
             <!-- Weight Slider (for variable fonts) -->
             <div v-if="isVariableFont" class="grid grid-cols-2 grid-rows-2 items-center gap-x-4 gap-y-0">
               <span class="text-sm text-white/70">Weight</span>
-              <div class="relative w-full max-w-32 h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2 touch-none" style="touch-action: none;" :style="{
+              <div class="relative w-full h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2 touch-none" style="touch-action: none;" :style="{
                 '--w': `calc(${weightPercentage}% - ${weightPercentage/9}px)`
               }">
                 <div
@@ -38,7 +38,7 @@
             <!-- SHPE Axis Slider (for diode-global-next) -->
             <div v-if="isVariableFont && hasShapeAxis" class="grid grid-cols-2 grid-rows-2 items-center gap-x-4 gap-y-0">
               <span class="text-sm text-white/70">Shape</span>
-              <div class="relative w-full max-w-32 h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2 touch-none" style="touch-action: none;" :style="{
+              <div class="relative w-full h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2 touch-none" style="touch-action: none;" :style="{
                 '--w': `calc(${shapePercentage}% - ${shapePercentage/9}px)`
               }">
                 <div
@@ -58,7 +58,7 @@
             <!-- JUST Axis Slider -->
             <div v-if="isVariableFont && hasJustAxis" class="grid grid-cols-2 grid-rows-2 items-center gap-x-4 gap-y-0">
               <span class="text-sm text-white/70">Just</span>
-              <div class="relative w-full max-w-32 h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2 touch-none" style="touch-action: none;" :style="{
+              <div class="relative w-full h-1 bg-green-500 rounded-full col-start-1 row-start-2 col-span-2 touch-none" style="touch-action: none;" :style="{
                 '--w': `calc(${justPercentage}% - ${justPercentage/9}px)`
               }">
                 <div
@@ -152,12 +152,11 @@
             </div>
           </div>
           <!-- Character Info -->
-          <div class="flex sm:flex-col self-start sm:items-end ml-auto text-sm text-white/70 gap-x-4 w-full">
-            <span class="font-medium text-white">{{
-              getGlyphName(previewChar)
-            }}</span
-            >
-            <span>U+{{ getCharCode(previewChar) }}</span>
+          <div class="flex sm:flex-col self-start sm:items-end ml-auto text-sm gap-x-4 w-full">
+            <span class="text-white text-xl leading-none" :class="{ 'font-arabic': isArabicChar(previewChar) }">{{
+              previewCharWithFormLabel
+            }}</span>
+            <span class="text-white/70 text-xs font-normal text-right leading-none mt-1 max-w-full text-balance">{{ displayedGlyphNameFormatted }}</span>
           </div>
         </div>
       </div>
@@ -390,6 +389,109 @@ const hoveredFeatureTag = ref<string | null>(null);
 // Features to exclude (irrelevant for individual glyphs)
 const excludedFeatures = new Set(['calt', 'dlig', 'liga', 'rlig']);
 
+// Supported glyphs spec (character/glyph list from font). Format: "Char/GlyphName" or "Char" per token; "/f_f.dlig" -> ﬀ, "/f_t.dlig" -> ﬅ.
+const SUPPORTED_GLYPHS_SPEC =
+  "AÁĂÂÄÀÅÃÆBCÇĊDĐÐEÉÊËĖÈẼƏƷǮFGĞĠǤHĦIĲÍÎÏİÌĨJ/Jacute KLMNÑŊOÓÔÖÒŐØÕŒPÞQRSŞȘẞTŦȚUÚÛÜÙŮŨVWẂŴẄẀXYÝŶŸỲỸZŻꞋaáăâäàåãæbcçċdđðeéêëėèẽəʒǯfgğġǥhħiıíîï/idotaccent ìĩĳjȷ/jacute klmnñŋoóôöòőøõœpþqrsşșßtŧțuúûüùůũvwẃŵẅẁxyýŷÿỳỹzżꞌ/f_f.dlig/f_t.dlig " +
+  "АБВГЃҐД/De-cy.loclBGR ЕЀЁЖЗИЙЍКЌЛ/El-cy.loclBGR МНОПРСТУЎФ/Ef-cy.loclBGR ХЦЧШЩЏЬЫЪЉЊЅЄЭІЇЈЋЮЯЂѢѪаб/be-cy.loclSRBMKD в/ve-cy.loclBGR г/ge-cy.loclBGR ѓґд/de-cy.loclBGR/de-cy.ss01 еѐёж/zhe-cy.loclBGR з/ze-cy.loclBGR и/ii-cy.loclBGR й/iishort-cy.loclBGR ѝк/ka-cy.loclBGR ќл/el-cy.loclBGR мноп/pe-cy.loclBGR рст/te-cy.loclBGR уўфхц/tse-cy.loclBGR чш/sha-cy.loclBGR щ/shcha-cy.loclBGR џь/softsign-cy.loclBGR ыъ/hardsign-cy.loclBGR љњѕєэіїјћю/yu-cy.loclBGR яђѣѫ" +
+  "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΆΈΉΊΌΎΏΪΫϏαβγδεζηθικλμνξοπρςστυφχψωίϊΐύϋΰόώάέήϗϰὶό" +
+  "ءا/alef-ar.fina أ/alefHamzaabove-ar.fina إ/alefHamzabelow-ar.fina آ/alefMadda-ar.fina ٱ/alefWasla-ar.fina ٮ/behDotless-ar.fina/behDotless-ar.medi/behDotless-ar.init ب/beh-ar.fina/beh-ar.medi/beh-ar.init پ/peh-ar.fina/peh-ar.medi/peh-ar.init ت/teh-ar.fina/teh-ar.medi/teh-ar.init ث/theh-ar.fina/theh-ar.medi/theh-ar.init ٹ/tteh-ar.fina/tteh-ar.medi/tteh-ar.init ج/jeem-ar.fina/jeem-ar.medi/jeem-ar.medi.cv01/jeem-ar.init/jeem-ar.init.cv01 چ/tcheh-ar.fina/tcheh-ar.medi/tcheh-ar.medi.cv01/tcheh-ar.init/tcheh-ar.init.cv01 ڃ/nyeh-ar.fina/nyeh-ar.medi/nyeh-ar.medi.cv01/nyeh-ar.init/nyeh-ar.init.cv01 ڄ/dyeh-ar.fina/dyeh-ar.medi/dyeh-ar.medi.cv01/dyeh-ar.init/dyeh-ar.init.cv01 ح/hah-ar.fina/hah-ar.medi/hah-ar.medi.001/hah-ar.medi.cv01/hah-ar.init/hah-ar.init.cv01 څ/hahThreedotsabove-ar.fina/hahThreedotsabove-ar.medi/hahThreedotsabove-ar.medi.cv01/hahThreedotsabove-ar.init/hahThreedotsabove-ar.init.cv01 خ/khah-ar.fina/khah-ar.medi/khah-ar.medi.cv01/khah-ar.init/khah-ar.init.cv01 د/dal-ar.fina ذ/thal-ar.fina ڈ/ddal-ar.fina ڎ/dul-ar.fina ر/reh-ar.fina ز/zain-ar.fina ڑ/rreh-ar.fina ڕ/rehVbelow-ar.fina ژ/jeh-ar.fina س/seen-ar.fina/seen-ar.medi/seen-ar.init ښ/seenDotbelowDotabove-ar.fina/seenDotbelowDotabove-ar.medi/seenDotbelowDotabove-ar.init ش/sheen-ar.fina/sheen-ar.medi/sheen-ar.init ص/sad-ar.fina/sad-ar.medi/sad-ar.init ض/dad-ar.fina/dad-ar.medi/dad-ar.init ط/tah-ar.fina/tah-ar.medi/tah-ar.init ظ/zah-ar.fina/zah-ar.medi/zah-ar.init ع/ain-ar.fina/ain-ar.medi/ain-ar.init غ/ghain-ar.fina/ghain-ar.medi/ghain-ar.init ف/feh-ar.fina/feh-ar.medi/feh-ar.init ڤ/veh-ar.fina/veh-ar.medi/veh-ar.init ڡ/fehDotless-ar.fina/fehDotless-ar.medi/fehDotless-ar.init ٯ/qafDotless-ar.fina ق/qaf-ar.fina/qaf-ar.medi/qaf-ar.init ك/kaf-ar.fina/kaf-ar.medi/kaf-ar.init ک/keheh-ar.fina/keheh-ar.medi/keheh-ar.init گ/gaf-ar.fina/gaf-ar.medi/gaf-ar.init ڪ/kafswash-ar.fina/kafswash-ar.medi/kafswash-ar.init ل/lam-ar.fina/lam-ar.medi/lam-ar.init ڵ/lamVabove-ar.init/lamVabove-ar.medi/lamVabove-ar.fina م/meem-ar.fina/meem-ar.medi/meem-ar.medi.cv02/meem-ar.init/meem-ar.init.cv02 ن/noon-ar.fina/noon-ar.medi/noon-ar.init ں/noonghunna-ar.fina ڻ/rnoon-ar.fina/rnoon-ar.medi/rnoon-ar.init ه/heh-ar.fina/heh-ar.medi/heh-ar.init ہ/hehgoal-ar.fina/hehgoal-ar.medi/hehgoal-ar.init ۂ/hehgoalHamzaabove-ar.fina ھ/hehDoachashmee-ar.fina/hehDoachashmee-ar.medi/hehDoachashmee-ar.init ة/tehMarbuta-ar.fina ۃ/tehMarbutagoal-ar.fina و/waw-ar.fina ۊ/wawTwodots-ar.fina ۏ/wawDotabove-ar.fina ؤ/wawHamzaabove-ar.fina ۆ/oe-ar.fina ى/alefMaksura-ar.fina ي/yeh-ar.cv03/yeh-ar.fina/yeh-ar.fina.cv03/yeh-ar.medi/yeh-ar.init ئ/yehHamzaabove-ar.fina/yehHamzaabove-ar.medi/yehHamzaabove-ar.init ێ/yehVabove-ar.fina/yehVabove-ar.medi/yehVabove-ar.init ی/yehFarsi-ar.fina/yehFarsi-ar.medi/yehFarsi-ar.init ے/yehbarree-ar.fina ۓ/yehbarreeHamzaabove-ar.fina ە/ae-ar.fina ݩ/noonVabove-ar.fina/noonVabove-ar.medi/noonVabove-ar.init ـ/alef_fathatan-ar/lam_alefWasla-ar/lam_alefWasla-ar.fina/jeem_comma-ar/tcheh_comma-ar/dyeh_comma-ar/hah_comma-ar/hahHamzaabove_comma-ar/hahThreedotsabove_comma-ar/khah_comma-ar/lam_alef-ar/lam_alef-ar.fina/lam_alefHamzaabove-ar/lam_alefHamzaabove-ar.fina/lam_alefHamzabelow-ar/lam_alefHamzabelow-ar.fina/lam_alefMadda-ar/lam_alefMadda-ar.fina/lam_meem-ar.init/lamVabove_alef-ar/lamVabove_alef-ar.fina/allah-ar " +
+  "ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖաբգդեզէըթժիլխծկհձղճմյնշոչպջռսվտրցւփքօֆև" +
+  "ᲐᲑᲒᲓ/Don-georgian.ss02 ᲔᲕᲖᲗᲘᲙᲚ/Las-georgian.ss02 ᲛᲜᲝᲞᲟᲠ/Rae-georgian.ss02 ᲡᲢᲣᲤᲥᲦᲧᲨᲩᲪᲫᲬ/Cil-georgian.ss02 ᲭᲮᲯᲰაბგდ/don-georgian.ss02 ევზთიკლ/las-georgian.ss02 მნოპჟრ/rae-georgian.ss02 სტუფქღყშჩცძწ/cil-georgian.ss02 ჭხჯჰ" +
+  "א/alef-hb.jalt בגד/dalet-hb.jalt ה/he-hb.jalt וזחטיךכ/kaf-hb.jalt ל/lamed-hb.jalt ם/memFinal-hb.jalt מןנסעףפץצקר/resh-hb.jalt שת/tav-hb.jalt ﬡﬢﬣﬤﬥﬦﬧﬨ/vav_holam-hb/vav_dagesh-hb/shin_shindot-hb/shin_sindot-hb " +
+  "ߊ/a-nko.fina/a-nko.medi/a-nko.init ߋ/ee-nko.fina/ee-nko.medi/ee-nko.init ߌ/i-nko.fina/i-nko.medi/i-nko.init ߍ/e-nko.fina/e-nko.medi/e-nko.init ߎ/u-nko.fina/u-nko.medi/u-nko.init ߏ/oo-nko.fina/oo-nko.medi/oo-nko.init ߐ/o-nko.fina/o-nko.medi/o-nko.init ߑ/dagbasinna-nko.fina/dagbasinna-nko.medi/dagbasinna-nko.init ߒ/n-nko.fina/n-nko.medi/n-nko.init ߓ/ba-nko.fina/ba-nko.medi/ba-nko.init ߔ/pa-nko.fina/pa-nko.medi/pa-nko.init ߕ/ta-nko.fina/ta-nko.medi/ta-nko.init ߖ/ja-nko.fina/ja-nko.medi/ja-nko.init ߗ/cha-nko.fina/cha-nko.medi/cha-nko.init ߘ/da-nko.fina/da-nko.medi/da-nko.init ߙ/ra-nko.fina/ra-nko.medi/ra-nko.init ߚ/rra-nko.fina/rra-nko.medi/rra-nko.init ߛ/sa-nko.fina/sa-nko.medi/sa-nko.init ߜ/gba-nko.fina/gba-nko.medi/gba-nko.init ߝ/fa-nko.fina/fa-nko.medi/fa-nko.init ߞ/ka-nko.fina/ka-nko.medi/ka-nko.init ߟ/la-nko.fina/la-nko.medi/la-nko.init ߠ/nawoloso-nko.fina/nawoloso-nko.medi/nawoloso-nko.init ߡ/ma-nko.fina/ma-nko.medi/ma-nko.init ߢ/nya-nko.fina/nya-nko.medi/nya-nko.init ߣ/na-nko.fina/na-nko.medi/na-nko.init ߤ/ha-nko.fina/ha-nko.medi/ha-nko.init ߥ/wa-nko.fina/wa-nko.medi/wa-nko.init ߦ/ya-nko.fina/ya-nko.medi/ya-nko.init ߧ/nyawoloso-nko.fina/nyawoloso-nko.medi/nyawoloso-nko.init ߨ/jonaja-nko.fina/jonaja-nko.medi/jonaja-nko.init ߩ/jonacha-nko.fina/jonacha-nko.medi/jonacha-nko.init ߪ/jonara-nko.fina/jonara-nko.medi/jonara-nko.init ߴߵߺ" +
+  "٫٬٠/zero-ar.tf ١/one-ar.ss01/one-ar.tf/one-ar.tf.ss01 ٢/two-ar.ss01/two-ar.tf/two-ar.tf.ss01 ٣/three-ar.ss01/three-ar.tf/three-ar.tf.ss01 ٤/four-ar.tf ٥/five-ar.tf/five-ar.tf.ss01 ٦/six-ar.ss01/six-ar.tf/six-ar.tf.ss01 ٧/seven-ar.tf ٨/eight-ar.tf ٩/nine-ar.ss01/nine-ar.tf/nine-ar.tf.ss01 ۰۱/oneFarsi-ar.ss01 ۲/twoFarsi-ar.ss01 ۳/threeFarsi-ar.ss01 ۴/fourFarsi-ar.ss01/fourFarsi-ar.urdu ۵۶/sixFarsi-ar.ss01 ۷/sevenFarsi-ar.urdu ۸۹/nineFarsi-ar.ss01 ߀߁߂߃߄߅߆߇߈߉0123456789/zero.tf/one.tf/two.tf/three.tf/four.tf/five.tf/six.tf/seven.tf/eight.tf/nine.tf ⓪①②③④⑤⑥⑦⑧⑨/zero.circled.ss03/one.circled.ss03/two.circled.ss03/three.circled.ss03/four.circled.ss03/five.circled.ss03/six.circled.ss03/seven.circled.ss03/eight.circled.ss03/nine.circled.ss03 ⁰¹²³⁴⁵⁶⁷⁸⁹ ₀₁₂₃₄₅₆₇₈₉ " +
+  " ·;۔،؛؟٭﴾﴿՚՛՜՝՞՟։֊׆׳״־߷߸߹.,:/colon.calt ;…!¡/exclamdown.calt ?¿/questiondown.calt ·•*#/numbersign.tf ⁋/\\-/hyphen.tf –—_(/parenleft.calt )/parenright.calt {/braceleft.calt }/braceright.calt [/bracketleft.calt ]/bracketright.calt ‚„\"\"''«/guillemetleft.calt »/guillemetright.calt ‹/guilsinglleft.calt ›/guilsinglright.calt \"'ʹ͵﷼/rial.001/rial.002/rial.tf ٪֏/dram-arm.tf ߶/ooDennen-nko.tf ฿/baht.tf " +
+  "🌙🌞🌤🌥🌧🌨🌪🌫🌬🏃💨🚆🚗🚲/cloud_crescentMoon ☀☁⛅⛈@&¶§©®™°|¦†ℓ‡℮№₿/bitcoin.tf ¢/cent.tf ¤$/dollar.tf €/euro.tf ₴/hryvnia.tf ₾/lari.tf ₺/liraTurkish.tf ₽/ruble.tf ₹/rupeeIndian.tf ₪/sheqel.tf £/sterling.tf ₩¥/yen.tf " +
+  "+/plus.calt −/minus.calt ×/multiply.calt ÷/divide.calt =/equal.calt ≠/notequal.calt >/greater.calt </less.calt ≥/greaterequal.calt ≤/lessequal.calt ±/plusminus.calt ≈/approxequal.calt ~¬/logicalnot.calt/asciitilde.calt ^∞∅/infinity.calt ∫∆∏∑√∂µ%‰↑↗→↘↓↙←↖↔↕◌◊/brevecomb-cy ΄/tonos.case ΅ؕ/dotabove-ar/dotbelow-ar/dotcenter-ar/twodotsverticalabove-ar/twodotsverticalbelow-ar/twodotshorizontalabove-ar/twodotshorizontalbelow-ar/threedotsdownabove-ar/threedotsdownbelow-ar/threedotsdowncenter-ar/threedotsupabove-ar/threedotsupbelow-ar/miniKeheh-ar/gafsarkashabove-ar/gafsarkashcenter-ar/doublestroke-ar ًٰٕٔ٘ՙְֱֲֳִֵֶַָׇֹֺֻּׁׂ̧߲߽߫߬߭߮߯߰߱߳̈̇̀́̂̆̊̃`ʼ/Indian/Paisa/colon-ar/paisa/symbol.svg";
+
+function parseSupportedGlyphsSpec(spec: string): Array<{ name: string; characters: string[] }> {
+  const LIGATURE_FF = "\uFB00"; // ﬀ
+  const LIGATURE_FT = "\uFB05"; // ﬅ
+  const flat: string[] = [];
+  const tokens = spec.split(/\s+/).filter(Boolean);
+  for (const token of tokens) {
+    const displayPart = token.includes("/") ? token.slice(0, token.indexOf("/")) : token;
+    if (displayPart.length > 0) {
+      for (const c of [...displayPart]) {
+        flat.push(c);
+      }
+    } else if (token.includes("f_f.dlig")) {
+      flat.push(LIGATURE_FF);
+    } else if (token.includes("f_t.dlig")) {
+      flat.push(LIGATURE_FT);
+    }
+  }
+  function scriptGroup(c: string): string {
+    const code = c.codePointAt(0) ?? 0;
+    if (c === LIGATURE_FF || c === LIGATURE_FT) return "Latin_Lig";
+    if (code >= 0x0041 && code <= 0x005a) return "Latin_UC";
+    if (code >= 0x0061 && code <= 0x007a) return "Latin_LC";
+    if (code >= 0x00c0 && code <= 0x024f || code >= 0x1e00 && code <= 0x1eff || code >= 0x2c60 && code <= 0x2c7f || code >= 0xa720 && code <= 0xa7ff) {
+      try { return (c === c.toUpperCase() && c !== c.toLowerCase()) ? "Latin_UC" : "Latin_LC"; } catch { return "Latin_Any"; }
+    }
+    if (code >= 0x0400 && code <= 0x04ff) return (code >= 0x0400 && code <= 0x042f) || (code >= 0x0460 && code <= 0x046f) ? "Cyrillic_UC" : "Cyrillic_LC";
+    if (code >= 0x0500 && code <= 0x052f) return "Cyrillic_Any";
+    if (code >= 0x0370 && code <= 0x03ff) return (code >= 0x0391 && code <= 0x03a9) ? "Greek_UC" : (code >= 0x03b1 && code <= 0x03c9) ? "Greek_LC" : "Greek_Any";
+    if (code >= 0x0600 && code <= 0x06ff) return "Arabic";
+    if (code >= 0x0530 && code <= 0x058f) return (code >= 0x0530 && code <= 0x0556) ? "Armenian_UC" : "Armenian_LC";
+    if (code >= 0x10a0 && code <= 0x10c5) return "Georgian_UC";
+    if ((code >= 0x10c6 && code <= 0x10ff) || (code >= 0x1c80 && code <= 0x1c8f)) return "Georgian_LC";
+    if ((code >= 0x0590 && code <= 0x05ff) || (code >= 0xfb1d && code <= 0xfb4f)) return "Hebrew";
+    if (code >= 0x07c0 && code <= 0x07ff) return (code >= 0x07f4 && code <= 0x07f9) ? "Nko_Num" : "Nko";
+    if ((code >= 0x0030 && code <= 0x0039) || (code >= 0x0660 && code <= 0x0669) || (code >= 0x06f0 && code <= 0x06f9) || (code >= 0x0966 && code <= 0x096f) || (code >= 0x2460 && code <= 0x2473) || (code >= 0x24ea && code <= 0x24ff)) return "Number";
+    // Superscript figures ⁰¹²³⁴⁵⁶⁷⁸⁹ (U+2070, U+00B9, U+00B2, U+00B3, U+2074–U+2079)
+    if (code === 0x2070 || code === 0x00b9 || code === 0x00b2 || code === 0x00b3 || (code >= 0x2074 && code <= 0x2079)) return "Superscript";
+    // Subscript figures ₀₁₂₃₄₅₆₇₈₉ (U+2080–U+2089)
+    if (code >= 0x2080 && code <= 0x2089) return "Subscript";
+    if (".,:;…!¡?¿·•*#/\\-–—_(){}[]‚„\"\"''«»‹›'".includes(c) || (code >= 0x060c && code <= 0x061f) || (code >= 0x066d && code <= 0x066f) || (code >= 0x2000 && code <= 0x206f) || code === 0x002d || (code >= 0x2010 && code <= 0x2014) || code === 0x2018 || code === 0x2019 || code === 0x201c || code === 0x201d) return "Punctuation";
+    if ("@&¶§©®™°|¦†ℓ‡℮№₿¢¤$€₴₾₺₽₹₪£₩¥".includes(c) || (code >= 0x20a0 && code <= 0x20cf)) return "Currency";
+    if ("+−×÷=≠><≥≤±≈¬~^∅∞∫∆∏∑√∂µ%‰↑↗→↘↓↙←↖↔↕".includes(c)) return "Math";
+    if ("🌙🌞🌤🌥🌧🌨🌪🌫🌬🏃💨🚆🚗🚲☀☁⛅⛈◌◊".includes(c)) return "Symbol";
+    if (code >= 0x0300 && code <= 0x036f) return "Combining";
+    return "Other";
+  }
+  const groupMap = new Map<string, string[]>();
+  const groupOrder: string[] = [];
+  for (const c of flat) {
+    const g = scriptGroup(c);
+    if (!groupMap.has(g)) {
+      groupMap.set(g, []);
+      groupOrder.push(g);
+    }
+    groupMap.get(g)!.push(c);
+  }
+  const nameMap: Record<string, string> = {
+    Latin_UC: "Latin Uppercase",
+    Latin_LC: "Latin Lowercase",
+    Latin_Lig: "Latin Ligatures",
+    Latin_Any: "Latin",
+    Cyrillic_UC: "Cyrillic Uppercase",
+    Cyrillic_LC: "Cyrillic Lowercase",
+    Cyrillic_Any: "Cyrillic",
+    Greek_UC: "Greek Uppercase",
+    Greek_LC: "Greek Lowercase",
+    Greek_Any: "Greek",
+    Arabic: "Arabic Letters",
+    Armenian_UC: "Armenian Uppercase",
+    Armenian_LC: "Armenian Lowercase",
+    Georgian_UC: "Georgian Mtavruli",
+    Georgian_LC: "Georgian Lowercase",
+    Hebrew: "Hebrew Letters",
+    Nko: "N'Ko Letters",
+    Nko_Num: "N'Ko Numerals",
+    Number: "Numbers",
+    Superscript: "Superscript figures",
+    Subscript: "Subscript figures",
+    Punctuation: "Punctuation",
+    Currency: "Currency",
+    Math: "Mathematical",
+    Symbol: "Symbols",
+    Combining: "Combining",
+    Other: "Symbols",
+  };
+  return groupOrder.map((g) => ({ key: g, name: nameMap[g] ?? g, characters: groupMap.get(g)! }));
+}
+
 // Available features from featureMetadata
 const availableFeatures = computed(() => {
   if (!props.featureMetadata) return [];
@@ -540,6 +642,27 @@ onUnmounted(() => {
 });
 
 const previewChar = ref<string>("A");
+const { displayedGlyphName, loadForChar: loadGlyphNameForChar } = useGlyphNames();
+
+// Codepoint names are stored display-ready from scripts/generate-glyph-map.js (space-separated uppercase).
+// No runtime formatting — use as-is and append Arabic form suffix when applicable.
+// Arabic form label for preview character (init, medi, fina only — isolated has no suffix)
+const arabicFormLabelForPreview: Record<string, string> = {
+  "\uE001": " (init)",
+  "\uE002": " (medi)",
+  "\uE003": " (fina)",
+};
+const previewCharWithFormLabel = computed(() => {
+  const { baseChar } = getArabicCharAndForm(previewChar.value);
+  return (baseChar || previewChar.value);
+});
+const displayedGlyphNameFormatted = computed(() => {
+  const base = displayedGlyphName.value ?? "";
+  if (!base) return "";
+  const { form } = getArabicCharAndForm(previewChar.value);
+  const suffix = (form && arabicFormLabelForPreview[form]) ?? "";
+  return base + (suffix ? suffix.toUpperCase() : "");
+});
 const showDetails = ref(false);
 const isDraggingWeight = ref(false);
 const isDraggingWeightSlider = ref(false);
@@ -742,55 +865,59 @@ const FORM_INITIAL = "\uE001";
 const FORM_MEDIAL = "\uE002";
 const FORM_FINAL = "\uE003";
 
+// ZWJ U+200D and ZWNJ U+200C are often part of Arabic character entries in specs; use the base letter for joining.
+function getArabicBaseCodePoint(letter: string): number {
+  for (let i = 0; i < letter.length; ) {
+    const cp = letter.codePointAt(i) ?? 0;
+    if (cp !== 0x200c && cp !== 0x200d) return cp;
+    i += cp >= 0x10000 ? 2 : 1;
+  }
+  return 0;
+}
+
 // Arabic letter joining behavior lookup
 // Based on Unicode joining types: U=Non_Joining, R=Right_Joining, D=Dual_Joining
+// Only add init/medi/fina for characters that actually have those positional forms
 const getArabicLetterForms = (letter: string): string[] => {
-  const codePoint = letter.codePointAt(0) || 0;
+  const codePoint = getArabicBaseCodePoint(letter);
   const forms: string[] = [];
-  
-  const specialLetters = new Set([
-    0x0640, // ـ FATHA,
-  ]);
-  // Non-joining letters (only isolated form)
-  // These don't connect to adjacent letters
+
+  // Tatweel / kashida: no joining forms
+  const specialLetters = new Set([0x0640]); // ـ
+
+  // Non-joining (isolated only): no init/medi/fina
   const nonJoining = new Set([
-    0x0621, // ء HAMZA
-    0x0622, // آ ALEF WITH MADDA ABOVE
-    0x0623, // أ ALEF WITH HAMZA ABOVE
-    0x0624, // ؤ WAW WITH HAMZA ABOVE
-    0x0625, // إ ALEF WITH HAMZA BELOW
-    0x0626, // ئ YEH WITH HAMZA ABOVE
-    0x0671, // ٱ ALEF WASLA
+    0x0621, 0x0622, 0x0623, 0x0624, 0x0625, 0x0626, 0x0671, // ء أ إ آ ؤ إ ئ ٱ
+    // Arabic small / superscript (no positional forms): ؕ ٰ etc.
+    0x0615, 0x0616, 0x0617, 0x0618, 0x0619, 0x061a, 0x0670, // ARABIC SMALL TAH, small ligature, small ZAIN/FATHA/DAMMA/KASRA, SUPERSCRIPT ALEF
+    // Arabic-Indic digits ٠١٢٣٤٥٦٧٨٩
+    0x0660, 0x0661, 0x0662, 0x0663, 0x0664, 0x0665, 0x0666, 0x0667, 0x0668, 0x0669,
+    // Eastern Arabic-Indic digits ۰۱۲۳۴۵۶۷۸۹
+    0x06f0, 0x06f1, 0x06f2, 0x06f3, 0x06f4, 0x06f5, 0x06f6, 0x06f7, 0x06f8, 0x06f9,
+    // Punctuation: ٫ ٬ ، ؛ ؟ ٭ ٪ ۔
+    0x060c, 0x061b, 0x061f, 0x066a, 0x066b, 0x066c, 0x066d, 0x06d4,
+    // Combining / diacritics: ٔ ٕ ً ٘ etc.
+    0x064b, 0x064c, 0x064d, 0x064e, 0x064f, 0x0650, 0x0651, 0x0652, 0x0653, 0x0654, 0x0655, 0x0656, 0x0657, 0x0658,
   ]);
-  
-  // Right-joining letters (isolated and final forms only)
-  // These connect only to the preceding letter
+
+  // Right-joining (isolated + final only): ے ە ۓ and standard R-type
   const rightJoining = new Set([
-    0x0627, // ا ALEF
-    0x062F, // د DAL
-    0x0630, // ذ THAL
-    0x0631, // ر REH
-    0x0632, // ز ZAIN
-    0x0648, // و WAW
-    0x0649, // ى ALEF MAKSURA
+    0x0627, 0x0629, 0x062f, 0x0630, 0x0631, 0x0632, 0x0648, 0x0649, // ا ة د ذ ر ز و ى
+    0x06ba, 0x06d2, 0x06d3, 0x06d5, // ں ے ۓ ە (noon ghunna, yeh barree, yeh barree with hamza, ae)
   ]);
-  
-  // Check if letter is non-joining
+
   if (nonJoining.has(codePoint) || specialLetters.has(codePoint)) {
     forms.push(FORM_ISOLATED);
     return forms;
   }
-  
-  // Check if letter is right-joining
+
   if (rightJoining.has(codePoint)) {
     forms.push(FORM_ISOLATED);
     forms.push(FORM_FINAL);
     return forms;
   }
-  
-  // Default: dual-joining (all four forms)
-  // This includes most Arabic letters like ب ت ث ج ح خ س ش ص ض ط ظ ع غ ف ق ك ل م ن ه ي
-  // and extended Arabic characters like پ چ گ etc.
+
+  // Dual-joining (all four forms): ب ت ث ج ح خ س ش ص ض ط ظ ع غ ف ق ك ل م ن ه ي پ چ گ etc.
   forms.push(FORM_ISOLATED);
   forms.push(FORM_INITIAL);
   forms.push(FORM_MEDIAL);
@@ -974,6 +1101,57 @@ const characterGroups = computed(() => {
       lang.toLowerCase().includes("nko") || lang.toLowerCase().includes("n'ko")
   );
 
+  // Use supported glyphs spec for diode-global-next
+  if (props.fontId === "diode-global-next") {
+    const parsed = parseSupportedGlyphsSpec(SUPPORTED_GLYPHS_SPEC) as Array<{ key: string; name: string; characters: string[] }>;
+    const scriptByKey: Record<string, boolean> = {
+      Latin_UC: supportsLatin,
+      Latin_LC: supportsLatin,
+      Latin_Lig: supportsLatin,
+      Latin_Any: supportsLatin,
+      Cyrillic_UC: supportsCyrillic,
+      Cyrillic_LC: supportsCyrillic,
+      Cyrillic_Any: supportsCyrillic || supportsBelarusian || supportsBulgarian,
+      Greek_UC: supportsGreek,
+      Greek_LC: supportsGreek,
+      Greek_Any: supportsGreek,
+      Arabic: supportsArabic,
+      Armenian_UC: supportsArmenian,
+      Armenian_LC: supportsArmenian,
+      Georgian_UC: supportsGeorgian,
+      Georgian_LC: supportsGeorgian,
+      Hebrew: supportsHebrew,
+      Nko: supportsNko,
+      Nko_Num: supportsNko,
+      Number: true,
+      Superscript: true,
+      Subscript: true,
+      Punctuation: true,
+      Currency: true,
+      Math: true,
+      Symbol: true,
+      Combining: true,
+      Other: true,
+    };
+    for (const g of parsed) {
+      if (!scriptByKey[g.key]) continue;
+      if (g.key === "Arabic") {
+        const arabicWithAllForms: string[] = [];
+        g.characters.forEach((letter) => {
+          const supportedForms = getArabicLetterForms(letter);
+          supportedForms.forEach((form) => {
+            if (breaksLigatures && (form === FORM_INITIAL || form === FORM_MEDIAL || form === FORM_FINAL)) return;
+            arabicWithAllForms.push(letter + form);
+          });
+        });
+        groups.push({ name: g.name, characters: arabicWithAllForms });
+      } else {
+        groups.push({ name: g.name, characters: g.characters });
+      }
+    }
+    return groups;
+  }
+
   // Latin characters - Standard specimen order: Uppercase → Lowercase → Numerals → Punctuation
   if (supportsLatin) {
     groups.push({
@@ -987,6 +1165,14 @@ const characterGroups = computed(() => {
     groups.push({
       name: "Latin Numerals",
       characters: "0123456789⓪①②③④⑤⑥⑦⑧⑨".split(""),
+    });
+    groups.push({
+      name: "Superscript figures",
+      characters: "⁰¹²³⁴⁵⁶⁷⁸⁹".split(""),
+    });
+    groups.push({
+      name: "Subscript figures",
+      characters: "₀₁₂₃₄₅₆₇₈₉".split(""),
     });
     groups.push({
       name: "Latin Punctuation",
@@ -1137,6 +1323,14 @@ const characterGroups = computed(() => {
       characters: "0123456789⓪①②③④⑤⑥⑦⑧⑨".split(""),
     });
     groups.push({
+      name: "Superscript figures",
+      characters: "⁰¹²³⁴⁵⁶⁷⁸⁹".split(""),
+    });
+    groups.push({
+      name: "Subscript figures",
+      characters: "₀₁₂₃₄₅₆₇₈₉".split(""),
+    });
+    groups.push({
       name: "Latin Punctuation",
       characters: ".,:;…!¡?¿·•*#/\\-–—_(){}[]‚„\"\"\'\'«»‹›\'\"ʹ".split(""),
     });
@@ -1269,8 +1463,8 @@ watch(
   { immediate: true }
 );
 
-// Get PostScript glyph name from Samsa
-const getGlyphName = (char: string): string => {
+// Fallback glyph name from Samsa or character (used until readable name block loads)
+const getFallbackGlyphName = (char: string): string => {
   if (char === " ") return "space";
   if (char.length === 0) return "unknown";
 
@@ -1307,15 +1501,30 @@ const getGlyphName = (char: string): string => {
     }
   }
   const arabicFormMap = {
-    [FORM_INITIAL]: "initial",
-    [FORM_MEDIAL]: "medial",
-    [FORM_FINAL]: "final",
+    [FORM_INITIAL]: "init",
+    [FORM_MEDIAL]: "medi",
+    [FORM_FINAL]: "fina",
   };
   const arabicForm = arabicFormMap[form as keyof typeof arabicFormMap] || '';
 
   // Fallback: return the character itself
   return char === " " ? "space" : baseChar + (arabicForm ? ` (${arabicForm})` : '');
 };
+
+// Load readable name from lazy-loaded block files when preview character changes
+watch(
+  previewChar,
+  (char) => {
+    const { baseChar } = getArabicCharAndForm(char);
+    const fallback = getFallbackGlyphName(char);
+    const charForLookup = baseChar || char;
+    loadGlyphNameForChar(charForLookup, fallback, () => {
+      const { baseChar: cur } = getArabicCharAndForm(previewChar.value);
+      return (cur || previewChar.value) === charForLookup;
+    });
+  },
+  { immediate: true }
+);
 
 const selectCharacter = async (char: string) => {
   previewChar.value = char;

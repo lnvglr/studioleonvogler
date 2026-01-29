@@ -44,6 +44,8 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
+    // Codepoint names: short cache so regenerated names (generate-glyph-map) are picked up
+    '/codepoint-names/**': { headers: { 'Cache-Control': 'public, max-age=300' } },
     // Cache static assets for 1 year
     '/fonts/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
     '/img/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
