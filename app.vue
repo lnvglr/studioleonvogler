@@ -9,8 +9,8 @@
           route.name === 'privacy-policy' || route.name === 'legal-notice',
         'from-teal-200 via-green-50': route.name === 'index' || route.name?.toString().startsWith('projects'),
       }"
-      :style="`filter: hue-rotate(${hue}deg);`"
     />
+      <!-- :style="`filter: hue-rotate(${hue}deg);`" -->
     <div
       class="flex flex-col min-h-screen portrait:min-h-[100dvh] p-5 sm:p-10 md:px-20 sm:pb-20 md:pb-32 gap-5 sm:gap-10"
       :class="{ 'relative z-10': route.name === 'index' }"

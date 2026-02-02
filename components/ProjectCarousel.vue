@@ -202,8 +202,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const currentIndex = ref(0)
 const progress = ref(0)
-const intervalId = ref<NodeJS.Timeout | null>(null)
-const progressIntervalId = ref<NodeJS.Timeout | null>(null)
+const intervalId = ref<ReturnType<typeof setInterval> | null>(null)
+const progressIntervalId = ref<ReturnType<typeof setInterval> | null>(null)
 const isPaused = ref(false)
 const progressStartTime = ref(0)
 const imageRefs = ref<(HTMLImageElement | null)[]>([])
@@ -258,8 +258,12 @@ const getCategoryTag = (category: string) => {
 
 const calculateBrightness = (img: HTMLImageElement): Promise<number> => {
   return new Promise((resolve) => {
+    if (import.meta.server) {
+      resolve(128)
+      return
+    }
     const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
     if (!ctx) {
       resolve(128) // Default to medium brightness
       return
