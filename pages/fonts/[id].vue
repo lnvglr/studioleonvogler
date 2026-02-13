@@ -1,7 +1,7 @@
 <template>
   <main class="max-w-6xl">
     <FontSpecimen v-if="font" :font="font" :standalone="true" />
-    <div v-else class="flex flex-col gap-5">
+    <div v-else class="flex flex-col gap-5 items-start">
       <p>Font not found.</p>
       <NuxtLink
         to="/"

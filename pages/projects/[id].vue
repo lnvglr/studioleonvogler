@@ -61,7 +61,7 @@
       </div>
     </article>
 
-    <div v-else class="flex flex-col gap-5">
+    <div v-else class="flex flex-col gap-5 items-start">
       <p>Project not found.</p>
       <NuxtLink
         to="/"

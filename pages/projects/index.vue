@@ -1,6 +1,6 @@
 <template>
   <main class="gap-5 sm:gap-10 max-w-7xl">
-    <div class="flex flex-col gap-2 mb-5">
+    <div class="flex flex-col gap-2 mb-5 items-start">
       <NuxtLink
         to="/"
         class="text-green-500 hover:underline underline-offset-4 mb-2 inline-block"
