@@ -7,6 +7,7 @@ description: A poster design for a concert that was eventually canceled in the e
 image: img/projects/safari-concert-poster/safari.jpg
 alt: Safari – Polo & Pan / Artbat concert poster
 date: 2020-03-01
+draft: true
 ---
 
 A poster for a concert that never happened. Created in the early days of the COVID pandemic, this design explores Hebrew calligraphy as a primary visual element, bringing expressive, hand-drawn qualities to contemporary poster design.

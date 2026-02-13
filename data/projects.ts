@@ -45,8 +45,7 @@ export async function getProjectsWithDates(): Promise<Project[]> {
     }).filter((project: Project) => project.id) // Filter out projects without IDs
 
     // Hide drafts in production
-    const isDev = import.meta.dev
-    const publishedProjects = isDev ? projects : projects.filter((p) => !p.draft)
+    const publishedProjects = projects.filter((p) => !p.draft)
     
     // Sort by date (newest first), projects without dates go to the end
     return publishedProjects.sort((a, b) => {

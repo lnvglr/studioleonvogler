@@ -107,7 +107,11 @@
       </button>
       
       <!-- Dots Progress -->
-      <div class="flex items-center -mx-1">
+      <div
+        class="flex items-center -mx-1"
+        @mouseenter="pauseAutoplay"
+        @mouseleave="resumeAutoplay"
+      >
         <button
           v-for="(project, index) in projects"
           :key="project.id"
