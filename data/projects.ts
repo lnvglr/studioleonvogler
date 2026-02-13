@@ -8,6 +8,7 @@ export interface Project {
   image: string
   alt: string
   date?: string // YYYY-MM-DD format
+  draft?: boolean
 }
 
 
@@ -36,12 +37,19 @@ export async function getProjectsWithDates(): Promise<Project[]> {
       if (file.date) {
         project.date = file.date
       }
+      if (typeof file.draft === 'boolean') {
+        project.draft = file.draft
+      }
       
       return project
     }).filter((project: Project) => project.id) // Filter out projects without IDs
+
+    // Hide drafts in production
+    const isDev = import.meta.dev
+    const publishedProjects = isDev ? projects : projects.filter((p) => !p.draft)
     
     // Sort by date (newest first), projects without dates go to the end
-    return projects.sort((a, b) => {
+    return publishedProjects.sort((a, b) => {
       if (!a.date && !b.date) return 0
       if (!a.date) return 1
       if (!b.date) return -1

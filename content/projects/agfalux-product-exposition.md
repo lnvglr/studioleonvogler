@@ -7,6 +7,7 @@ description: Visual design for an Agfalux product exposition showcasing retro ca
 image: img/projects/agfalux-product-exposition/agfa-1.jpg
 alt: A disassembled retro camera flash
 date: 2018-07-01
+draft: true
 ---
 
 <div class="flex flex-col gap-3 my-16 mb-20">

@@ -53,7 +53,9 @@
           :value="content"
           class="prose prose-neutral max-w-none prose-headings:font-medium prose-p:font-normal prose-p:text-neutral-700 prose-p:leading-relaxed prose-img:rounded-xl prose-img:my-16 prose-img:mb-20 prose-p:mb-8 prose-img:cursor-pointer prose-img:hover:opacity-90 prose-img:transition-opacity"
           :components="{
-            img: ProseImg
+            img: ProseImg,
+            ProseVideo,
+            'prose-video': ProseVideo
           }"
         />
       </div>
@@ -77,6 +79,7 @@
 <script setup lang="ts">
 import { getFontById } from '~/data/fonts'
 import ProseImg from '~/components/content/ProseImg.vue'
+import ProseVideo from '~/components/content/ProseVideo.vue'
 
 const route = useRoute()
 const projectId = route.params.id as string
@@ -106,6 +109,9 @@ const { data: content } = await useAsyncData(`project-${projectId}`, async () =>
   try {
     const contentData = await queryContent(`projects/${projectId}`).findOne()
     if (contentData) {
+      if (contentData.draft && !import.meta.dev) {
+        return null
+      }
       return contentData
     }
   } catch (e) {
