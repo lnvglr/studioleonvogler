@@ -219,6 +219,8 @@ const touchStartY = ref(0)
 const scrollContainer = ref<HTMLElement | null>(null)
 let resizeHandler: (() => void) | null = null
 const isReady = ref(false)
+let fallbackReadyTimeoutId: ReturnType<typeof setTimeout> | null = null
+let touchEndTimeoutId: ReturnType<typeof setTimeout> | null = null
 
 const textColorClass = (index: number) => {
   if (imageBrightness.value[index] === undefined) {
@@ -438,8 +440,9 @@ const handleTouchMove = () => {
 
 const handleTouchEnd = () => {
   if (!isMobile.value) return
-  // Update index after scroll settles
-  setTimeout(() => {
+  if (touchEndTimeoutId) clearTimeout(touchEndTimeoutId)
+  touchEndTimeoutId = setTimeout(() => {
+    touchEndTimeoutId = null
     if (scrollContainer.value) {
       syncIndexFromScroll()
     }
@@ -532,7 +535,8 @@ onMounted(() => {
     }
 
     // Fallback: show anyway after a timeout if load event doesn't fire
-    setTimeout(() => {
+    fallbackReadyTimeoutId = setTimeout(() => {
+      fallbackReadyTimeoutId = null
       if (!isReady.value) isReady.value = true
     }, 2000)
   })
@@ -544,6 +548,14 @@ onBeforeUnmount(() => {
   }
   if (progressIntervalId.value) {
     clearInterval(progressIntervalId.value)
+  }
+  if (fallbackReadyTimeoutId) {
+    clearTimeout(fallbackReadyTimeoutId)
+    fallbackReadyTimeoutId = null
+  }
+  if (touchEndTimeoutId) {
+    clearTimeout(touchEndTimeoutId)
+    touchEndTimeoutId = null
   }
   if (scrollContainer.value) {
     scrollContainer.value.removeEventListener('scroll', handleScroll)

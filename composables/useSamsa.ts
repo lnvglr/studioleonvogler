@@ -141,8 +141,6 @@ export function useSamsa() {
     const unitsPerEm = samsaFont.tables.head.data.unitsPerEm || 1000
     const os2 = samsaFont.tables["OS/2"].data || {}
 
-    console.log(samsaFont);
-
     const ascender = os2.sTypoAscender ?? 800
     const descender = Math.abs(os2.sTypoDescender ?? -200)
     const capHeight = os2.sCapHeight ?? os2.sCapHeight ?? 700

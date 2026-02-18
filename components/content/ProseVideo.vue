@@ -50,7 +50,13 @@ onMounted(() => {
   observer.observe(containerRef.value)
 })
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
   observer?.disconnect()
+  observer = null
+  if (videoRef.value) {
+    videoRef.value.pause()
+    videoRef.value.removeAttribute('src')
+    videoRef.value.load()
+  }
 })
 </script>
