@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: process.env.NODE_ENV === 'development' },
+  ssr: false,
   css: ['~/assets/css/main.css'],
   modules: [
     '@nuxt/content',
@@ -8,7 +9,10 @@ export default defineNuxtConfig({
     // 'floating-vue/nuxt'
   ],
   image: {
-    provider: 'ipx',
+    // Static provider: images are pre-generated at build time by
+    // scripts/optimize-images.mjs and served as plain static files.
+    // No runtime IPX processing — no memory growth.
+    provider: 'none',
     format: ['webp'],
     quality: 85,
     screens: {
@@ -20,9 +24,6 @@ export default defineNuxtConfig({
       xxl: 1536,
     },
     densities: [1, 2],
-    ipx: {
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    },
     presets: {
       cover: {
         modifiers: {
@@ -43,20 +44,9 @@ export default defineNuxtConfig({
       strict: false,
     },
   },
-  routeRules: {
-    // Codepoint names: short cache so regenerated names (generate-glyph-map) are picked up
-    '/codepoint-names/**': { headers: { 'Cache-Control': 'public, max-age=300' } },
-    // Cache static assets for 1 year
-    '/fonts/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
-    '/img/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
-    '/_ipx/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
-    // Cache HTML pages for 1 hour, revalidate
-    '/**': { headers: { 'Cache-Control': 'public, max-age=3600, must-revalidate' } },
-  },
   nitro: {
     // Optimize for production deployment
     compressPublicAssets: true,
-    // Reduce memory usage by limiting minification
     minify: true,
     // Ensure links are crawled for SSG
     prerender: {
