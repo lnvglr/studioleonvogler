@@ -93,7 +93,6 @@ import { getProjectsWithDates } from "~/data/projects";
 const categories = [
   { value: "editorial", label: "Editorial" },
   { value: "type", label: "Type" },
-  { value: "graphic", label: "Graphic" },
   { value: "web", label: "Interface" },
 ];
 
