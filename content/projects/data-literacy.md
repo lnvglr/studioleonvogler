@@ -4,7 +4,7 @@ title: Data Literacy
 category: editorial
 categoryName: Editorial Design
 description: A comprehensive booklet designed to make data literacy accessible and engaging for readers of all backgrounds. Through thoughtful visual design, clear typography, and intuitive information architecture, the publication breaks down complex data concepts into digestible sections, helping readers develop the skills needed to understand and interpret data in their daily lives.
-image: img/projects/data-literacy/Magazine_Mockup_1.jpg
+image: img/projects/data-literacy/Magazine_Mockup_1.webp
 alt: Open booklet on data literacy
 date: 2021-04-01
 ---
@@ -16,10 +16,10 @@ The central visual concept treats data literacy as a transportation network. Dif
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/data-literacy/Magazine_Mockup_2.jpg" alt="Data Literacy Booklet mockup 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/data-literacy/Magazine_Mockup_3.jpg" alt="Data Literacy Booklet mockup 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/data-literacy/Magazine_Mockup_4.jpg" alt="Data Literacy Booklet mockup 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/data-literacy/Magazine_Mockup_6.jpg" alt="Data Literacy Booklet mockup 6" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/data-literacy/Magazine_Mockup_2.webp" alt="Data Literacy Booklet mockup 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/data-literacy/Magazine_Mockup_3.webp" alt="Data Literacy Booklet mockup 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/data-literacy/Magazine_Mockup_4.webp" alt="Data Literacy Booklet mockup 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/data-literacy/Magazine_Mockup_6.webp" alt="Data Literacy Booklet mockup 6" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
     </div>
   </div>
 </div>

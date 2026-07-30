@@ -13,7 +13,8 @@
     "start": "serve .output/public -l tcp://0.0.0.0:${PORT:-3000}",
     "postinstall": "nuxt prepare",
     "split:codepoint-names": "node scripts/split-codepoint-names.mjs",
-    "optimize:images": "node scripts/optimize-images.mjs"
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "downscale:sources": "node scripts/downscale-sources.mjs"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",

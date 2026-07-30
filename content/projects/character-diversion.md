@@ -5,12 +5,12 @@ category: web
 categoryName: Interface Design
 description: An experimental web platform that rethinks how typographic discourse happens by placing glyphs—not comment threads—at the center of the conversation. It explores how design can actively enable debate around letterforms, typographic conventions, and multi-script relationships, especially where disagreement and ambiguity are productive rather than something to smooth over.
 
-image: img/projects/character-diversion/character-diversion.png
+image: img/projects/character-diversion/character-diversion.webp
 alt: Webapp for typographic discourse
 date: 2022-07-01
 ---
 
-![Character Diversion](img/projects/character-diversion/character-diversion-00.png)
+![Character Diversion](img/projects/character-diversion/character-diversion-00.webp)
 
 ## Purpose
 
@@ -30,14 +30,14 @@ To keep discourse focused, opinions are intentionally constrained in length and 
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/character-diversion/character-diversion-01.png" alt="Character Diversion 1" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/character-diversion/character-diversion-02.png" alt="Character Diversion 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/character-diversion/character-diversion-03.png" alt="Character Diversion 3" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/character-diversion/character-diversion-04.png" alt="Character Diversion 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/character-diversion/character-diversion-05.png" alt="Character Diversion 5" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/character-diversion/character-diversion-06.png" alt="Character Diversion 6" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/character-diversion/character-diversion-07.png" alt="Character Diversion 7" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/character-diversion/character-diversion-08.png" alt="Character Diversion 8" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/character-diversion/character-diversion-01.webp" alt="Character Diversion 1" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/character-diversion/character-diversion-02.webp" alt="Character Diversion 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/character-diversion/character-diversion-03.webp" alt="Character Diversion 3" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/character-diversion/character-diversion-04.webp" alt="Character Diversion 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/character-diversion/character-diversion-05.webp" alt="Character Diversion 5" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/character-diversion/character-diversion-06.webp" alt="Character Diversion 6" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/character-diversion/character-diversion-07.webp" alt="Character Diversion 7" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/character-diversion/character-diversion-08.webp" alt="Character Diversion 8" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
     </div>
   </div>
 </div>

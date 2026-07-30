@@ -4,7 +4,7 @@ title: Military Occupations – An Index
 category: editorial
 categoryName: Editorial Design
 description: An index of ongoing and historical military occupations, designed to make visible how occupation expands territory and buries local identities. The layout translates political realities into physical form—occupying states literally take space from the occupied, while hidden cultural documents lie buried beneath removable stripes.
-image: img/projects/military-occupations/02-mo-mockup-perspective-contents.jpg
+image: img/projects/military-occupations/02-mo-mockup-perspective-contents.webp
 alt: Open book with about military occupations
 date: 2020-07-01
 ---
@@ -20,10 +20,10 @@ Research into what defines a military occupation revealed one common element acr
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/military-occupations/military-occupations-image-1-2048x1422.png" alt="Spread showing occupation layout" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/military-occupations-image-2-2048x1422.png" alt="Spread showing occupation layout" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/military-occupations-image-3-2048x1280.png" alt="Page structure visualization" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/military_occupations-digital-2-2-2048x1280.png" alt="Page structure detail" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/military-occupations-image-1-2048x1422.webp" alt="Spread showing occupation layout" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/military-occupations-image-2-2048x1422.webp" alt="Spread showing occupation layout" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/military-occupations-image-3-2048x1280.webp" alt="Page structure visualization" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/military_occupations-digital-2-2-2048x1280.webp" alt="Page structure detail" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
     </div>
   </div>
   <p class="text-sm text-neutral-400">Visual representation of occupied territories through graphic elements and spatial hierarchy.</p>
@@ -32,7 +32,7 @@ Research into what defines a military occupation revealed one common element acr
 
 Yellow was chosen deliberately for its urgency without aggression—less confrontational than red, yet more pressing than blue. It's a colour frequently associated with human rights contexts, lending the publication an immediate visual identity. The table of contents serves a dual purpose: navigation and overview. Structured as a timeline, it reinforces duration as a primary axis for comparing occupations—transforming an editorial convention into a data visualisation. At a glance, the stark discrepancies become visible: Israel's occupation over Palestine stretches across 67+ years and counting, while the UAE's occupation of Yemen's Socotra island lasted just over a year.
 
-![Table of contents timeline showing occupation durations](/img/projects/military-occupations/Screenshot-2021-04-13-at-12.15.18-2048x1280.png)
+![Table of contents timeline showing occupation durations](/img/projects/military-occupations/Screenshot-2021-04-13-at-12.15.18-2048x1280.webp)
 
 ## Physical Production
 
@@ -43,9 +43,9 @@ The production plan involved printing the yellow stripes as full pages, then cut
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/military-occupations/pagination-1-2048x1152.jpg" alt="Pagination problem with standard document setup" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/pagination-2-2048x1152.jpg" alt="Corrected pagination with single-page stripe setup" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/mo-document-setup.jpg" alt="InDesign master page structure" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/pagination-1-2048x1152.webp" alt="Pagination problem with standard document setup" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/pagination-2-2048x1152.webp" alt="Corrected pagination with single-page stripe setup" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/mo-document-setup.webp" alt="InDesign master page structure" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
     </div>
   </div>
   <p class="text-sm text-neutral-400">Pagination challenges and document setup—green lines indicate master page dependencies, magenta lines distinguish between two-page spreads (dashed) and single-page spreads (solid).</p>
@@ -57,12 +57,12 @@ This approach introduced new obstacles. The document could no longer export as s
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/military-occupations/IMG_8576-edited-2048x1365.jpg" alt="Physical stripe covering hidden cultural content" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/binding-1.jpg" alt="Binding prototype 1" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/binding-2.jpg" alt="Binding prototype 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/binding-3.jpg" alt="Binding prototype 3" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/binding-4.jpg" alt="Binding prototype 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/binding-5.jpg" alt="Binding prototype 5" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/IMG_8576-edited-2048x1365.webp" alt="Physical stripe covering hidden cultural content" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/binding-1.webp" alt="Binding prototype 1" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/binding-2.webp" alt="Binding prototype 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/binding-3.webp" alt="Binding prototype 3" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/binding-4.webp" alt="Binding prototype 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/binding-5.webp" alt="Binding prototype 5" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
     </div>
   </div>
   <p class="text-sm text-neutral-400">Prototyping the binding to enable physically layered content.</p>
@@ -82,14 +82,14 @@ This systems-oriented approach is central to how I work—whether in editorial d
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/military-occupations/01-mo-mockup-cover.jpg" alt="Book cover" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/02-mo-mockup-perspective-contents.jpg" alt="Perspective view of contents" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/03-mo-mockup-chapter-1-scaled.jpg" alt="Chapter 1 spreads" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/04-mo-mockup-ongoing-1.jpg" alt="Ongoing occupations section 1" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/05-mo-mockup-ongoing-2.jpg" alt="Ongoing occupations section 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/06-mo-mockup-chapter-2.1.jpg" alt="Chapter 2.1 spreads" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/07-mo-mockup-chapter-2.2.jpg" alt="Chapter 2.2 spreads" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/military-occupations/08-mo-mockup-historical.jpg" alt="Historical occupations section" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/01-mo-mockup-cover.webp" alt="Book cover" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/02-mo-mockup-perspective-contents.webp" alt="Perspective view of contents" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/03-mo-mockup-chapter-1-scaled.webp" alt="Chapter 1 spreads" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/04-mo-mockup-ongoing-1.webp" alt="Ongoing occupations section 1" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/05-mo-mockup-ongoing-2.webp" alt="Ongoing occupations section 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/06-mo-mockup-chapter-2.1.webp" alt="Chapter 2.1 spreads" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/07-mo-mockup-chapter-2.2.webp" alt="Chapter 2.2 spreads" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/military-occupations/08-mo-mockup-historical.webp" alt="Historical occupations section" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
     </div>
   </div>
 </div>

@@ -4,7 +4,7 @@ title: Wasted â€“ Food Worth Saving
 category: editorial
 categoryName: Editorial Design
 description: A zine that addresses the critical issue of food waste and why it demands our immediate attention. Through compelling editorial design and thoughtful content curation, the publication explores the environmental, economic, and social implications of food waste, encouraging readers to reconsider their relationship with food and take action toward more sustainable practices.
-image: img/projects/food-waste/wasted.jpg
+image: img/projects/food-waste/wasted.webp
 alt: Open magazine on food waste
 date: 2018-11-01
 ---
@@ -17,15 +17,15 @@ The zine begins with unstructured, chaotic layouts that visually resemble wasteâ
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/food-waste/wasted-0.jpg" alt="Wasted Food Waste Zine Cover" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/food-waste/wasted-1.jpg" alt="Wasted Food Waste Zine 1" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/food-waste/wasted-2.jpg" alt="Wasted Food Waste Zine 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/food-waste/wasted-3.jpg" alt="Wasted Food Waste Zine 3" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/food-waste/wasted-4.jpg" alt="Wasted Food Waste Zine 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/food-waste/wasted-5.jpg" alt="Wasted Food Waste Zine 5" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/food-waste/wasted-6.jpg" alt="Wasted Food Waste Zine 6" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/food-waste/wasted-7.jpg" alt="Wasted Food Waste Zine 7" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
-      <img src="/img/projects/food-waste/wasted-8.jpg" alt="Wasted Food Waste Zine 8" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/food-waste/wasted-0.webp" alt="Wasted Food Waste Zine Cover" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/food-waste/wasted-1.webp" alt="Wasted Food Waste Zine 1" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/food-waste/wasted-2.webp" alt="Wasted Food Waste Zine 2" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/food-waste/wasted-3.webp" alt="Wasted Food Waste Zine 3" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/food-waste/wasted-4.webp" alt="Wasted Food Waste Zine 4" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/food-waste/wasted-5.webp" alt="Wasted Food Waste Zine 5" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/food-waste/wasted-6.webp" alt="Wasted Food Waste Zine 6" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/food-waste/wasted-7.webp" alt="Wasted Food Waste Zine 7" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
+      <img src="/img/projects/food-waste/wasted-8.webp" alt="Wasted Food Waste Zine 8" class="h-64 sm:h-80 object-cover rounded-sm bg-stone-50 shrink-0" />
     </div>
   </div>
 </div>

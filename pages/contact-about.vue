@@ -34,7 +34,7 @@
     </div>
     <div class="flex items-center gap-3">
       <NuxtImg
-        src="/img/avatar-leon-vogler.jpg"
+        src="/img/avatar-leon-vogler.webp"
         sizes="196px"
         width="100px"
         height="100px"

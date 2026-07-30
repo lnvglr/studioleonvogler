@@ -73,7 +73,7 @@ function collectImages(dir) {
 
 /**
  * Derive the output path for a given source file and target width.
- * Source: /public/img/projects/foo/bar.jpg
+ * Source: /public/img/projects/foo/bar.webp
  * Output: /public/img/projects/foo/bar-640w.webp
  *
  * @param {string} srcPath  Absolute path to the source image.

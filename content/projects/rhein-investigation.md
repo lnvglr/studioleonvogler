@@ -4,13 +4,13 @@ title: Data Visualisation for CORRECTIV
 category: editorial
 categoryName: Data Visualisation
 description: For CORRECTIV’s investigation into unknown chemical substances in the Rhine, I co-conceptualised, designed, and implemented scroll-driven visualisations that translate chemical uncertainty into a readable system—from the overall scale of the unknown to specific probe findings along the river. A collaboration with CORRECTIV.Studio.
-image: img/projects/rhein-investigation/correctiv-das-unsichtbare-gift.png
+image: img/projects/rhein-investigation/correctiv-das-unsichtbare-gift.webp
 alt: Abstract particle flow field
 date: 2026-02-03
 ---
 
 
-<!-- ![Das unsichtbare Gift](img/projects/rhein-investigation/correctiv-das-unsichtbare-gift-2.png) -->
+<!-- ![Das unsichtbare Gift](img/projects/rhein-investigation/correctiv-das-unsichtbare-gift-2.webp) -->
 
 
 
@@ -23,9 +23,9 @@ For this <a href="https://correctiv.org/aktuelles/kampf-um-wasser/2026/02/03/wie
 <div class="flex flex-col gap-3 my-16 mb-20">
   <div class="w-screen relative overflow-x-auto -mx-5 sm:-mx-10 md:-mx-20">
     <div class="flex gap-4 px-5 sm:px-10 md:px-20 min-w-max">
-      <img src="/img/projects/rhein-investigation/stopper-1.png" alt="Stopper 1" class="h-80 sm:h-[60vh] object-cover rounded-sm shrink-0" />
-      <img src="/img/projects/rhein-investigation/stopper-2.png" alt="Stopper 2" class="h-80 sm:h-[60vh] object-cover rounded-sm shrink-0" />
-      <img src="/img/projects/rhein-investigation/stopper-3.png" alt="Stopper 3" class="h-80 sm:h-[60vh] object-cover rounded-sm shrink-0" />
+      <img src="/img/projects/rhein-investigation/stopper-1.webp" alt="Stopper 1" class="h-80 sm:h-[60vh] object-cover rounded-sm shrink-0" />
+      <img src="/img/projects/rhein-investigation/stopper-2.webp" alt="Stopper 2" class="h-80 sm:h-[60vh] object-cover rounded-sm shrink-0" />
+      <img src="/img/projects/rhein-investigation/stopper-3.webp" alt="Stopper 3" class="h-80 sm:h-[60vh] object-cover rounded-sm shrink-0" />
     </div>
   </div>
 </div>
