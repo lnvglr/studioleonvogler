@@ -1,5 +1,6 @@
-[[services]]
-name = "nuxt"
-type = "static"
+[build]
+builder = "RAILPACK"
 buildCommand = "npm run generate"
-outputDirectory = ".output/public"
+
+[deploy]
+startCommand = "npm run start"
